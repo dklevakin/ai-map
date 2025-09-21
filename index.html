@@ -1518,28 +1518,33 @@
 
     // Tooltip management
     let tipGroup = null;
+    let measureTextEl = null;
 
     function wrapText(text, maxWidth) {
       const lines = [];
       if (!text) return lines;
-      const temp = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      temp.setAttribute('class', 'muted');
-      temp.setAttribute('visibility', 'hidden');
-      stage.appendChild(temp);
+      if (!measureTextEl) {
+        measureTextEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        measureTextEl.setAttribute('class', 'muted');
+        measureTextEl.setAttribute('visibility', 'hidden');
+      }
+      if (measureTextEl.parentNode !== stage) {
+        stage.appendChild(measureTextEl);
+      }
       const words = text.split(/\s+/);
       let current = '';
       words.forEach((word) => {
         const candidate = current ? `${current} ${word}` : word;
-        temp.textContent = candidate;
-        if (temp.getComputedTextLength() <= maxWidth) {
+        measureTextEl.textContent = candidate;
+        if (measureTextEl.getComputedTextLength() <= maxWidth) {
           current = candidate;
         } else {
           if (current) {
             lines.push(current);
             current = '';
           }
-          temp.textContent = word;
-          if (temp.getComputedTextLength() > maxWidth) {
+          measureTextEl.textContent = word;
+          if (measureTextEl.getComputedTextLength() > maxWidth) {
             lines.push(word);
             current = '';
           } else {
@@ -1548,7 +1553,6 @@
         }
       });
       if (current) lines.push(current);
-      stage.removeChild(temp);
       return lines;
     }
 
@@ -1617,7 +1621,12 @@
 
     function render() {
       hideTip();
+      const hadMeasureText = measureTextEl && measureTextEl.parentNode === stage;
       stage.innerHTML = '';
+
+      if (hadMeasureText) {
+        stage.appendChild(measureTextEl);
+      }
 
       const connectorsLayer = group(stage);
       const nodesLayer = group(stage);
