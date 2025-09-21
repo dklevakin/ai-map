@@ -41,11 +41,11 @@ python3 -m http.server 8000
 ```
 /
 ├─ index.html            # Production single-file app (vanilla, no deps)
-├─ doc/                  # Документація та ADR
-│  ├─ index.md           # Керівництво користувача та підтримки
-│  ├─ Requirements.md    # Сукупність вимог
-│  ├─ Backlog.md         # Список покращень
-│  └─ adr/               # Архітектурні рішення
+├─ doc/                  # Documentation and ADRs
+│  ├─ index.md           # User and maintainer guide
+│  ├─ Requirements.md    # Consolidated requirements
+│  ├─ Backlog.md         # Improvement backlog
+│  └─ adr/               # Architecture decisions
 │     ├─ 0001-static-single-file-architecture.md
 │     ├─ 0002-adaptive-radial-layout.md
 │     ├─ 0003-curated-bilingual-catalog.md

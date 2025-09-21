@@ -1,60 +1,60 @@
-# AI Compass — документація користувача
+# AI Compass — User Guide
 
-## Опис проєкту
-AI Compass — це статичний вебсайт з інтерактивною мапою сервісів штучного інтелекту для малих та середніх бізнесів. Каталог зібрано у вигляді радіальної діаграми, де кожна категорія та сервіс візуально відображаються у зрозумілих зв'язках. Уся логіка та дані містяться в єдиному файлі `index.html`, тому рішення не потребує збірки, працює офлайн та легко хоститься на будь-якому статичному хостингу.
+## Project Overview
+AI Compass is a static website featuring an interactive map of artificial intelligence services tailored for small and medium-sized businesses. The catalog is presented as a radial diagram that visualizes the relationships between each category and service. All logic and data live in a single `index.html` file, so the solution requires no build step, works offline, and can be hosted on any static platform with ease.
 
-## Ціль та мета
-- **Цільова аудиторія**: маркетингові команди, операційні менеджери та підприємці, які шукають надійні AI-інструменти для бізнесу.
-- **Головна мета**: допомогти швидко зорієнтуватися в екосистемі сервісів, підібрати рішення під конкретні завдання та перейти на офіційні сторінки інструментів.
+## Purpose and Goals
+- **Target audience:** marketing teams, operations managers, and entrepreneurs who are searching for reliable AI tools for their business workflows.
+- **Primary goal:** help visitors quickly navigate the AI landscape, choose solutions for specific tasks, and jump to the official product pages.
 
-## Основні можливості
-- Радіальна мапа з центральним вузлом «AI Compass» та кольоровими категоріями сервісів.
-- Перемикання між українською та англійською локалізаціями контенту.
-- Розгортання категорій, груп і підгруп з детальними описами сервісів.
-- Підказки (tooltip) з розширеним описом та прямим посиланням на сервіс при наведенні.
-- Візуальні іконки поруч із назвами, щоб швидко зчитувати тип сервісу.
-- Адаптивна висота полотна для великих каталогів та підтримка клавіатурної навігації.
+## Key Features
+- Radial map with the “AI Compass” central node and color-coded service categories.
+- Toggle between Ukrainian and English content localizations.
+- Expandable categories, groups, and subgroups with detailed service descriptions.
+- Tooltips that surface extended descriptions and direct links to each service on hover.
+- Visual icons next to service names for instant recognition of the service type.
+- Adaptive canvas height for large catalogs plus keyboard navigation support.
 
-## Як користуватися сайтом
-### Швидкий старт
-1. Відкрийте `index.html` у браузері або розгорніть локальний сервер командою `python3 -m http.server 8000` і перейдіть на `http://localhost:8000`.
-2. Перевірте банер у верхній частині сторінки — він описує фокус каталогу.
-3. Ознайомтеся з блоком героя (hero section), що коротко пояснює призначення мапи.
+## How to Use the Site
+### Quick Start
+1. Open `index.html` in your browser, or launch a local server with `python3 -m http.server 8000` and navigate to `http://localhost:8000`.
+2. Review the banner at the top of the page—it explains the catalog’s focus.
+3. Read the hero section, which briefly outlines the purpose of the mind map.
 
-### Навігація по мапі
-1. У центрі знаходиться вузол «AI Compass». Від нього відходять гілки категорій (маркетинг, автоматизація, аналітика тощо).
-2. Натисніть на категорію, щоб розгорнути пов'язані сервіси. Повторний клік згортає категорію.
-3. Якщо категорія містить групи (наприклад, «Відео та кліпи» у маркетингу), натисніть на заголовок групи для перегляду всіх сервісів всередині.
+### Navigating the Map
+1. The “AI Compass” node sits in the center, with branches extending into categories (marketing, automation, analytics, etc.).
+2. Click a category to expand its services. Click again to collapse it.
+3. When a category contains groups (for example, “Video & Clips” inside Marketing), click the group heading to reveal all services inside it.
 
-### Деталі сервісів
-- Наведіть курсор на назву сервісу, щоб побачити опис, ключові сценарії застосування та активне посилання.
-- Клацніть по назві сервісу в підказці, щоб перейти на офіційний сайт (відкриється у новій вкладці).
-- Кожен сервіс позначено іконкою, яка відображає його спеціалізацію (наприклад, 🧩 для DALL·E).
+### Service Details
+- Hover over a service name to see a tooltip containing the description, key use cases, and an active link.
+- Click the service name inside the tooltip to open the official website in a new tab.
+- Each service is paired with an icon that represents its specialization (for example,  for DALL·E).
 
-### Перемикання мов
-- Кнопки **UA** та **EN** у панелі керування дозволяють перемкнути контент на потрібну мову.
-- Після вибору мовні налаштування зберігаються у LocalStorage, тому повторний візит відобразить останню мову.
+### Switching Languages
+- Use the **UA** and **EN** buttons in the control panel to switch the content language.
+- The selected language is stored in LocalStorage, so returning visitors see their last preference automatically.
 
-### Робота з клавіатури
-- Категорії отримують фокус і реагують на клавіші `Enter` або `Space`, тому мапою можна керувати без миші.
-- Для закриття підказки натисніть у довільній точці полотна або наведіть курсор на інший елемент.
+### Keyboard Controls
+- Categories receive focus and react to the `Enter` or `Space` keys, allowing navigation without a mouse.
+- To dismiss a tooltip, click anywhere on the canvas or hover over another element.
 
-## Оновлення каталогу
-- Дані каталогу знаходяться в константі `DATA` всередині `index.html`. Кожна категорія містить перелік сервісів із полями `name`, `href`, `desc`, а також необов'язкові групи `group` -> `items`.
-- Щоб додати новий сервіс, додайте об'єкт у відповідний масив мовної версії (`ua` та `en`), забезпечивши синхронність перекладів.
-- Іконки налаштовуються у словнику `ICONS`. Якщо сервісу немає у словнику, використовується fallback-значок ✨.
+## Updating the Catalog
+- Catalog data lives in the `DATA` constant inside `index.html`. Each category contains a list of services with `name`, `href`, and `desc` fields, plus optional groups structured as `group` → `items`.
+- To add a service, insert an object into the relevant language array (`ua` and `en`) and keep the translations aligned.
+- Icons are configured through the `ICONS` dictionary. If a service is not listed, the fallback ✨ icon is used.
 
-## Розгортання
-- **Локально**: відкрийте `index.html` або підніміть будь-який простий HTTP-сервер.
-- **Cloudflare Pages**: створіть проєкт, залиште порожньою команду збірки та вкажіть корінь (`/`) як вихідну директорію.
-- **GitHub Pages**: оберіть гілку `main` та корінь репозиторію як джерело публікації. Сайт статичний, тому додаткові налаштування не потрібні.
+## Deployment
+- **Local:** open `index.html` directly or spin up any simple HTTP server.
+- **Cloudflare Pages:** create a project, leave the build command empty, and set the output directory to the root (`/`).
+- **GitHub Pages:** publish from the `main` branch and point the source to the repository root. No extra settings are required because the site is static.
 
-## Документація на GitHub Pages
-1. Створено папку `/doc`, яка містить цю документацію й супровідні файли.
-2. У налаштуваннях GitHub Pages можна обрати джерелом папку `/doc`, щоб опублікувати документацію окремо від основного сайту.
-3. Для використання теми GitHub Pages додайте за потреби файл `_config.yml` з темою у цю папку.
+## Documentation on GitHub Pages
+1. The `/doc` folder contains this guide and supporting files.
+2. In GitHub Pages settings you can publish the documentation separately by selecting the `/doc` folder as the source.
+3. To apply a GitHub Pages theme, add a `_config.yml` file with the theme name to this folder.
 
-## Додаткові матеріали
-- [Requirements.md](./Requirements.md) — зібрані функціональні та нефункціональні вимоги.
-- [Backlog.md](./Backlog.md) — пропозиції з покращень і майбутніх завдань.
-- [ADR](./adr) — архітектурні рішення, прийняті під час розробки проєкту.
+## Additional Resources
+- [Requirements.md](./Requirements.md) — functional and non-functional requirements.
+- [Backlog.md](./Backlog.md) — proposed improvements and future tasks.
+- [ADR](./adr) — architecture decisions made during the project.

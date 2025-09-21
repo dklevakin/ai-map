@@ -1,20 +1,20 @@
-# ADR 0001: Статична односторінкова архітектура
+# ADR 0001: Static Single-File Architecture
 
-- **Статус:** Accepted
-- **Дата:** 2025-09-21
-- **Контекст:** вихідний репозиторій (`initial commit`, PR draft)
+- **Status:** Accepted
+- **Date:** 2025-09-21
+- **Context:** initial repository (`initial commit`, PR draft)
 
-## Контекст
-Перший реліз AI Compass мав забезпечити простий спосіб публікації каталогу AI-сервісів без бекенду та з мінімальною кількістю файлів. Команда хотіла, щоб рішення:
-- розгорталося на GitHub Pages чи Cloudflare Pages без CI/CD та Node.js;
-- працювало офлайн (достатньо зберегти сторінку);
-- було прозорим для нетехнічних редакторів, які можуть відкрити вихідний код та оновити дані вручну.
+## Context
+The first release of AI Compass needed a straightforward way to publish the AI service catalog without a backend and with as few files as possible. The team wanted a solution that:
+- could be deployed to GitHub Pages or Cloudflare Pages without CI/CD or Node.js;
+- worked offline (simply save the page);
+- remained transparent for non-technical editors who can open the source and update the data manually.
 
-## Рішення
-Обрано архітектуру "single-file app": увесь HTML, CSS, JavaScript та дані розміщено в `index.html`. Жодних сторонніх бібліотек чи пакетних менеджерів не використовується. Застосунок працює повністю на клієнті та рендерить SVG-графіку для мапи.
+## Decision
+We chose a “single-file app” architecture: all HTML, CSS, JavaScript, and data are placed inside `index.html`. No third-party libraries or package managers are used. The application runs entirely on the client and renders SVG graphics for the map.
 
-## Наслідки
-- ✅ Проєкт легко деплоїти на будь-який статичний хостинг і відкривати напряму з файлової системи.
-- ✅ Оновлення контенту можливе через просте редагування одного файлу без складної збірки.
-- ⚠️ Масштабування коду потребує акуратного структурування секцій в `index.html`, оскільки файл зростає в розмірах.
-- ⚠️ Відсутність збірки обмежує використання TypeScript/SCSS та модульної структури без додаткових інструментів.
+## Consequences
+- ✅ The project is easy to deploy on any static hosting and can even be opened directly from the file system.
+- ✅ Content updates require only editing one file without a build pipeline.
+- ⚠️ Scaling the code base demands careful structuring of sections within `index.html` as the file grows in size.
+- ⚠️ The lack of a build step limits the ability to use TypeScript/SCSS and modular organization without additional tooling.

@@ -1,20 +1,20 @@
-# ADR 0002: Адаптивне радіальне компонування мапи
+# ADR 0002: Adaptive Radial Map Layout
 
-- **Статус:** Accepted
-- **Дата:** 2025-09-21
-- **Повʼязані PR:** #1 `codex/refactor-mind-map-l`
+- **Status:** Accepted
+- **Date:** 2025-09-21
+- **Related PRs:** #1 `codex/refactor-mind-map-l`
 
-## Контекст
-Початкове розміщення вузлів у мапі не враховувало різну кількість сервісів у категоріях. Через це деякі елементи перекривалися, а полотно мало фіксовану висоту й не масштабувалося під контент. Потрібно було забезпечити адаптивне компонування без сторонніх бібліотек для графів.
+## Context
+The initial node placement on the map did not account for different numbers of services per category. As a result, some elements overlapped and the canvas height was fixed, failing to scale with the content. We needed adaptive positioning without relying on external graph libraries.
 
-## Рішення
-- Розраховувати позиції категорій симетрично відносно центрального вузла та поділяти їх на ліву/праву півкулі.
-- Визначати вагу категорії залежно від кількості елементів (з урахуванням розкритих груп) і пропорційно розподіляти вертикальний простір.
-- Використовувати еліпси з динамічними радіусами навколо тексту, щоб довгі назви не обрізалися.
-- Генерувати з’єднувальні криві Безьє між центром і категоріями для плавної візуалізації звʼязків.
+## Decision
+- Compute category positions symmetrically around the central node, splitting them into left and right hemispheres.
+- Determine category weight based on the number of items (including expanded groups) and distribute vertical space proportionally.
+- Use ellipses with dynamic radii around text so long labels are not truncated.
+- Generate connecting Bézier curves between the center and categories for smooth visualization of relationships.
 
-## Наслідки
-- ✅ Мапа масштабуються під різні каталоги без перекриття елементів.
-- ✅ Гнучкі еліпси дозволяють легко додавати довгі назви категорій та сервісів.
-- ⚠️ Збільшилась складність клієнтської логіки; необхідні тести при зміні констант відступів.
-- ⚠️ Подальше ускладнення графа (наприклад, додавання третіх рівнів) вимагатиме додаткових алгоритмів розміщення.
+## Consequences
+- ✅ The map now scales to different catalogs without overlapping elements.
+- ✅ Flexible ellipses allow longer category and service names without clipping.
+- ⚠️ Client-side logic is more complex; we need regression tests when adjusting spacing constants.
+- ⚠️ Further graph complexity (such as third-level nodes) will require additional layout algorithms.
