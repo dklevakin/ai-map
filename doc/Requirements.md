@@ -21,16 +21,20 @@
 7. Hovering over a service must show a tooltip with its description and link; clicking opens the official site in a new tab.
 8. Icons next to services must reflect the tool type and speed up scanning for the right solution.
 
-### 2.3 Localization and Management
-9. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
-10. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
-11. Categories on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility.
-12. The catalog must document manual update instructions for future content editors.
+### 2.3 Search & Discovery
+9. The UI must expose a debounced search input that filters categories, groups, and services in the currently selected language.
+10. Search results must highlight matching nodes, auto-expand relevant branches, and display a “no results” message when nothing matches.
 
-### 2.4 Deployment and Documentation
-13. The site must open directly from the file system or through any static hosting without a build step.
-14. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
-15. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
+### 2.4 Localization and Management
+11. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
+12. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
+13. Categories on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility.
+14. The catalog must document manual update instructions for future content editors.
+
+### 2.5 Deployment and Documentation
+15. The site must open directly from the file system or through any static hosting without a build step.
+16. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
+17. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
 
 ## 3. Non-functional Requirements
 | ID | Requirement | Type |
@@ -40,7 +44,7 @@
 | NF-3 | The interface must be readable on screens from 1024px and remain usable on tablets/mobile devices. | Usability |
 | NF-4 | All text and data must be stored in UTF-8 to support Ukrainian and English languages. | Compatibility |
 | NF-5 | Interaction logic must stay understandable without reading the code thanks to comments and documentation. | Maintainability |
-| NF-6 | Catalog expansion must not significantly degrade performance; position calculations run on the client in O(n). | Performance |
+| NF-6 | Catalog expansion must not significantly degrade performance; layout runs in O(n) and caches text measurements to avoid repeated reflows. | Performance |
 | NF-7 | The code must follow accessibility principles: focusable elements, ARIA attributes, and sufficient contrast. | Accessibility |
 
 ## 4. Constraints and Assumptions

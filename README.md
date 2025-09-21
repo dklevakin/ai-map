@@ -1,6 +1,6 @@
 # AI Tools Mind‑map (Static)
 
-Interactive mind‑map of AI tools for SMBs. Single‑file static site (`index.html`) built with pure HTML/SVG/vanilla JS — no build step, works offline.
+Interactive mind‑map of AI tools for SMBs. Single‑file static site (`index.html`) built with pure HTML/SVG/vanilla JS — no build step, works offline. Includes a bilingual, debounced search that highlights matches and auto-expands matching branches.
 
 ## Quick Start (Local)
 
@@ -49,7 +49,9 @@ python3 -m http.server 8000
 │     ├─ 0001-static-single-file-architecture.md
 │     ├─ 0002-adaptive-radial-layout.md
 │     ├─ 0003-curated-bilingual-catalog.md
-│     └─ 0004-collapsible-subcategories.md
+│     ├─ 0004-collapsible-subcategories.md
+│     ├─ 0005-localized-search-and-highlighting.md
+│     └─ 0006-node-measurement-caching.md
 ├─ assets/               # Place any static assets here (optional)
 ├─ examples/
 │  └─ react-babel/       # Alternative React+Babel+CDN version (no build)
@@ -63,9 +65,10 @@ python3 -m http.server 8000
 
 ## Editing Content
 
-- Categories and items are defined inside `index.html` in the `DATA` object (UA/EN).  
-- To add tools: update the `DATA` arrays (name, href, desc).  
+- Categories and items are defined inside `index.html` in the `DATA` object (UA/EN).
+- To add tools: update the `DATA` arrays (name, href, desc).
 - The mind‑map layout is calculated radially; category click expands nodes; hover shows tooltip with link.
+- The search index is generated from both language datasets; keep UA/EN entries aligned to ensure accurate results.
 
 ## License
 

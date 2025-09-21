@@ -4,7 +4,7 @@
 
 | ID | Epic / Theme | Initiative Description | Expected Value | Priority | Status | Notes for GitHub Projects |
 | --- | --- | --- | --- | --- | --- | --- |
-| BL-01 | Search & filtering | Add a search bar and filters by categories/service types to quickly find the desired tool. | Reduces time to locate a service and improves click-through rates. | High | Planned | Create a “Search” epic with tasks for UI, filtering logic, and UX testing. |
+| BL-01 | Search & filtering | Ship bilingual, debounced search with highlighted results and auto-expanding branches. | Reduces time to locate a service and improves click-through rates. | High | Delivered | Track adoption via analytics; consider follow-up filters once data is available. |
 | BL-02 | Interaction analytics | Integrate lightweight analytics (e.g., Plausible or GA4) to track popular categories and services. | Enables data-driven prioritization of catalog updates. | Medium | Planned | Create a task with a checklist: select a platform, update policy, implement tracking code. |
 | BL-03 | Catalog export | Generate CSV/JSON with the service list for analytics or CRM import. | Simplifies data sharing with other systems and consultants. | Medium | Planned | Prepare a technical plan (export button + file formats). |
 | BL-04 | Mobile optimization | Refine the map on mobile devices: scaling, vertical scroll, typography readability. | Improves the experience for users who access the site on smartphones. | High | In Review | Test on real devices and document breakpoints. |
