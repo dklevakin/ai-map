@@ -1,21 +1,21 @@
-# ADR 0003: Курований двомовний каталог з іконками
+# ADR 0003: Curated Bilingual Catalog with Icons
 
-- **Статус:** Accepted
-- **Дата:** 2025-09-21
-- **Повʼязані PR:** #2 `codex/review-and-improve-services-categories`, #3 `codex/add-icons-to-ai-services`
+- **Status:** Accepted
+- **Date:** 2025-09-21
+- **Related PRs:** #2 `codex/review-and-improve-services-categories`, #3 `codex/add-icons-to-ai-services`
 
-## Контекст
-Початковий список сервісів був коротким і не відображав ключові сценарії використання для бізнесу. Крім того, відсутність іконок і додаткових описів ускладнювала швидке сканування списку та робила мапу менш інформативною. Команда прагнула покрити ширший стек AI-рішень та зробити каталог зручним як для україномовних, так і для англомовних користувачів.
+## Context
+The initial service list was short and failed to reflect key business use cases. The lack of icons and extended descriptions also made it harder to scan the map quickly and reduced its informational value. The team aimed to cover a broader range of AI solutions and make the catalog useful for both Ukrainian- and English-speaking audiences.
 
-## Рішення
-- Розширити `DATA` докладними описами сервісів українською й англійською мовами, синхронізуючи масиви `ua` та `en`.
-- Стандартизувати структуру категорій і груп, додати підгрупи (наприклад, "Відео та кліпи", "Контент і копірайтинг").
-- Додати словник `ICONS`, що відображає релевантні емодзі для популярних сервісів, і fallback-іконку ✨.
-- Оновити текстові блоки сторінки (банер, hero, нотатки, футер) для двомовного відображення.
+## Decision
+- Enrich the `DATA` object with detailed service descriptions in Ukrainian and English while keeping the `ua` and `en` arrays synchronized.
+- Standardize the structure of categories and groups, adding subgroups (for example, “Video & Clips” and “Content & Copywriting”).
+- Add an `ICONS` dictionary that maps popular services to relevant emoji and falls back to ✨ when undefined.
+- Update page text blocks (banner, hero, notes, footer) to support bilingual display.
 
-## Наслідки
-- ✅ Користувачі отримують контекст і сценарії використання без переходу на зовнішні сайти.
-- ✅ Білінгвальна підтримка робить продукт придатним для міжнародної аудиторії.
-- ✅ Іконки прискорюють візуальне сприйняття і допомагають відрізняти сервіси.
-- ⚠️ Збільшення обсягу даних потребує ретельного ревʼю перекладів при кожному оновленні.
-- ⚠️ Підтримка іконок вимагає синхронізації словника `ICONS` при додаванні нових сервісів.
+## Consequences
+- ✅ Users receive context and usage scenarios without leaving the site.
+- ✅ Bilingual support makes the product suitable for an international audience.
+- ✅ Icons speed up visual scanning and help differentiate services.
+- ⚠️ The larger dataset requires thorough translation review with each update.
+- ⚠️ Maintaining icons demands keeping the `ICONS` dictionary in sync when adding new services.

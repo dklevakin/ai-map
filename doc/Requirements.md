@@ -1,54 +1,54 @@
 # Requirements — AI Compass
 
-## 1. Контекст та обсяг
-- **Опис продукту**: статична веб-мапа AI-сервісів для SMB, реалізована у файлі `index.html` без сторонніх залежностей.
-- **Межі системи**: сайт працює повністю на клієнті, не має бекенду і використовує лише відкриті посилання на зовнішні сервіси.
-- **Основні зацікавлені сторони**:
-  - Бізнес-власники та операційні менеджери, які приймають рішення щодо впровадження AI.
-  - Маркетингові та продуктові команди, що підбирають інструменти для конкретних кампаній.
-  - Команда підтримки сайту, яка оновлює перелік сервісів та підтримує локалізації.
+## 1. Context and Scope
+- **Product description:** a static web map of AI services for SMBs, implemented in `index.html` without third-party dependencies.
+- **System boundaries:** the site runs fully on the client, has no backend, and only links out to public external resources.
+- **Key stakeholders:**
+  - Business owners and operations managers who decide which AI tools to adopt.
+  - Marketing and product teams selecting tools for specific campaigns.
+  - The site maintenance team that updates the catalog and keeps localizations in sync.
 
-## 2. Функціональні вимоги
-### 2.1 Структура контенту
-1. Система повинна зберігати категорії, підкатегорії (групи) та сервіси у двох мовних масивах `ua` і `en`, щоб забезпечити синхронність перекладів.
-2. Кожен сервіс має містити назву, короткий опис і гіперпосилання на офіційний ресурс.
-3. Категорії та групи повинні мати унікальні кольори/назви для візуального відокремлення на мапі.
+## 2. Functional Requirements
+### 2.1 Content Structure
+1. The system must store categories, subcategories (groups), and services in two language arrays, `ua` and `en`, to keep translations aligned.
+2. Every service entry must include a name, short description, and hyperlink to the official resource.
+3. Categories and groups must have unique colors/titles to stay visually distinct on the map.
 
-### 2.2 Інтерактивність мапи
-4. Після завантаження сторінки користувач повинен бачити радіальну діаграму з центральним вузлом «AI Compass».
-5. Клік по категорії має розгортати/згортати перелік повʼязаних сервісів, а повторний клік — повертає стан за замовчуванням.
-6. Групи всередині категорій повинні згортатися/розгортатися незалежно від категорії, щоб масштабні списки залишались читабельними.
-7. Наведення на сервіс повинно показувати підказку з описом та посиланням; натискання відкриває офіційний сайт у новій вкладці.
-8. Іконки поруч із сервісами мають відображати тип інструменту й прискорювати пошук потрібного рішення.
+### 2.2 Map Interactivity
+4. After the page loads, the user must see a radial diagram with the “AI Compass” central node.
+5. Clicking a category must expand or collapse its related services; clicking again returns it to the default state.
+6. Groups inside categories must expand/collapse independently so long lists remain readable.
+7. Hovering over a service must show a tooltip with its description and link; clicking opens the official site in a new tab.
+8. Icons next to services must reflect the tool type and speed up scanning for the right solution.
 
-### 2.3 Локалізація та керування
-9. Користувач повинен мати змогу перемикати мову інтерфейсу між українською та англійською; вибір зберігається між сеансами через LocalStorage.
-10. Основні текстові блоки сторінки (банер, hero, примітки, футер) повинні автоматично оновлюватися відповідно до вибраної мови.
-11. Категорії на мапі мають реагувати на клавіатурні події `Enter` та `Space`, забезпечуючи базову доступність.
-12. Каталог має надавати інструкції щодо ручного оновлення даних для майбутніх редакторів контенту.
+### 2.3 Localization and Management
+9. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
+10. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
+11. Categories on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility.
+12. The catalog must document manual update instructions for future content editors.
 
-### 2.4 Деплоймент та документація
-13. Сайт повинен відкриватися напряму з файлової системи або через будь-який статичний хостинг без збірки.
-14. Документація до проєкту має розміщуватися в папці `/doc` і бути готовою до публікації через GitHub Pages.
-15. Потрібно надавати посилання на суміжні документи (ADR, backlog, вимоги) для зручної навігації команди.
+### 2.4 Deployment and Documentation
+13. The site must open directly from the file system or through any static hosting without a build step.
+14. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
+15. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
 
-## 3. Нефункціональні вимоги
-| ID | Вимога | Тип |
+## 3. Non-functional Requirements
+| ID | Requirement | Type |
 | --- | --- | --- |
-| NF-1 | Рішення має працювати офлайн та без серверної частини. | Надійність / автономність |
-| NF-2 | Файл `index.html` повинен бути самодостатнім і не використовувати зовнішні бібліотеки для рендерингу мапи. | Архітектура |
-| NF-3 | Інтерфейс має бути читабельним на екранах від 1024px і зберігати працездатність на планшетах/мобільних пристроях. | Юзабіліті |
-| NF-4 | Усі тексти й дані повинні зберігатися в UTF-8 для підтримки української та англійської мов. | Сумісність |
-| NF-5 | Логіка взаємодії має залишатися зрозумілою без знання коду завдяки коментарям і документації. | Підтримуваність |
-| NF-6 | Розширення каталогу не повинно суттєво погіршувати продуктивність; розрахунки позицій виконуються клієнтом за O(n). | Продуктивність |
-| NF-7 | Код має дотримуватись принципів доступності: фокусовані елементи, aria-атрибути та контраст. | Доступність |
+| NF-1 | The solution must work offline and without a server component. | Reliability / Autonomy |
+| NF-2 | `index.html` must be self-contained and avoid external libraries for rendering the map. | Architecture |
+| NF-3 | The interface must be readable on screens from 1024px and remain usable on tablets/mobile devices. | Usability |
+| NF-4 | All text and data must be stored in UTF-8 to support Ukrainian and English languages. | Compatibility |
+| NF-5 | Interaction logic must stay understandable without reading the code thanks to comments and documentation. | Maintainability |
+| NF-6 | Catalog expansion must not significantly degrade performance; position calculations run on the client in O(n). | Performance |
+| NF-7 | The code must follow accessibility principles: focusable elements, ARIA attributes, and sufficient contrast. | Accessibility |
 
-## 4. Обмеження та припущення
-- Проєкт не зберігає користувацькі дані та не потребує політики конфіденційності.
-- Користувачам потрібен сучасний браузер з підтримкою SVG та LocalStorage.
-- Для аналітики відвідувань необхідно інтегрувати сторонні інструменти (відсутні у базовій версії).
+## 4. Constraints and Assumptions
+- The project does not store user data and does not require a privacy policy.
+- Users need a modern browser with SVG and LocalStorage support.
+- Traffic analytics requires integrating third-party tools (not included in the base version).
 
-## 5. Відкриті питання
-- Чи потрібна можливість імпорту/експорту каталогу у форматі JSON або Google Sheets.
-- Який процес рецензування нових сервісів перед публікацією та хто за нього відповідає.
-- Чи планується інтеграція з CRM/Slack для сповіщення про оновлення каталогу.
+## 5. Open Questions
+- Is there a need for JSON or Google Sheets import/export of the catalog?
+- What is the review process for new services before publication, and who owns it?
+- Should we integrate with CRM/Slack to notify stakeholders about catalog updates?

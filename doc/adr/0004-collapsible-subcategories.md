@@ -1,20 +1,20 @@
-# ADR 0004: Розкривні підкатегорії та групи сервісів
+# ADR 0004: Collapsible Subcategories and Service Groups
 
-- **Статус:** Accepted
-- **Дата:** 2025-09-21
-- **Повʼязані PR:** #4 `codex/expand-subcategories-to-match-categories`
+- **Status:** Accepted
+- **Date:** 2025-09-21
+- **Related PRs:** #4 `codex/expand-subcategories-to-match-categories`
 
-## Контекст
-Зі збільшенням кількості сервісів у категоріях стало важко проглядати довгі списки — елементи виходили за межі екрана, а користувачі втрачали контекст. Потрібно було зберегти компактність мапи й одночасно дозволити заглиблюватися в потрібні блоки.
+## Context
+As the number of services grew within each category, long lists became hard to browse—items stretched beyond the viewport and users lost context. We needed to keep the map compact while allowing people to dive into specific sections.
 
-## Рішення
-- Запровадити структуру `group` → `items` для підгруп із власними заголовками.
-- Зберігати стан розгортання груп окремо для кожної мови та категорії через `Map` + `Set`, щоб перемикання мов не губило контекст.
-- Відображати групи як окремі вузли з можливістю відкриття/закриття клацанням і клавіатурою.
-- Перераховувати вагу категорій з урахуванням відкритих груп, щоб канва адаптувалася до нової висоти.
+## Decision
+- Introduce a `group` → `items` structure for subgroups with their own titles.
+- Store the expansion state of groups separately for each language and category via a `Map` + `Set` approach so language switching does not lose context.
+- Render groups as dedicated nodes that can be opened/closed via clicks and keyboard controls.
+- Recalculate category weights with the state of expanded groups to adjust the canvas height dynamically.
 
-## Наслідки
-- ✅ Користувачі бачать компактний огляд і розгортають лише потрібні підрозділи.
-- ✅ Архітектура даних дозволяє додавати гнучкі сценарії (наприклад, тематичні плейбуки).
-- ⚠️ Логіка підрахунку ваги категорії стала складнішою; потрібні unit-тести або smoke-тести при зміні структури.
-- ⚠️ Необхідно контролювати, щоб усі нові елементи мали унікальні назви груп для коректного кешування стану.
+## Consequences
+- ✅ Users get a concise overview and can expand only the sections they need.
+- ✅ The data architecture supports flexible scenarios such as thematic playbooks.
+- ⚠️ The category weight calculation logic is more complex; unit or smoke tests are recommended when the structure changes.
+- ⚠️ All new elements must have unique group names to ensure caching works correctly.

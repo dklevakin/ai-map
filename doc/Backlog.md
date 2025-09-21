@@ -1,13 +1,12 @@
-# Backlog — AI Compass покращення
+# Backlog — AI Compass Improvements
 
-> **Примітка:** Створити або оновити задачі на GitHub Projects не вдалося в межах цього середовища. Будь ласка, додайте наведені нижче пункти на канбан-дошку вручну.
+> **Note:** Creating or updating GitHub Projects items is not possible in this environment. Please add the initiatives below to your Kanban board manually.
 
-| ID | Епік / тема | Опис ініціативи | Очікувана цінність | Пріоритет | Статус | Нотатки для GitHub Projects |
+| ID | Epic / Theme | Initiative Description | Expected Value | Priority | Status | Notes for GitHub Projects |
 | --- | --- | --- | --- | --- | --- | --- |
-| BL-01 | Пошук і фільтрація | Додати поле пошуку та фільтри за категоріями/типами сервісів, щоб швидко віднайти потрібний інструмент. | Скорочення часу на пошук сервісу, підвищення конверсії кліків. | High | Planned | Створити епік "Search" з задачами: UI, логіка фільтрації, UX-тести. |
-| BL-02 | Аналітика взаємодії | Інтегрувати простий збір статистики (наприклад, Plausible або GA4) для відстеження популярних категорій і сервісів. | Дає змогу пріоритезувати оновлення каталогу на основі даних. | Medium | Planned | Створити задачу з чек-листом: вибір платформи, оновлення політики, впровадження коду. |
-| BL-03 | Експорт каталогу | Реалізувати генерацію CSV/JSON з переліком сервісів для подальшої аналітики або імпорту в CRM. | Полегшує обмін даними з іншими системами та роботу консультантів. | Medium | Planned | Підготувати технічне рішення (кнопка експорту + формат файлів). |
-| BL-04 | Мобільна оптимізація | Уточнити відображення мапи на мобільних пристроях: масштабування, вертикальний скрол, читабельність тексту. | Покращує досвід користувачів, що відкривають сайт зі смартфонів. | High | In Review | Необхідно протестувати на реальних девайсах, задокументувати брейкпоінти. |
-| BL-05 | Контентні сценарії | Додати готові плейбуки використання (наприклад, "маркетингова кампанія" чи "автоматизація підтримки"). | Підвищує прикладну цінність і допомагає новачкам. | Medium | Planned | Розбити на підзадачі: дослідження, копірайтинг, дизайн секції. |
-| BL-06 | Підтримка третьої мови | Додати локалізацію, наприклад, польську або німецьку, з повним набором описів. | Розширює аудиторію і покращує експансію на нові ринки. | Low | Backlog | Підготувати мовне керівництво, залучити перекладача. |
-
+| BL-01 | Search & filtering | Add a search bar and filters by categories/service types to quickly find the desired tool. | Reduces time to locate a service and improves click-through rates. | High | Planned | Create a “Search” epic with tasks for UI, filtering logic, and UX testing. |
+| BL-02 | Interaction analytics | Integrate lightweight analytics (e.g., Plausible or GA4) to track popular categories and services. | Enables data-driven prioritization of catalog updates. | Medium | Planned | Create a task with a checklist: select a platform, update policy, implement tracking code. |
+| BL-03 | Catalog export | Generate CSV/JSON with the service list for analytics or CRM import. | Simplifies data sharing with other systems and consultants. | Medium | Planned | Prepare a technical plan (export button + file formats). |
+| BL-04 | Mobile optimization | Refine the map on mobile devices: scaling, vertical scroll, typography readability. | Improves the experience for users who access the site on smartphones. | High | In Review | Test on real devices and document breakpoints. |
+| BL-05 | Content playbooks | Add ready-made usage playbooks (e.g., “marketing campaign” or “support automation”). | Increases practical value and helps newcomers. | Medium | Planned | Break down into subtasks: research, copywriting, section design. |
+| BL-06 | Third-language support | Add another localization, such as Polish or German, with full descriptions. | Expands the audience and supports new markets. | Low | Backlog | Prepare a language guide and involve a translator. |
