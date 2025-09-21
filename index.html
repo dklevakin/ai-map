@@ -16,7 +16,7 @@
     .small { font-size:10px; font-weight:600; fill:#111827; }
     .normal { font-size:12px; font-weight:600; fill:#111827; }
     .large { font-size:16px; font-weight:700; fill:#111827; }
-    .muted { font-size:11px; fill:#d1d5db; }
+    .muted { font-size:13px; font-weight:500; fill:#e5e7eb; }
     .link { font-size:11px; fill:#60a5fa; text-decoration:underline; }
   </style>
 </head>
@@ -40,98 +40,544 @@
   <script>
     const DATA = {
       ua: [
-        { category: "LLM", color: "#2563eb", items: [
-          { name: "ChatGPT", href: "https://chat.openai.com/", desc: "Універсальний асистент для текстів, ідей, аналізу." },
-          { name: "Claude", href: "https://claude.ai/", desc: "Зручний для великих документів і юридичних текстів." },
-          { name: "Google Gemini", href: "https://gemini.google.com/", desc: "Інтеграція з Google Workspace (Docs, Sheets)." },
-          { name: "Microsoft Copilot", href: "https://copilot.microsoft.com/", desc: "Вбудований у Word, Excel, Outlook." },
-        ]},
-        { category: "Зображення", color: "#16a34a", items: [
-          { name: "Midjourney", href: "https://www.midjourney.com/", desc: "Високоякісні візуали: мода, інтер'єри, реклама." },
-          { name: "Stable Diffusion / Leonardo AI", href: "https://leonardo.ai/", desc: "Гнучкість і контроль стилю, рішення для бізнесу." },
-          { name: "Canva AI", href: "https://www.canva.com/ai/", desc: "Швидке створення маркетингових матеріалів." },
-          { name: "Adobe Firefly", href: "https://www.adobe.com/products/firefly.html", desc: "Генеративні інструменти у Photoshop/Illustrator." },
-        ]},
-        { category: "Відео", color: "#f59e0b", items: [
-          { name: "HeyGen", href: "https://www.heygen.com/", desc: "Аватар‑відео з тексту." },
-          { name: "Synthesia", href: "https://www.synthesia.io/", desc: "Навчальні та маркетингові відео." },
-          { name: "Runway ML", href: "https://runwayml.com/", desc: "Генерація сцен і відеоредагування." },
-          { name: "Pictory / OpusClip", href: "https://www.opus.pro/", desc: "Нарізки з довгих відео для соцмереж." },
-        ]},
-        { category: "Автоматизація", color: "#db2777", items: [
-          { name: "Zapier / Make / n8n", href: "https://zapier.com/", desc: "Інтеграція CRM, пошти, маркетингу, Google Sheets." },
-          { name: "UiPath / Power Automate", href: "https://www.uipath.com/", desc: "RPA для складних бізнес‑процесів." },
-          { name: "Tidio / ManyChat", href: "https://www.manychat.com/", desc: "Чат‑боти з AI для продажів і підтримки." },
-        ]},
-        { category: "Навчання", color: "#7c3aed", items: [
-          { name: "Coursera / Udemy", href: "https://www.coursera.org/", desc: "AI‑курси для команд." },
-          { name: "Docebo / LearnWorlds", href: "https://www.docebo.com/", desc: "Корпоративне навчання з AI." },
-          { name: "Evolv AI", href: "https://www.evolv.ai/", desc: "Персоналізоване навчання і експерименти." },
-        ]},
-        { category: "UGC & Маркетинг", color: "#0ea5e9", items: [
-          { name: "CapCut / VEED.io", href: "https://www.capcut.com/", desc: "Швидкі відео для TikTok/Instagram." },
-          { name: "Copy.ai / Jasper", href: "https://www.jasper.ai/", desc: "Тексти для реклами та email." },
-          { name: "Notion AI", href: "https://www.notion.so/product/ai", desc: "Плани, статті, внутрішня документація." },
-        ]},
-        { category: "Аналітика", color: "#059669", items: [
-          { name: "Power BI + Copilot / Tableau + AI", href: "https://powerbi.microsoft.com/", desc: "BI‑аналітика з AI‑допомогою." },
-          { name: "MonkeyLearn", href: "https://monkeylearn.com/", desc: "Аналіз відгуків і текстів." },
-          { name: "Crayon / Crux", href: "https://www.crayon.co/", desc: "Конкурентна аналітика." },
-        ]},
-        { category: "Спеціальні", color: "#dc2626", items: [
-          { name: "Xero / QuickBooks + AI", href: "https://www.xero.com/", desc: "Автоматизація бухобліку." },
-          { name: "AdCreative.ai", href: "https://www.adcreative.ai/", desc: "Генерація банерів і оголошень." },
-          { name: "Shopify AI / Wix AI", href: "https://www.shopify.com/", desc: "Опис товарів, SEO, магазин." },
-          { name: "Planner 5D / Autodesk AI", href: "https://planner5d.com/", desc: "Проєкти та візуалізації у будівництві/дизайні." },
-          { name: "Fashwell AI", href: "https://www.fashwell.com/", desc: "Рекомендації стилю та трендів." },
-        ]},
+        {
+          category: "LLM-асистенти",
+          color: "#2563eb",
+          items: [
+            {
+              name: "ChatGPT",
+              href: "https://chat.openai.com/",
+              desc: "Універсальний асистент для текстів, ідей та аналізу даних. Допомагає писати статті, презентації, сценарії й листи у розмовному форматі. Пояснює складні теми, генерує таблиці, код і створює прототипи презентацій. Має режими для веб-перегляду, аналізу файлів і генерації зображень.",
+            },
+            {
+              name: "Claude",
+              href: "https://claude.ai/",
+              desc: "Створений для роботи з великими документами та юридичними матеріалами. Легко резюмує десятки сторінок, виокремлює ризики та пропонує правки. Вміє генерувати інструкції, шаблони документів і коректно обробляє конфіденційні дані. Приділяє увагу безпеці та пояснює свої відповіді.",
+            },
+            {
+              name: "Google Gemini",
+              href: "https://gemini.google.com/",
+              desc: "Інтегрується з Google Workspace, щоб доповнювати Docs, Sheets, Gmail і презентації. Працює з текстом, зображеннями та кодом у єдиному чаті. Може узагальнювати пошту, аналізувати дані в таблицях та формувати слайди з дизайном. Підтримує голосові запити і мобільні сценарії.",
+            },
+            {
+              name: "Microsoft Copilot",
+              href: "https://copilot.microsoft.com/",
+              desc: "Вбудований у Word, Excel, Outlook, PowerPoint та Teams для корпоративних сценаріїв. Автоматично створює звіти, пропозиції й відповіді на листи на основі ваших файлів. Підсумовує зустрічі, виокремлює ризики і формує наступні кроки для команди. Спирається на безпеку й контроль Microsoft 365.",
+            },
+          ],
+        },
+        {
+          category: "Генерація зображень",
+          color: "#16a34a",
+          items: [
+            {
+              name: "Midjourney",
+              href: "https://www.midjourney.com/",
+              desc: "Дає фотореалістичні й художні візуали для маркетингу, дизайну та моди. Працює через Discord із продуманими промптами та параметрами стилю. Дозволяє швидко тестувати варіанти, від fine-art до продукційної візуалізації. Спільнота надає інспірацію й готові рецепти стилів.",
+            },
+            {
+              name: "Stable Diffusion",
+              href: "https://stability.ai/",
+              desc: "Відкрите ядро для генерації зображень з можливістю запуску локально або в хмарі. Підтримує контроль композиції, інпейнтинг і кастомні чекпоінти. Дозволяє тренувати власні моделі під бренд чи продукт. Має велику екосистему плагінів та UI для різних рівнів користувачів.",
+            },
+            {
+              name: "Leonardo AI",
+              href: "https://leonardo.ai/",
+              desc: "Зосереджений на високоякісних рендерах для ігор, реклами та продуктового дизайну. Пропонує бібліотеку стилів і можливість тренувати персональні генератори. Підтримує пакетну генерацію, етапи редагування і командну роботу. Має контролі за кольором, позою й атмосферою сцени.",
+            },
+            {
+              name: "Canva AI",
+              href: "https://www.canva.com/ai/",
+              desc: "Поєднує генерацію зображень із редагуванням у знайомому інтерфейсі Canva. Дозволяє створювати макети для соціальних мереж, презентацій і реклами за хвилини. Підтримує видалення фону, швидке копіювання стилю та спільну роботу. Має готові шаблони і бренд-палітри для команд.",
+            },
+            {
+              name: "Adobe Firefly",
+              href: "https://www.adobe.com/products/firefly.html",
+              desc: "Пропонує генеративні інструменти, інтегровані в Photoshop, Illustrator і Express. Дозволяє створювати зображення, текстури й ефекти за текстовими підказками. Підтримує Generative Fill для контекстного редагування та точних правок. Має ліцензований датасет, тож контент підходить для комерційного використання.",
+            },
+          ],
+        },
+        {
+          category: "Відеопродакшн",
+          color: "#f59e0b",
+          items: [
+            {
+              name: "HeyGen",
+              href: "https://www.heygen.com/",
+              desc: "Генерує персоналізовані відео з аватарів і синтезованої мови. Підходить для навчання, онбордингу й локалізації контенту без знімальної групи. Дозволяє завантажити власний сценарій, обрати голос і мову для кожної сцени. Має функції перекладу з автоматичним дубляжем і субтитрами.",
+            },
+            {
+              name: "Synthesia",
+              href: "https://www.synthesia.io/",
+              desc: "Платформа для створення навчальних і маркетингових роликів з понад 140 аватарами. Дозволяє перетворити текстовий сценарій у відео за кілька хвилин. Має шаблони курсів, доступ до голосів із різними стилями та редагування жестів. Забезпечує контроль бренду і легко вбудовується в LMS.",
+            },
+            {
+              name: "Runway ML",
+              href: "https://runwayml.com/",
+              desc: "Надає інструменти для генерації відео, монтажу та візуальних ефектів. Підтримує текст-у-відео, видалення об’єктів, трекінг і реверс монтаж. Дозволяє комбінувати традиційне редагування з генеративними моделями. Має колаборативний режим та бібліотеку тренувальних моделей.",
+            },
+            {
+              name: "Pictory",
+              href: "https://pictory.ai/",
+              desc: "Автоматично перетворює довгі відео або статті на короткі ролики. Аналізує структуру контенту, знаходить ключові моменти і створює сценарій. Додає субтитри, візуальні вставки та голосове озвучення. Підходить для створення контенту для YouTube, блогів та курсів.",
+            },
+            {
+              name: "OpusClip",
+              href: "https://www.opus.pro/",
+              desc: "Спеціалізується на швидкому створенні вертикальних кліпів для соцмереж. Розпізнає найцікавіші фрагменти з довгих відео й розставляє акценти. Генерує субтитри, емодзі та заголовки для утримання уваги. Має аналітику A/B і рекомендації щодо часу публікації.",
+            },
+          ],
+        },
+        {
+          category: "Автоматизація процесів",
+          color: "#db2777",
+          items: [
+            {
+              name: "Zapier",
+              href: "https://zapier.com/",
+              desc: "Дозволяє поєднувати тисячі SaaS-сервісів без коду. Автоматизує повторювані дії між CRM, маркетингом, фінансами та підтримкою. Пропонує готові шаблони для запуску роботів за хвилини. Має вбудовані AI-доповнення для обробки тексту та ухвалення рішень.",
+            },
+            {
+              name: "Make",
+              href: "https://www.make.com/",
+              desc: "Візуальний конструктор сценаріїв із гнучкими умовами та паралельними гілками. Підтримує розгалужену логіку, цикли й роботу з великими масивами даних. Дає змогу будувати інтеграції між внутрішніми системами й API. Містить AI-модулі для класифікації й генерації контенту в процесі.",
+            },
+            {
+              name: "n8n",
+              href: "https://n8n.io/",
+              desc: "Open-source платформа для автоматизації з можливістю самостійного хостингу. Надає контролю над даними та розширеннями через JavaScript. Підтримує складні робочі процеси, вебхуки і кастомні ноди. Активна спільнота створює готові фрагменти для AI-інтеграцій.",
+            },
+            {
+              name: "UiPath",
+              href: "https://www.uipath.com/",
+              desc: "Рішення для роботизованої автоматизації бізнес-процесів на рівні підприємства. Захоплює дії користувача, аналізує документи та запускає цифрових роботів. Має Studio, Orchestrator і Test Suite для повного циклу автоматизації. Вбудовані AI-модулі допомагають обробляти зображення, тексти й пошту.",
+            },
+            {
+              name: "Power Automate",
+              href: "https://powerautomate.microsoft.com/",
+              desc: "Хмарна платформа від Microsoft для автоматизації робочих процесів і RPA. Інтегрується з екосистемою Microsoft 365, Dynamics, Azure та сторонніми сервісами. Дозволяє створювати боти, які запускають дії за подіями або розкладом. Copilot допомагає будувати потоки природною мовою.",
+            },
+          ],
+        },
+        {
+          category: "Навчання та розвиток",
+          color: "#7c3aed",
+          items: [
+            {
+              name: "Coursera",
+              href: "https://www.coursera.org/",
+              desc: "Глобальна платформа з програмами від провідних університетів і компаній. Пропонує спеціалізації з AI, аналітики та менеджменту для команд. Має персональні рекомендації на основі ваших цілей і прогресу. Сертифікати допомагають підтвердити компетенції співробітників.",
+            },
+            {
+              name: "Udemy",
+              href: "https://www.udemy.com/",
+              desc: "Маркетплейс курсів із величезним вибором практичних програм. Дозволяє проходити навчання у власному темпі з довічним доступом до матеріалів. Підтримує корпоративні підписки з аналітикою прогресу та рекомендаціями. Регулярно оновлює контент у галузях AI, розробки й бізнесу.",
+            },
+            {
+              name: "Docebo",
+              href: "https://www.docebo.com/",
+              desc: "LMS для корпоративного навчання з AI-персоналізацією. Автоматично формує навчальні шляхи на основі ролей і навичок. Має вбудований контент-маркетплейс, можливості соціального навчання та коучингу. Забезпечує аналітику ефективності та інтеграції з HR-системами.",
+            },
+            {
+              name: "LearnWorlds",
+              href: "https://www.learnworlds.com/",
+              desc: "Платформа для створення власної академії і продажу курсів. Пропонує інтерактивні відео, сертифікацію та гейміфікацію. Дозволяє налаштовувати бренд, цінові плани і маркетингові кампанії. AI-інструменти допомагають генерувати модулі та описи уроків.",
+            },
+            {
+              name: "Evolv AI",
+              href: "https://www.evolv.ai/",
+              desc: "Платформа експериментів і персоналізації цифрових продуктів. Використовує AI, щоб тестувати сотні варіацій контенту й UX одночасно. Автоматично оптимізує досвід під сегменти аудиторії. Надає глибоку аналітику впливу на конверсії та дохід.",
+            },
+          ],
+        },
+        {
+          category: "Маркетинг і контент",
+          color: "#0ea5e9",
+          items: [
+            {
+              name: "CapCut",
+              href: "https://www.capcut.com/",
+              desc: "Редактор для швидкого створення вертикальних відео та кліпів. Має шаблони трендів, авто-субтитри і бібліотеку ефектів. AI функції вирізають фони, змінюють голос і покращують якість. Ідеально підходить для TikTok, Reels і YouTube Shorts.",
+            },
+            {
+              name: "VEED.io",
+              href: "https://www.veed.io/",
+              desc: "Онлайн-студія для монтажу й субтитрування відео. Підтримує запис екрана, подкастів і співпрацю в команді. AI-алгоритми автоматично розставляють субтитри, очищують звук і перекладають. Має шаблони для вебінарів, реклами та курсів.",
+            },
+            {
+              name: "Copy.ai",
+              href: "https://www.copy.ai/",
+              desc: "Сервіс для генерації маркетингових текстів і брифів. Дозволяє створювати варіанти рекламних оголошень, описів продуктів і листів. Підтримує бібліотеки тонів, персон і кампаній. Має робочі процеси для автоматичного створення контенту з даних.",
+            },
+            {
+              name: "Jasper",
+              href: "https://www.jasper.ai/",
+              desc: "AI-помічник для команд контент-маркетингу. Пропонує бренд-голос, стильові гіди і спільні проєкти. Генерує статті, лендінги, сценарії відео й SEO-брифи. Інтегрується з CMS та має аналітику продуктивності контенту.",
+            },
+            {
+              name: "Notion AI",
+              href: "https://www.notion.so/product/ai",
+              desc: "Вбудований у Notion для створення документів, баз знань і планів. Допомагає структурувати зустрічі, резюмувати нотатки та генерувати задачі. Може трансформувати тексти в списки, таблиці або OKR. Підтримує командну роботу з правами доступу та шаблонами.",
+            },
+            {
+              name: "Tidio",
+              href: "https://www.tidio.com/",
+              desc: "Платформа живого чату з AI-ботами для продажів і підтримки. Автоматично відповідає на поширені питання та передає лідів менеджерам. Аналізує поведінку відвідувачів і показує персональні пропозиції. Має сценарії для email, месенджерів і інтеграції з CRM.",
+            },
+            {
+              name: "ManyChat",
+              href: "https://www.manychat.com/",
+              desc: "Конструктор чат-ботів для Instagram, Facebook і WhatsApp. Дозволяє будувати воронки з автоповідомленнями та AI-відповідями. Сегментує аудиторію, запускає розсилки й опитування. Інтегрується з Shopify, HubSpot та іншими маркетинговими інструментами.",
+            },
+          ],
+        },
+        {
+          category: "Аналітика та BI",
+          color: "#059669",
+          items: [
+            {
+              name: "Power BI",
+              href: "https://powerbi.microsoft.com/",
+              desc: "Потужна платформа бізнес-аналітики від Microsoft. Підключається до сотень джерел даних і будує інтерактивні дашборди. Допомагає виявляти тренди, прогнозувати показники та створювати звіти. Copilot пропонує візуалізації і відповідає на питання природною мовою.",
+            },
+            {
+              name: "Tableau",
+              href: "https://www.tableau.com/",
+              desc: "Гнучкий інструмент для візуалізації даних і досліджень. Підтримує великі набори даних і створює комплексні історії. Має AI-функції Explain Data та Data Stories для інтерпретації метрик. Дозволяє публікувати дашборди в хмарі або локально з контролем доступу.",
+            },
+            {
+              name: "MonkeyLearn",
+              href: "https://monkeylearn.com/",
+              desc: "Платформа для аналізу текстів та відгуків на основі AI. Дозволяє тренувати власні класифікатори і тегери без програмування. Підходить для моніторингу NPS, соцмереж і сапорт-звернень. Має інтеграції з Zapier, Zendesk і BI-панелями.",
+            },
+            {
+              name: "Crayon",
+              href: "https://www.crayon.co/",
+              desc: "Інструмент конкурентної розвідки з AI-аналітикою. Збирає дані про активність конкурентів, оновлення сайтів і контент. Формує дайджести, сигнали і battlecards для продажів. Допомагає командам маркетингу оперативно реагувати на ринок.",
+            },
+            {
+              name: "Crux",
+              href: "https://www.cruxinformatics.com/",
+              desc: "Платформа для управління корпоративними даними та їх доставки в аналітичні системи. Автоматизує збір із зовнішніх джерел, очищення та нормалізацію. Підтримує готові конектори до фінансових і альтернативних датасетів. Використовує AI, щоб контролювати якість і повноту даних.",
+            },
+          ],
+        },
+        {
+          category: "Галузеві рішення",
+          color: "#dc2626",
+          items: [
+            {
+              name: "Xero",
+              href: "https://www.xero.com/",
+              desc: "Хмарна бухгалтерія для малого та середнього бізнесу. Автоматично імпортує банківські транзакції та узгоджує платежі. Генерує фінансові звіти, рахунки та нагадування клієнтам. AI-підказки допомагають прогнозувати кеш-флоу і виявляти аномалії.",
+            },
+            {
+              name: "QuickBooks",
+              href: "https://quickbooks.intuit.com/",
+              desc: "Комплексне рішення для бухгалтерії, зарплат і витрат. Синхронізується з банками, платіжними системами та CRM. Створює податкові звіти, бюджети та дашборди в режимі реального часу. Інструменти AI спрощують класифікацію транзакцій і планування.",
+            },
+            {
+              name: "AdCreative.ai",
+              href: "https://www.adcreative.ai/",
+              desc: "Сервіс для генерації рекламних банерів і текстів. Аналізує ваш бренд, кольори й цільову аудиторію. Пропонує десятки варіантів креативів із прогнозом CTR. Інтегрується з Meta, Google Ads та платформами ремаркетингу.",
+            },
+            {
+              name: "Shopify AI",
+              href: "https://www.shopify.com/",
+              desc: "AI-функції у Shopify для описів товарів, email та чат-підтримки. Допомагає створювати персоналізовані рекомендації і поп-апи. Автоматично генерує SEO-теги, заголовки й тексти колекцій. Працює в адмін-панелі без додаткових плагінів.",
+            },
+            {
+              name: "Wix AI",
+              href: "https://www.wix.com/ai",
+              desc: "Надає інструменти для автоматичного створення сайтів і контенту. Після короткого брифу генерує структуру сторінок, тексти та зображення. Оптимізує SEO, підказує кампанії та аналізує поведінку відвідувачів. Підходить для малого бізнесу та фрилансерів.",
+            },
+            {
+              name: "Planner 5D",
+              href: "https://planner5d.com/",
+              desc: "Платформа для проєктування інтер'єрів із AI-допомогою. Дозволяє створювати плани приміщень, 3D-візуалізації та кошториси. Має бібліотеку меблів, стилів і автоматичне розставлення предметів. Підходить дизайнерам, забудовникам і DIY-користувачам.",
+            },
+            {
+              name: "Autodesk AI",
+              href: "https://www.autodesk.com/solutions/ai",
+              desc: "Набір AI-інструментів у продуктах Autodesk для проєктування та будівництва. Допомагає оптимізувати конструкції, зменшувати витрати матеріалів і планувати графіки. Аналізує дані з BIM, IoT та польових звітів. Прискорює узгодження команд і контроль якості.",
+            },
+            {
+              name: "Fashwell AI",
+              href: "https://www.fashwell.com/",
+              desc: "Рішення для fashion-ретейлу з візуальним пошуком і рекомендаціями. Аналізує каталоги, фото користувачів та тренди. Підбирає товари за стилем, кольором і фасоном у режимі реального часу. Підвищує конверсію й середній чек у онлайн-магазинах.",
+            },
+          ],
+        },
       ],
       en: [
-        { category: "LLM", color: "#2563eb", items: [
-          { name: "ChatGPT", href: "https://chat.openai.com/", desc: "Universal assistant for texts, ideas, analysis." },
-          { name: "Claude", href: "https://claude.ai/", desc: "Great for large docs and legal texts." },
-          { name: "Google Gemini", href: "https://gemini.google.com/", desc: "Integration with Google Workspace." },
-          { name: "Microsoft Copilot", href: "https://copilot.microsoft.com/", desc: "Built into Word, Excel, Outlook." },
-        ]},
-        { category: "Images", color: "#16a34a", items: [
-          { name: "Midjourney", href: "https://www.midjourney.com/", desc: "High‑quality visuals: fashion, interiors, ads." },
-          { name: "Stable Diffusion / Leonardo AI", href: "https://leonardo.ai/", desc: "Flexible style control, business‑ready." },
-          { name: "Canva AI", href: "https://www.canva.com/ai/", desc: "Fast marketing materials." },
-          { name: "Adobe Firefly", href: "https://www.adobe.com/products/firefly.html", desc: "Generative tools in Adobe apps." },
-        ]},
-        { category: "Video", color: "#f59e0b", items: [
-          { name: "HeyGen", href: "https://www.heygen.com/", desc: "Avatar videos from text." },
-          { name: "Synthesia", href: "https://www.synthesia.io/", desc: "Training & marketing videos." },
-          { name: "Runway ML", href: "https://runwayml.com/", desc: "Scene generation & editing." },
-          { name: "Pictory / OpusClip", href: "https://www.opus.pro/", desc: "Shorts from long videos." },
-        ]},
-        { category: "Automation", color: "#db2777", items: [
-          { name: "Zapier / Make / n8n", href: "https://zapier.com/", desc: "Integrate CRM, email, marketing, Sheets." },
-          { name: "UiPath / Power Automate", href: "https://www.uipath.com/", desc: "RPA for complex workflows." },
-          { name: "Tidio / ManyChat", href: "https://www.manychat.com/", desc: "AI chatbots for sales & support." },
-        ]},
-        { category: "Learning", color: "#7c3aed", items: [
-          { name: "Coursera / Udemy", href: "https://www.coursera.org/", desc: "AI courses for teams." },
-          { name: "Docebo / LearnWorlds", href: "https://www.docebo.com/", desc: "Corporate learning with AI." },
-          { name: "Evolv AI", href: "https://www.evolv.ai/", desc: "Personalized learning & experiments." },
-        ]},
-        { category: "UGC & Marketing", color: "#0ea5e9", items: [
-          { name: "CapCut / VEED.io", href: "https://www.capcut.com/", desc: "Quick videos for social." },
-          { name: "Copy.ai / Jasper", href: "https://www.jasper.ai/", desc: "Copy for ads & emails." },
-          { name: "Notion AI", href: "https://www.notion.so/product/ai", desc: "Docs, plans, internal notes." },
-        ]},
-        { category: "Analytics", color: "#059669", items: [
-          { name: "Power BI + Copilot / Tableau + AI", href: "https://powerbi.microsoft.com/", desc: "BI analytics with AI." },
-          { name: "MonkeyLearn", href: "https://monkeylearn.com/", desc: "Reviews & text analysis." },
-          { name: "Crayon / Crux", href: "https://www.crayon.co/", desc: "Competitive intelligence." },
-        ]},
-        { category: "Specialized", color: "#dc2626", items: [
-          { name: "Xero / QuickBooks + AI", href: "https://www.xero.com/", desc: "Accounting automation." },
-          { name: "AdCreative.ai", href: "https://www.adcreative.ai/", desc: "Ad banners & creatives." },
-          { name: "Shopify AI / Wix AI", href: "https://www.shopify.com/", desc: "SEO, product descriptions, store." },
-          { name: "Planner 5D / Autodesk AI", href: "https://planner5d.com/", desc: "Projects & visualizations." },
-          { name: "Fashwell AI", href: "https://www.fashwell.com/", desc: "Style & trend recommendations." },
-        ]},
+        {
+          category: "LLM Assistants",
+          color: "#2563eb",
+          items: [
+            {
+              name: "ChatGPT",
+              href: "https://chat.openai.com/",
+              desc: "Universal assistant for writing, ideation, and data analysis. Drafts articles, presentations, scripts, and emails in a conversational flow. Explains complex topics, produces tables, code, and presentation prototypes. Offers browsing, file analysis, and image generation modes.",
+            },
+            {
+              name: "Claude",
+              href: "https://claude.ai/",
+              desc: "Built for long-form documents and legal materials. Summarizes dozens of pages, highlights risks, and suggests revisions. Generates instructions, document templates, and handles sensitive data carefully. Prioritizes safety and explains its reasoning.",
+            },
+            {
+              name: "Google Gemini",
+              href: "https://gemini.google.com/",
+              desc: "Integrates with Google Workspace to enrich Docs, Sheets, Gmail, and Slides. Works with text, images, and code inside one chat interface. Summarizes email threads, analyzes spreadsheets, and creates designed slide decks. Supports voice prompts and mobile workflows.",
+            },
+            {
+              name: "Microsoft Copilot",
+              href: "https://copilot.microsoft.com/",
+              desc: "Embedded across Word, Excel, Outlook, PowerPoint, and Teams for enterprise use. Drafts reports, proposals, and replies by relying on your files. Recaps meetings, surfaces risks, and suggests next steps for the team. Leverages Microsoft 365 security and governance.",
+            },
+          ],
+        },
+        {
+          category: "Image Generation",
+          color: "#16a34a",
+          items: [
+            {
+              name: "Midjourney",
+              href: "https://www.midjourney.com/",
+              desc: "Delivers photorealistic and artistic visuals for marketing, design, and fashion. Runs through Discord with detailed prompts and style parameters. Lets teams test variations from fine art to product visualization in minutes. A vibrant community shares inspiration and ready-made style recipes.",
+            },
+            {
+              name: "Stable Diffusion",
+              href: "https://stability.ai/",
+              desc: "Open model core for image generation that can run locally or in the cloud. Supports composition control, inpainting, and custom checkpoints. Enables training branded models tailored to your product library. A broad ecosystem of plugins and UIs serves every skill level.",
+            },
+            {
+              name: "Leonardo AI",
+              href: "https://leonardo.ai/",
+              desc: "Focused on high-quality renders for games, advertising, and product design. Provides a style library and the ability to train personal generators. Offers batch creation, iterative editing, and collaborative workflows. Detailed controls manage color, pose, and scene ambience.",
+            },
+            {
+              name: "Canva AI",
+              href: "https://www.canva.com/ai/",
+              desc: "Combines image generation with editing inside Canva’s familiar interface. Produces social posts, presentations, and ads in minutes. Includes background removal, style copying, and shared brand assets. Ready-made templates and team spaces speed up collaboration.",
+            },
+            {
+              name: "Adobe Firefly",
+              href: "https://www.adobe.com/products/firefly.html",
+              desc: "Brings generative tools into Photoshop, Illustrator, and Express. Creates images, textures, and effects from textual prompts. Generative Fill enables context-aware edits and precise refinements. Trained on licensed datasets so outputs are safe for commercial use.",
+            },
+          ],
+        },
+        {
+          category: "Video Production",
+          color: "#f59e0b",
+          items: [
+            {
+              name: "HeyGen",
+              href: "https://www.heygen.com/",
+              desc: "Generates personalized videos with avatars and synthesized speech. Ideal for training, onboarding, and localized messaging without a film crew. Upload scripts, choose voices and languages for each scene. Translation features add dubbed audio and subtitles automatically.",
+            },
+            {
+              name: "Synthesia",
+              href: "https://www.synthesia.io/",
+              desc: "Platform for training and marketing videos with more than 140 avatars. Turns a written script into a finished video in minutes. Includes course templates, varied voice styles, and gesture editing. Brand controls make it easy to deploy content inside LMS platforms.",
+            },
+            {
+              name: "Runway ML",
+              href: "https://runwayml.com/",
+              desc: "Provides tools for video generation, editing, and visual effects. Supports text-to-video, object removal, motion tracking, and reverse editing. Blends traditional timelines with generative models in one workspace. Collaborative modes and a model library expand creative options.",
+            },
+            {
+              name: "Pictory",
+              href: "https://pictory.ai/",
+              desc: "Automatically converts long videos or articles into short-form clips. Analyzes structure, finds key moments, and drafts a storyline. Adds subtitles, stock visuals, and AI voiceovers with minimal effort. Great for YouTube, blogs, and online courses.",
+            },
+            {
+              name: "OpusClip",
+              href: "https://www.opus.pro/",
+              desc: "Specializes in fast vertical clips tailored for social media. Detects high-impact segments from long videos and highlights key hooks. Generates captions, emojis, and titles to maximize retention. Includes A/B analytics and recommendations for posting schedules.",
+            },
+          ],
+        },
+        {
+          category: "Process Automation",
+          color: "#db2777",
+          items: [
+            {
+              name: "Zapier",
+              href: "https://zapier.com/",
+              desc: "Connects thousands of SaaS tools without writing code. Automates repetitive workflows across CRM, marketing, finance, and support. Offers ready-made templates to launch automations in minutes. Built-in AI steps classify text, enrich data, and trigger decisions.",
+            },
+            {
+              name: "Make",
+              href: "https://www.make.com/",
+              desc: "Visual scenario builder with flexible conditions and parallel branches. Handles complex logic, loops, and bulk data operations. Bridges internal systems and APIs into unified flows. AI modules classify, summarize, and generate content mid-process.",
+            },
+            {
+              name: "n8n",
+              href: "https://n8n.io/",
+              desc: "Open-source automation platform you can self-host. Gives full control over data, extensions, and JavaScript customizations. Orchestrates intricate workflows, webhooks, and custom nodes. A vibrant community shares ready-to-use snippets for AI integrations.",
+            },
+            {
+              name: "UiPath",
+              href: "https://www.uipath.com/",
+              desc: "Enterprise-grade robotic process automation suite. Captures user actions, reads documents, and deploys digital workers. Studio, Orchestrator, and Test Suite cover the automation lifecycle. Built-in AI skills process images, text, and email at scale.",
+            },
+            {
+              name: "Power Automate",
+              href: "https://powerautomate.microsoft.com/",
+              desc: "Microsoft’s cloud platform for workflow automation and RPA. Integrates deeply with Microsoft 365, Dynamics, Azure, and third-party services. Builds bots that trigger on events, schedules, or approvals. Copilot assists with designing flows using natural language.",
+            },
+          ],
+        },
+        {
+          category: "Learning & Development",
+          color: "#7c3aed",
+          items: [
+            {
+              name: "Coursera",
+              href: "https://www.coursera.org/",
+              desc: "Global platform with programs from leading universities and companies. Offers AI, analytics, and leadership tracks for entire teams. Personalized recommendations adapt to goals and progress. Industry-recognized certificates validate employee skills.",
+            },
+            {
+              name: "Udemy",
+              href: "https://www.udemy.com/",
+              desc: "Marketplace with a vast library of hands-on courses. Lets learners study at their own pace with lifetime access to materials. Provides business subscriptions with progress analytics and content suggestions. Regularly refreshes catalogues in AI, development, and business.",
+            },
+            {
+              name: "Docebo",
+              href: "https://www.docebo.com/",
+              desc: "Corporate LMS with AI-driven personalization. Automatically builds learning paths based on roles and skills. Includes a content marketplace, social learning, and coaching features. Delivers performance analytics and HR integrations.",
+            },
+            {
+              name: "LearnWorlds",
+              href: "https://www.learnworlds.com/",
+              desc: "Platform for launching branded academies and selling courses. Features interactive video, certification, and gamification tools. Customizes branding, pricing, and marketing campaigns. AI helpers generate modules, quizzes, and lesson descriptions.",
+            },
+            {
+              name: "Evolv AI",
+              href: "https://www.evolv.ai/",
+              desc: "Experimentation and personalization platform for digital products. Uses AI to test hundreds of content and UX variations simultaneously. Automatically tailors experiences to audience segments. Provides deep analytics on conversion and revenue impact.",
+            },
+          ],
+        },
+        {
+          category: "Marketing & Content",
+          color: "#0ea5e9",
+          items: [
+            {
+              name: "CapCut",
+              href: "https://www.capcut.com/",
+              desc: "Editor for rapid creation of vertical videos and social clips. Packs trending templates, auto captions, and an effects library. AI tools remove backgrounds, change voices, and upscale footage. Built for TikTok, Reels, and YouTube Shorts workflows.",
+            },
+            {
+              name: "VEED.io",
+              href: "https://www.veed.io/",
+              desc: "Online studio for video editing and captioning. Supports screen recording, podcast production, and team collaboration. AI transcribes, cleans audio, and translates subtitles. Templates cover webinars, ads, and course content.",
+            },
+            {
+              name: "Copy.ai",
+              href: "https://www.copy.ai/",
+              desc: "Generates marketing copy and creative briefs in seconds. Produces variations of ads, product descriptions, and outreach emails. Libraries store brand tones, personas, and campaign assets. Automated workflows build content directly from your data.",
+            },
+            {
+              name: "Jasper",
+              href: "https://www.jasper.ai/",
+              desc: "AI assistant for content marketing teams. Provides brand voice, style guides, and collaborative projects. Writes articles, landing pages, scripts, and SEO briefs at scale. Integrates with CMS tools and reports on content performance.",
+            },
+            {
+              name: "Notion AI",
+              href: "https://www.notion.so/product/ai",
+              desc: "Embedded in Notion to craft docs, knowledge bases, and plans. Structures meeting notes, summarizes research, and generates tasks. Transforms raw text into lists, tables, or OKRs instantly. Designed for collaborative work with permissions and templates.",
+            },
+            {
+              name: "Tidio",
+              href: "https://www.tidio.com/",
+              desc: "Live chat platform with AI bots for sales and support. Answers repetitive questions and routes leads to agents automatically. Tracks visitor behavior to trigger personalized offers. Orchestrates email, messenger, and CRM integrations.",
+            },
+            {
+              name: "ManyChat",
+              href: "https://www.manychat.com/",
+              desc: "Chatbot builder for Instagram, Facebook, and WhatsApp. Designs funnels with autoresponders and AI-powered replies. Segments audiences, launches broadcasts, and runs surveys. Connects to Shopify, HubSpot, and other marketing stacks.",
+            },
+          ],
+        },
+        {
+          category: "Analytics & BI",
+          color: "#059669",
+          items: [
+            {
+              name: "Power BI",
+              href: "https://powerbi.microsoft.com/",
+              desc: "Microsoft’s flagship business intelligence platform. Connects to hundreds of data sources and builds interactive dashboards. Helps discover trends, forecast metrics, and craft reports. Copilot suggests visuals and answers questions in natural language.",
+            },
+            {
+              name: "Tableau",
+              href: "https://www.tableau.com/",
+              desc: "Flexible data visualization and exploration tool. Handles large datasets and builds narrative dashboards. Explain Data and Data Stories interpret metrics with AI assistance. Publishes in cloud or on-prem with granular governance.",
+            },
+            {
+              name: "MonkeyLearn",
+              href: "https://monkeylearn.com/",
+              desc: "AI platform for text and feedback analytics. Trains custom classifiers and extractors without coding. Ideal for monitoring NPS, social media, and support tickets. Integrations connect with Zapier, Zendesk, and BI dashboards.",
+            },
+            {
+              name: "Crayon",
+              href: "https://www.crayon.co/",
+              desc: "Competitive intelligence solution with AI-driven insights. Tracks competitor moves, website changes, and content releases. Produces digests, alerts, and battlecards for sales teams. Marketing teams react faster to shifts in the market.",
+            },
+            {
+              name: "Crux",
+              href: "https://www.cruxinformatics.com/",
+              desc: "Data operations platform for sourcing and delivering enterprise data. Automates ingestion, cleaning, and normalization from external providers. Ships ready-made connectors for financial and alternative datasets. AI monitors data quality and completeness continuously.",
+            },
+          ],
+        },
+        {
+          category: "Industry Solutions",
+          color: "#dc2626",
+          items: [
+            {
+              name: "Xero",
+              href: "https://www.xero.com/",
+              desc: "Cloud accounting for small and mid-sized businesses. Imports bank transactions automatically and reconciles payments. Generates financial reports, invoices, and client reminders. AI insights forecast cash flow and flag anomalies.",
+            },
+            {
+              name: "QuickBooks",
+              href: "https://quickbooks.intuit.com/",
+              desc: "Comprehensive suite for accounting, payroll, and expenses. Syncs with banks, payment processors, and CRM systems. Builds tax reports, budgets, and dashboards in real time. AI tools streamline transaction categorization and planning.",
+            },
+            {
+              name: "AdCreative.ai",
+              href: "https://www.adcreative.ai/",
+              desc: "Generates ad banners and copy tailored to your brand. Analyzes colors, audiences, and past performance. Suggests dozens of creative variations with predicted CTR. Integrates with Meta, Google Ads, and retargeting platforms.",
+            },
+            {
+              name: "Shopify AI",
+              href: "https://www.shopify.com/",
+              desc: "AI capabilities inside Shopify for product copy, email, and chat support. Delivers personalized recommendations and pop-ups for shoppers. Auto-generates SEO tags, titles, and collection descriptions. Runs inside the admin panel with no extra plugins.",
+            },
+            {
+              name: "Wix AI",
+              href: "https://www.wix.com/ai",
+              desc: "AI builder that crafts websites and content automatically. Collects a short brief then produces layouts, copy, and imagery. Optimizes SEO, guides campaigns, and reviews visitor behavior. Ideal for small businesses and freelancers.",
+            },
+            {
+              name: "Planner 5D",
+              href: "https://planner5d.com/",
+              desc: "Interior design platform enhanced with AI assistance. Builds room layouts, 3D renders, and project budgets quickly. Massive library of furniture, styles, and auto-placement tools. Serves designers, developers, and DIY creators.",
+            },
+            {
+              name: "Autodesk AI",
+              href: "https://www.autodesk.com/solutions/ai",
+              desc: "Suite of AI features across Autodesk products for design and construction. Optimizes structures, reduces material waste, and plans schedules. Combines data from BIM, IoT, and field reports for smarter decisions. Accelerates coordination and quality control for large teams.",
+            },
+            {
+              name: "Fashwell AI",
+              href: "https://www.fashwell.com/",
+              desc: "Visual search and recommendation engine for fashion retail. Analyzes catalogues, user photos, and trend data. Matches products by style, color, and fit in real time. Lifts conversion rates and basket size for online stores.",
+            },
+          ],
+        },
       ],
     };
 
@@ -201,11 +647,54 @@
 
     // Tooltip management
     let tipGroup = null;
+
+    function wrapText(text, maxWidth) {
+      const lines = [];
+      if (!text) return lines;
+      const temp = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      temp.setAttribute('class', 'muted');
+      temp.setAttribute('visibility', 'hidden');
+      stage.appendChild(temp);
+      const words = text.split(/\s+/);
+      let current = '';
+      words.forEach((word) => {
+        const candidate = current ? `${current} ${word}` : word;
+        temp.textContent = candidate;
+        if (temp.getComputedTextLength() <= maxWidth) {
+          current = candidate;
+        } else {
+          if (current) {
+            lines.push(current);
+            current = '';
+          }
+          temp.textContent = word;
+          if (temp.getComputedTextLength() > maxWidth) {
+            lines.push(word);
+            current = '';
+          } else {
+            current = word;
+          }
+        }
+      });
+      if (current) lines.push(current);
+      stage.removeChild(temp);
+      return lines;
+    }
+
     function showTip(x, y, title, desc, href) {
       hideTip();
       tipGroup = group(stage);
       tipGroup.setAttribute('class','tip');
-      const w = 260, h = 110, pad = 10;
+      const w = 340;
+      const pad = 14;
+      const maxWidth = w - pad * 2;
+      const lines = wrapText(desc, maxWidth);
+      const lineHeight = 18;
+      const descHeight = Math.max(lineHeight, lines.length * lineHeight);
+      const titleHeight = 18;
+      const linkHeight = 16;
+      const gap = 12;
+      const h = Math.max(170, pad + titleHeight + gap + descHeight + gap + linkHeight + pad);
       const vb = (stage.getAttribute('viewBox') || '0 0 1100 760').split(' ').map(Number);
       const viewW = vb[2] || 1100;
       const viewH = vb[3] || 760;
@@ -221,18 +710,29 @@
       bg.setAttribute('fill', '#111827'); bg.setAttribute('opacity', '0.95');
       tipGroup.appendChild(bg);
       const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t1.setAttribute('x', tx + pad); t1.setAttribute('y', ty + pad + 4); t1.setAttribute('fill', '#fff');
-      t1.setAttribute('style','font-weight:700; font-size:12px;');
+      t1.setAttribute('x', tx + pad); t1.setAttribute('y', ty + pad + 6); t1.setAttribute('fill', '#fff');
+      t1.setAttribute('style','font-weight:700; font-size:13px;');
       t1.textContent = title;
       tipGroup.appendChild(t1);
       const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t2.setAttribute('x', tx + pad); t2.setAttribute('y', ty + 28); t2.setAttribute('class', 'muted');
-      t2.textContent = desc;
+      t2.setAttribute('x', tx + pad);
+      t2.setAttribute('y', ty + pad + titleHeight + 4);
+      t2.setAttribute('class', 'muted');
+      t2.setAttribute('dominant-baseline', 'hanging');
+      lines.forEach((line, idx) => {
+        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+        tspan.setAttribute('x', tx + pad);
+        tspan.setAttribute('dy', idx === 0 ? 0 : lineHeight);
+        tspan.textContent = line;
+        t2.appendChild(tspan);
+      });
       tipGroup.appendChild(t2);
       const link = document.createElementNS('http://www.w3.org/2000/svg','a');
       link.setAttribute('href', href); link.setAttribute('target','_blank'); link.setAttribute('rel','noreferrer');
       const t3 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t3.setAttribute('x', tx + pad); t3.setAttribute('y', ty + h - 12); t3.setAttribute('class','link');
+      t3.setAttribute('x', tx + pad);
+      t3.setAttribute('y', ty + h - pad);
+      t3.setAttribute('class','link');
       t3.textContent = (lang==='ua' ? 'Відкрити сайт →' : 'Visit site →');
       link.appendChild(t3);
       tipGroup.appendChild(link);
@@ -311,7 +811,8 @@
       layoutSide(0, rightCount, 'right');
       layoutSide(rightCount, leftCount, 'left');
 
-      const rootNode = createNode(nodesLayer, rootX, rootY, 'MSB × AI', {
+      const rootLabel = lang === 'ua' ? 'ШІ сервіси' : 'AI Services';
+      const rootNode = createNode(nodesLayer, rootX, rootY, rootLabel, {
         fill: '#fff',
         stroke: '#111827',
         sw: 2,
