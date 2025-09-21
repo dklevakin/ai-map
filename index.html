@@ -15,13 +15,102 @@
       height: 100%;
     }
     body {
+      --color-body-bg: #0b1120;
+      --color-text-primary: #e2e8f0;
+      --color-top-banner-bg: #0f172a;
+      --color-top-banner-text: #e2e8f0;
+      --color-top-banner-border: rgba(148, 163, 184, 0.18);
+      --color-banner-pill-bg: rgba(148, 163, 184, 0.22);
+      --color-banner-pill-text: #bae6fd;
+      --color-hero-bg: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
+      --color-hero-border: rgba(148, 163, 184, 0.22);
+      --color-hero-title: #f8fafc;
+      --color-hero-subtitle: #cbd5f5;
+      --color-hero-description: #94a3b8;
+      --color-map-heading: #e2e8f0;
+      --color-search-bg: #111827;
+      --color-search-border: rgba(148, 163, 184, 0.4);
+      --color-search-text: #e2e8f0;
+      --color-search-placeholder: #64748b;
+      --color-search-focus: #60a5fa;
+      --color-search-focus-ring: rgba(96, 165, 250, 0.28);
+      --color-button-bg: #1e293b;
+      --color-button-text: #e2e8f0;
+      --color-button-hover-bg: #273449;
+      --color-button-active-bg: #2563eb;
+      --color-button-active-text: #f8fafc;
+      --color-button-active-shadow: rgba(37, 99, 235, 0.35);
+      --color-card-bg: #111827;
+      --color-card-border: rgba(148, 163, 184, 0.25);
+      --color-card-shadow: 0 12px 32px rgba(2, 6, 23, 0.7);
+      --info-note-color: #94a3b8;
+      --color-footer-bg: #020617;
+      --color-footer-text: #cbd5f5;
+      --color-footer-border: rgba(148, 163, 184, 0.18);
+      --color-footer-title: #f8fafc;
+      --surface-color: #0f172a;
+      --surface-border: rgba(148, 163, 184, 0.35);
+      --node-text: #f8fafc;
+      --muted-text: #94a3b8;
+      --link-text: #60a5fa;
+      --error-text: #fca5a5;
+      --tooltip-bg: #020617;
+      --tooltip-text: #f8fafc;
       margin: 0;
       min-height: 100%;
       display: flex;
       flex-direction: column;
-      background: #f9fafb;
-      color: #111827;
+      background: var(--color-body-bg);
+      color: var(--color-text-primary);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    body[data-theme="dark"] {
+      color-scheme: dark;
+    }
+    body[data-theme="light"] {
+      color-scheme: light;
+      --color-body-bg: #f9fafb;
+      --color-text-primary: #111827;
+      --color-top-banner-bg: #1f2937;
+      --color-top-banner-text: #f9fafb;
+      --color-top-banner-border: rgba(255, 255, 255, 0.08);
+      --color-banner-pill-bg: rgba(255, 255, 255, 0.12);
+      --color-banner-pill-text: #e0f2fe;
+      --color-hero-bg: linear-gradient(135deg, #dbeafe 0%, #f8fafc 100%);
+      --color-hero-border: #e5e7eb;
+      --color-hero-title: #0f172a;
+      --color-hero-subtitle: #1f2937;
+      --color-hero-description: #374151;
+      --color-map-heading: #0f172a;
+      --color-search-bg: #fff;
+      --color-search-border: #d1d5db;
+      --color-search-text: #0f172a;
+      --color-search-placeholder: #9ca3af;
+      --color-search-focus: #2563eb;
+      --color-search-focus-ring: rgba(37, 99, 235, 0.14);
+      --color-button-bg: #e5e7eb;
+      --color-button-text: #1f2937;
+      --color-button-hover-bg: #d1d5db;
+      --color-button-active-bg: #2563eb;
+      --color-button-active-text: #fff;
+      --color-button-active-shadow: rgba(37, 99, 235, 0.18);
+      --color-card-bg: #fff;
+      --color-card-border: #e5e7eb;
+      --color-card-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+      --info-note-color: #4b5563;
+      --color-footer-bg: #0f172a;
+      --color-footer-text: #e5e7eb;
+      --color-footer-border: rgba(255, 255, 255, 0.08);
+      --color-footer-title: #f9fafb;
+      --surface-color: #fff;
+      --surface-border: #d1d5db;
+      --node-text: #111827;
+      --muted-text: #e5e7eb;
+      --link-text: #60a5fa;
+      --error-text: #b91c1c;
+      --tooltip-bg: #111827;
+      --tooltip-text: #fff;
     }
     main {
       flex: 1;
@@ -34,9 +123,10 @@
       box-sizing: border-box;
     }
     .top-banner {
-      background: #1f2937;
-      color: #f9fafb;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--color-top-banner-bg);
+      color: var(--color-top-banner-text);
+      border-bottom: 1px solid var(--color-top-banner-border);
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
     .banner-inner {
       padding: 10px 16px;
@@ -55,16 +145,18 @@
       justify-content: center;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
-      color: #e0f2fe;
+      background: var(--color-banner-pill-bg);
+      color: var(--color-banner-pill-text);
       font-weight: 600;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      transition: background 0.3s ease, color 0.3s ease;
     }
     .hero {
-      background: linear-gradient(135deg, #dbeafe 0%, #f8fafc 100%);
-      border-bottom: 1px solid #e5e7eb;
+      background: var(--color-hero-bg);
+      border-bottom: 1px solid var(--color-hero-border);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
     .hero-inner {
       padding: 48px 16px;
@@ -91,20 +183,23 @@
       font-size: 32px;
       line-height: 1.2;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--color-hero-title);
+      transition: color 0.3s ease;
     }
     .hero-subtitle {
       margin: 0;
       font-size: 18px;
       font-weight: 600;
-      color: #1f2937;
+      color: var(--color-hero-subtitle);
+      transition: color 0.3s ease;
     }
     .hero-description {
       margin: 0;
       max-width: 640px;
       font-size: 15px;
       line-height: 1.6;
-      color: #374151;
+      color: var(--color-hero-description);
+      transition: color 0.3s ease;
     }
     .main-content {
       padding: 40px 16px 48px;
@@ -130,57 +225,64 @@
       width: min(100%, 320px);
       padding: 10px 14px;
       border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      color: #0f172a;
+      border: 1px solid var(--color-search-border);
+      background: var(--color-search-bg);
+      color: var(--color-search-text);
       font-size: 14px;
       line-height: 1.4;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
       box-sizing: border-box;
     }
     .search-input::placeholder {
-      color: #9ca3af;
+      color: var(--color-search-placeholder);
     }
     .search-input:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+      border-color: var(--color-search-focus);
+      box-shadow: 0 0 0 3px var(--color-search-focus-ring);
     }
     .map-heading {
       margin: 0;
       font-size: 22px;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--color-map-heading);
+      transition: color 0.3s ease;
     }
     .language-toggle {
       display: inline-flex;
       gap: 8px;
+    }
+    .theme-toggle {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .btn {
       border: 0;
       padding: 8px 14px;
       border-radius: 10px;
       cursor: pointer;
-      background: #e5e7eb;
+      background: var(--color-button-bg);
       font-size: 13px;
       font-weight: 600;
-      color: #1f2937;
-      transition: background 0.2s ease, color 0.2s ease;
+      color: var(--color-button-text);
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
     .btn:hover {
-      background: #d1d5db;
+      background: var(--color-button-hover-bg);
     }
     .btn.active {
-      background: #2563eb;
-      color: #fff;
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.18);
+      background: var(--color-button-active-bg);
+      color: var(--color-button-active-text);
+      box-shadow: 0 8px 16px var(--color-button-active-shadow);
     }
     .card {
-      background: #fff;
+      background: var(--color-card-bg);
       border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+      box-shadow: var(--color-card-shadow);
       overflow: auto;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--color-card-border);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     svg {
       display: block;
@@ -189,10 +291,11 @@
       min-height: 640px;
     }
     .info-note {
-      color: #4b5563;
+      color: var(--info-note-color);
       font-size: 13px;
       margin-top: 14px;
       line-height: 1.5;
+      transition: color 0.3s ease;
     }
     .tip {
       pointer-events: none;
@@ -200,26 +303,26 @@
     .small {
       font-size: 11px;
       font-weight: 600;
-      fill: #111827;
+      fill: var(--node-text);
     }
     .normal {
       font-size: 12px;
       font-weight: 600;
-      fill: #111827;
+      fill: var(--node-text);
     }
     .large {
       font-size: 16px;
       font-weight: 700;
-      fill: #111827;
+      fill: var(--node-text);
     }
     .muted {
       font-size: 13px;
       font-weight: 500;
-      fill: #e5e7eb;
+      fill: var(--muted-text);
     }
     .link {
       font-size: 11px;
-      fill: #60a5fa;
+      fill: var(--link-text);
       text-decoration: underline;
     }
     .search-hit text {
@@ -230,10 +333,11 @@
       stroke-width: 2.6;
     }
     .site-footer {
-      background: #0f172a;
-      color: #e5e7eb;
+      background: var(--color-footer-bg);
+      color: var(--color-footer-text);
       padding: 28px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--color-footer-border);
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
     .footer-inner {
       padding: 0 16px;
@@ -245,8 +349,16 @@
     }
     .footer-title {
       font-weight: 600;
-      color: #f9fafb;
+      color: var(--color-footer-title);
       letter-spacing: 0.01em;
+      transition: color 0.3s ease;
+    }
+    .footer-theme {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
     @media (max-width: 640px) {
       .hero-inner {
@@ -275,7 +387,7 @@
     }
   </style>
 </head>
-<body>
+<body data-theme="dark">
   <div class="top-banner">
     <div class="wrap banner-inner">
       <span class="banner-pill">AI Compass</span>
@@ -311,6 +423,10 @@
             <button id="uaBtn" class="btn active">UA</button>
             <button id="enBtn" class="btn">EN</button>
           </div>
+          <div class="theme-toggle" data-theme-toggle="header">
+            <button id="headerDarkBtn" class="btn" type="button" data-theme-option="dark">🌙 Темна</button>
+            <button id="headerLightBtn" class="btn" type="button" data-theme-option="light">☀️ Світла</button>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -327,6 +443,12 @@
       <span class="footer-title">Dmytro Klevakin</span>
       <span id="footerRights">All rights reserved · 2024</span>
       <span id="footerTagline">Crafted to help you explore and compare AI solutions with confidence.</span>
+      <div class="footer-theme">
+        <div class="theme-toggle" data-theme-toggle="footer">
+          <button id="footerDarkBtn" class="btn" type="button" data-theme-option="dark">🌙 Темна</button>
+          <button id="footerLightBtn" class="btn" type="button" data-theme-option="light">☀️ Світла</button>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -509,6 +631,9 @@
     let searchQuery = '';
     let searchTimer = null;
     const expandedGroups = new Map();
+    const THEME_STORAGE_KEY = 'theme';
+    let theme = localStorage.getItem(THEME_STORAGE_KEY) === 'light' ? 'light' : 'dark';
+    let themeColors = {};
 
     function getGroupState(cat, currentLang = lang) {
       const key = `${currentLang}:${cat.category}`;
@@ -532,6 +657,7 @@
     const infoNoteEl = document.getElementById('infoNote');
     const footerRightsEl = document.getElementById('footerRights');
     const footerTaglineEl = document.getElementById('footerTagline');
+    const themeButtons = Array.from(document.querySelectorAll('[data-theme-option]'));
 
     const COPY = {
       heroTitle: {
@@ -578,6 +704,14 @@
         ua: 'Створено, щоб допомогти досліджувати й порівнювати AI-рішення впевнено.',
         en: 'Crafted to help you explore and compare AI solutions with confidence.',
       },
+      themeDark: {
+        ua: 'Темна',
+        en: 'Dark',
+      },
+      themeLight: {
+        ua: 'Світла',
+        en: 'Light',
+      },
       loading: {
         ua: 'Завантаження…',
         en: 'Loading…',
@@ -601,8 +735,80 @@
       if (infoNoteEl) infoNoteEl.textContent = COPY.infoNote[lang];
       if (footerRightsEl) footerRightsEl.textContent = COPY.footerRights[lang];
       if (footerTaglineEl) footerTaglineEl.textContent = COPY.footerTagline[lang];
+      const themeSuffix = lang === 'ua' ? 'тема' : 'theme';
+      themeButtons.forEach((btn) => {
+        if (!btn) return;
+        const option = btn.dataset.themeOption;
+        if (option === 'dark') {
+          const label = COPY.themeDark[lang];
+          const text = `🌙 ${label}`;
+          const fullLabel = `${label} ${themeSuffix}`;
+          btn.textContent = text;
+          btn.setAttribute('aria-label', fullLabel);
+          btn.setAttribute('title', fullLabel);
+        } else if (option === 'light') {
+          const label = COPY.themeLight[lang];
+          const text = `☀️ ${label}`;
+          const fullLabel = `${label} ${themeSuffix}`;
+          btn.textContent = text;
+          btn.setAttribute('aria-label', fullLabel);
+          btn.setAttribute('title', fullLabel);
+        }
+      });
       document.documentElement.lang = lang === 'ua' ? 'uk' : 'en';
     }
+
+    function readThemeColors() {
+      const styles = getComputedStyle(document.body);
+      return {
+        surface: styles.getPropertyValue('--surface-color').trim() || '#fff',
+        surfaceBorder: styles.getPropertyValue('--surface-border').trim() || '#d1d5db',
+        nodeText: styles.getPropertyValue('--node-text').trim() || '#111827',
+        errorText: styles.getPropertyValue('--error-text').trim() || '#b91c1c',
+        tooltipBg: styles.getPropertyValue('--tooltip-bg').trim() || '#111827',
+        tooltipText: styles.getPropertyValue('--tooltip-text').trim() || '#fff',
+      };
+    }
+
+    function updateThemeToggleState(activeTheme) {
+      themeButtons.forEach((btn) => {
+        if (!btn) return;
+        const isActive = btn.dataset.themeOption === activeTheme;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    function applyThemeAttributes(nextTheme) {
+      const normalized = nextTheme === 'light' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', normalized);
+      updateThemeToggleState(normalized);
+      themeColors = readThemeColors();
+    }
+
+    function changeTheme(nextTheme) {
+      const normalized = nextTheme === 'light' ? 'light' : 'dark';
+      if (normalized === theme) {
+        updateThemeToggleState(normalized);
+        return;
+      }
+      theme = normalized;
+      localStorage.setItem(THEME_STORAGE_KEY, normalized);
+      applyThemeAttributes(normalized);
+      render().catch((error) => {
+        console.error('Failed to render dataset after theme change', error);
+      });
+    }
+
+    themeButtons.forEach((btn) => {
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const option = btn.dataset.themeOption;
+        if (option) {
+          changeTheme(option);
+        }
+      });
+    });
 
     async function setLang(l) {
       lang = l;
@@ -753,6 +959,7 @@
 
     function showTip(x, y, title, desc, href) {
       hideTip();
+      const palette = themeColors.surface ? themeColors : readThemeColors();
       tipGroup = group(stage);
       tipGroup.setAttribute('class','tip');
       const w = 340;
@@ -777,10 +984,10 @@
       const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
       bg.setAttribute('x', tx); bg.setAttribute('y', ty); bg.setAttribute('rx', 12); bg.setAttribute('ry', 12);
       bg.setAttribute('width', w); bg.setAttribute('height', h);
-      bg.setAttribute('fill', '#111827'); bg.setAttribute('opacity', '0.95');
+      bg.setAttribute('fill', palette.tooltipBg || '#111827'); bg.setAttribute('opacity', '0.95');
       tipGroup.appendChild(bg);
       const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t1.setAttribute('x', tx + pad); t1.setAttribute('y', ty + pad + 6); t1.setAttribute('fill', '#fff');
+      t1.setAttribute('x', tx + pad); t1.setAttribute('y', ty + pad + 6); t1.setAttribute('fill', palette.tooltipText || '#fff');
       t1.setAttribute('style','font-weight:700; font-size:13px;');
       t1.textContent = title;
       tipGroup.appendChild(t1);
@@ -816,6 +1023,7 @@
 
     async function render() {
       const activeLang = lang;
+      const palette = themeColors.surface ? themeColors : readThemeColors();
       hideTip();
       const hadMeasureText = measureTextEl && measureTextEl.parentNode === stage;
       stage.innerHTML = '';
@@ -830,14 +1038,14 @@
         stage.style.height = '200px';
         const loadingLayer = group(stage);
         const loadingNode = createNode(loadingLayer, 200, 100, COPY.loading[activeLang], {
-          fill: '#fff',
-          stroke: '#d1d5db',
+          fill: palette.surface,
+          stroke: palette.surfaceBorder,
           sw: 1.6,
           padX: 24,
           padY: 16,
           cls: 'normal',
         });
-        loadingNode.text.setAttribute('fill', '#1f2937');
+        loadingNode.text.setAttribute('fill', palette.nodeText);
       }
 
       let data;
@@ -853,14 +1061,14 @@
         stage.style.height = '200px';
         const errorLayer = group(stage);
         const errorNode = createNode(errorLayer, 200, 100, COPY.loadError[activeLang], {
-          fill: '#fff',
-          stroke: '#fca5a5',
+          fill: palette.surface,
+          stroke: palette.errorText,
           sw: 1.6,
           padX: 24,
           padY: 16,
           cls: 'normal',
         });
-        errorNode.text.setAttribute('fill', '#b91c1c');
+        errorNode.text.setAttribute('fill', palette.errorText);
         console.error('Failed to load dataset', error);
         return;
       }
@@ -908,14 +1116,14 @@
         stage.setAttribute('height', height);
         stage.style.height = `${height}px`;
         const message = createNode(nodesLayer, CANVAS_WIDTH / 2, height / 2, COPY.noResults[activeLang], {
-          fill: '#fff',
-          stroke: '#d1d5db',
+          fill: palette.surface,
+          stroke: palette.surfaceBorder,
           sw: 1.6,
           padX: 28,
           padY: 18,
           cls: 'normal',
         });
-        message.text.setAttribute('fill', '#1f2937');
+        message.text.setAttribute('fill', palette.nodeText);
         return;
       }
 
@@ -996,8 +1204,8 @@
 
       const rootLabel = 'AI Compass';
       const rootNode = createNode(nodesLayer, rootX, rootY, rootLabel, {
-        fill: '#fff',
-        stroke: '#111827',
+        fill: palette.surface,
+        stroke: palette.nodeText,
         sw: 2,
         padX: 30,
         padY: 20,
@@ -1144,7 +1352,7 @@
             const indicator = searchActive ? (hasItems ? '▾' : '•') : branch.expanded ? '▾' : '▸';
             const labelText = branch.entry.group ? `${indicator} ${branch.entry.group}` : indicator;
             const groupNode = createNode(groupLayer, groupX, groupY, labelText, {
-              fill: '#fff',
+              fill: palette.surface,
               stroke: cat.color,
               sw: 1.6,
               padX: 20,
@@ -1194,7 +1402,7 @@
               const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
               const label = formatLabel(svc.name);
               const itemNode = createNode(leafLayer, itemX, itemY, label, {
-                fill: '#fff',
+                fill: palette.surface,
                 stroke: cat.color,
                 sw: 1.5,
                 padX: 20,
@@ -1228,7 +1436,7 @@
             const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
             const label = formatLabel(svc.name);
             const itemNode = createNode(leafLayer, itemX, itemY, label, {
-              fill: '#fff',
+              fill: palette.surface,
               stroke: cat.color,
               sw: 1.5,
               padX: 20,
@@ -1262,6 +1470,7 @@
 
 
     // Init
+    applyThemeAttributes(theme);
     setLang(lang).catch((error) => {
       console.error('Failed to initialize language', error);
     });
