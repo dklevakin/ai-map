@@ -10,6 +10,13 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
+## Documentation
+
+- [User & maintainer guide](doc/index.md)
+- [Requirements](doc/Requirements.md)
+- [Backlog](doc/Backlog.md)
+- [Architecture Decision Records](doc/adr)
+
 ## Deploy to **Cloudflare Pages**
 
 1. Create a new Pages project and connect your GitHub repo.
@@ -34,6 +41,15 @@ python3 -m http.server 8000
 ```
 /
 ├─ index.html            # Production single-file app (vanilla, no deps)
+├─ doc/                  # Документація та ADR
+│  ├─ index.md           # Керівництво користувача та підтримки
+│  ├─ Requirements.md    # Сукупність вимог
+│  ├─ Backlog.md         # Список покращень
+│  └─ adr/               # Архітектурні рішення
+│     ├─ 0001-static-single-file-architecture.md
+│     ├─ 0002-adaptive-radial-layout.md
+│     ├─ 0003-curated-bilingual-catalog.md
+│     └─ 0004-collapsible-subcategories.md
 ├─ assets/               # Place any static assets here (optional)
 ├─ examples/
 │  └─ react-babel/       # Alternative React+Babel+CDN version (no build)
