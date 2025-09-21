@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Tools Mind‑map (Vanilla)</title>
+  <style>
+    html, body { height: 100%; margin:0; background:#f9fafb; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    .wrap { padding: 16px; max-width: 1200px; margin: 0 auto; }
+    .bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .btn { border:0; padding:6px 10px; border-radius:8px; cursor:pointer; background:#e5e7eb; }
+    .btn.active { background:#2563eb; color:#fff; }
+    .card { background:#fff; border-radius:16px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); overflow:auto; }
+    svg { display:block; width:100%; height:780px; }
+    .tip { pointer-events:none; }
+    .small { font-size:10px; font-weight:600; fill:#111827; }
+    .normal { font-size:12px; font-weight:600; fill:#111827; }
+    .muted { font-size:11px; fill:#d1d5db; }
+    .link { font-size:11px; fill:#60a5fa; text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <h1>AI Tools Mind‑map</h1>
+      <div>
+        <button id="uaBtn" class="btn active">UA</button>
+        <button id="enBtn" class="btn">EN</button>
+      </div>
+    </div>
+    <div class="card">
+      <svg id="stage" viewBox="0 0 1100 760" aria-label="Mind map canvas"></svg>
+    </div>
+    <p style="color:#4b5563; font-size:12px; margin-top:10px;">
+      Клік по категорії — розкрити сервіси. Наведіть — опис і посилання. / Click category to expand; hover a service for description & link.
+    </p>
+  </div>
+
+  <script>
+    const DATA = {
+      ua: [
+        { category: "LLM", color: "#2563eb", items: [
+          { name: "ChatGPT", href: "https://chat.openai.com/", desc: "Універсальний асистент для текстів, ідей, аналізу." },
+          { name: "Claude", href: "https://claude.ai/", desc: "Зручний для великих документів і юридичних текстів." },
+          { name: "Google Gemini", href: "https://gemini.google.com/", desc: "Інтеграція з Google Workspace (Docs, Sheets)." },
+          { name: "Microsoft Copilot", href: "https://copilot.microsoft.com/", desc: "Вбудований у Word, Excel, Outlook." },
+        ]},
+        { category: "Зображення", color: "#16a34a", items: [
+          { name: "Midjourney", href: "https://www.midjourney.com/", desc: "Високоякісні візуали: мода, інтер'єри, реклама." },
+          { name: "Stable Diffusion / Leonardo AI", href: "https://leonardo.ai/", desc: "Гнучкість і контроль стилю, рішення для бізнесу." },
+          { name: "Canva AI", href: "https://www.canva.com/ai/", desc: "Швидке створення маркетингових матеріалів." },
+          { name: "Adobe Firefly", href: "https://www.adobe.com/products/firefly.html", desc: "Генеративні інструменти у Photoshop/Illustrator." },
+        ]},
+        { category: "Відео", color: "#f59e0b", items: [
+          { name: "HeyGen", href: "https://www.heygen.com/", desc: "Аватар‑відео з тексту." },
+          { name: "Synthesia", href: "https://www.synthesia.io/", desc: "Навчальні та маркетингові відео." },
+          { name: "Runway ML", href: "https://runwayml.com/", desc: "Генерація сцен і відеоредагування." },
+          { name: "Pictory / OpusClip", href: "https://www.opus.pro/", desc: "Нарізки з довгих відео для соцмереж." },
+        ]},
+        { category: "Автоматизація", color: "#db2777", items: [
+          { name: "Zapier / Make / n8n", href: "https://zapier.com/", desc: "Інтеграція CRM, пошти, маркетингу, Google Sheets." },
+          { name: "UiPath / Power Automate", href: "https://www.uipath.com/", desc: "RPA для складних бізнес‑процесів." },
+          { name: "Tidio / ManyChat", href: "https://www.manychat.com/", desc: "Чат‑боти з AI для продажів і підтримки." },
+        ]},
+        { category: "Навчання", color: "#7c3aed", items: [
+          { name: "Coursera / Udemy", href: "https://www.coursera.org/", desc: "AI‑курси для команд." },
+          { name: "Docebo / LearnWorlds", href: "https://www.docebo.com/", desc: "Корпоративне навчання з AI." },
+          { name: "Evolv AI", href: "https://www.evolv.ai/", desc: "Персоналізоване навчання і експерименти." },
+        ]},
+        { category: "UGC & Маркетинг", color: "#0ea5e9", items: [
+          { name: "CapCut / VEED.io", href: "https://www.capcut.com/", desc: "Швидкі відео для TikTok/Instagram." },
+          { name: "Copy.ai / Jasper", href: "https://www.jasper.ai/", desc: "Тексти для реклами та email." },
+          { name: "Notion AI", href: "https://www.notion.so/product/ai", desc: "Плани, статті, внутрішня документація." },
+        ]},
+        { category: "Аналітика", color: "#059669", items: [
+          { name: "Power BI + Copilot / Tableau + AI", href: "https://powerbi.microsoft.com/", desc: "BI‑аналітика з AI‑допомогою." },
+          { name: "MonkeyLearn", href: "https://monkeylearn.com/", desc: "Аналіз відгуків і текстів." },
+          { name: "Crayon / Crux", href: "https://www.crayon.co/", desc: "Конкурентна аналітика." },
+        ]},
+        { category: "Спеціальні", color: "#dc2626", items: [
+          { name: "Xero / QuickBooks + AI", href: "https://www.xero.com/", desc: "Автоматизація бухобліку." },
+          { name: "AdCreative.ai", href: "https://www.adcreative.ai/", desc: "Генерація банерів і оголошень." },
+          { name: "Shopify AI / Wix AI", href: "https://www.shopify.com/", desc: "Опис товарів, SEO, магазин." },
+          { name: "Planner 5D / Autodesk AI", href: "https://planner5d.com/", desc: "Проєкти та візуалізації у будівництві/дизайні." },
+          { name: "Fashwell AI", href: "https://www.fashwell.com/", desc: "Рекомендації стилю та трендів." },
+        ]},
+      ],
+      en: [
+        { category: "LLM", color: "#2563eb", items: [
+          { name: "ChatGPT", href: "https://chat.openai.com/", desc: "Universal assistant for texts, ideas, analysis." },
+          { name: "Claude", href: "https://claude.ai/", desc: "Great for large docs and legal texts." },
+          { name: "Google Gemini", href: "https://gemini.google.com/", desc: "Integration with Google Workspace." },
+          { name: "Microsoft Copilot", href: "https://copilot.microsoft.com/", desc: "Built into Word, Excel, Outlook." },
+        ]},
+        { category: "Images", color: "#16a34a", items: [
+          { name: "Midjourney", href: "https://www.midjourney.com/", desc: "High‑quality visuals: fashion, interiors, ads." },
+          { name: "Stable Diffusion / Leonardo AI", href: "https://leonardo.ai/", desc: "Flexible style control, business‑ready." },
+          { name: "Canva AI", href: "https://www.canva.com/ai/", desc: "Fast marketing materials." },
+          { name: "Adobe Firefly", href: "https://www.adobe.com/products/firefly.html", desc: "Generative tools in Adobe apps." },
+        ]},
+        { category: "Video", color: "#f59e0b", items: [
+          { name: "HeyGen", href: "https://www.heygen.com/", desc: "Avatar videos from text." },
+          { name: "Synthesia", href: "https://www.synthesia.io/", desc: "Training & marketing videos." },
+          { name: "Runway ML", href: "https://runwayml.com/", desc: "Scene generation & editing." },
+          { name: "Pictory / OpusClip", href: "https://www.opus.pro/", desc: "Shorts from long videos." },
+        ]},
+        { category: "Automation", color: "#db2777", items: [
+          { name: "Zapier / Make / n8n", href: "https://zapier.com/", desc: "Integrate CRM, email, marketing, Sheets." },
+          { name: "UiPath / Power Automate", href: "https://www.uipath.com/", desc: "RPA for complex workflows." },
+          { name: "Tidio / ManyChat", href: "https://www.manychat.com/", desc: "AI chatbots for sales & support." },
+        ]},
+        { category: "Learning", color: "#7c3aed", items: [
+          { name: "Coursera / Udemy", href: "https://www.coursera.org/", desc: "AI courses for teams." },
+          { name: "Docebo / LearnWorlds", href: "https://www.docebo.com/", desc: "Corporate learning with AI." },
+          { name: "Evolv AI", href: "https://www.evolv.ai/", desc: "Personalized learning & experiments." },
+        ]},
+        { category: "UGC & Marketing", color: "#0ea5e9", items: [
+          { name: "CapCut / VEED.io", href: "https://www.capcut.com/", desc: "Quick videos for social." },
+          { name: "Copy.ai / Jasper", href: "https://www.jasper.ai/", desc: "Copy for ads & emails." },
+          { name: "Notion AI", href: "https://www.notion.so/product/ai", desc: "Docs, plans, internal notes." },
+        ]},
+        { category: "Analytics", color: "#059669", items: [
+          { name: "Power BI + Copilot / Tableau + AI", href: "https://powerbi.microsoft.com/", desc: "BI analytics with AI." },
+          { name: "MonkeyLearn", href: "https://monkeylearn.com/", desc: "Reviews & text analysis." },
+          { name: "Crayon / Crux", href: "https://www.crayon.co/", desc: "Competitive intelligence." },
+        ]},
+        { category: "Specialized", color: "#dc2626", items: [
+          { name: "Xero / QuickBooks + AI", href: "https://www.xero.com/", desc: "Accounting automation." },
+          { name: "AdCreative.ai", href: "https://www.adcreative.ai/", desc: "Ad banners & creatives." },
+          { name: "Shopify AI / Wix AI", href: "https://www.shopify.com/", desc: "SEO, product descriptions, store." },
+          { name: "Planner 5D / Autodesk AI", href: "https://planner5d.com/", desc: "Projects & visualizations." },
+          { name: "Fashwell AI", href: "https://www.fashwell.com/", desc: "Style & trend recommendations." },
+        ]},
+      ],
+    };
+
+    // Helpers
+    const polar = (cx, cy, r, angleDeg) => {
+      const a = (angleDeg - 90) * (Math.PI / 180);
+      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+    };
+
+    // State
+    let lang = localStorage.getItem('lang') || 'ua';
+    let expanded = null; // index of category
+    const stage = document.getElementById('stage');
+    const uaBtn = document.getElementById('uaBtn');
+    const enBtn = document.getElementById('enBtn');
+
+    function setLang(l) {
+      lang = l;
+      localStorage.setItem('lang', l);
+      uaBtn.classList.toggle('active', l==='ua');
+      enBtn.classList.toggle('active', l==='en');
+      expanded = null;
+      render();
+    }
+
+    uaBtn.onclick = () => setLang('ua');
+    enBtn.onclick = () => setLang('en');
+
+    // Drawing primitives
+    function circle(svg, cx, cy, r, opts={}) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      el.setAttribute('cx', cx); el.setAttribute('cy', cy); el.setAttribute('r', r);
+      if (opts.fill) el.setAttribute('fill', opts.fill);
+      if (opts.stroke) el.setAttribute('stroke', opts.stroke);
+      if (opts.sw) el.setAttribute('stroke-width', opts.sw);
+      if (opts.op) el.setAttribute('opacity', opts.op);
+      if (opts.sd) el.setAttribute('stroke-dasharray', opts.sd);
+      svg.appendChild(el);
+      return el;
+    }
+    function line(svg, x1,y1,x2,y2, opts={}) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','line');
+      el.setAttribute('x1',x1); el.setAttribute('y1',y1);
+      el.setAttribute('x2',x2); el.setAttribute('y2',y2);
+      if (opts.stroke) el.setAttribute('stroke', opts.stroke);
+      if (opts.sw) el.setAttribute('stroke-width', opts.sw);
+      if (opts.op) el.setAttribute('stroke-opacity', opts.op);
+      svg.appendChild(el);
+      return el;
+    }
+    function text(svg, x,y, str, cls='normal') {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','text');
+      el.setAttribute('x', x); el.setAttribute('y', y);
+      el.setAttribute('text-anchor','middle');
+      el.setAttribute('dominant-baseline','middle');
+      el.setAttribute('class', cls);
+      el.textContent = str;
+      svg.appendChild(el);
+      return el;
+    }
+    function group(svg) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','g');
+      svg.appendChild(el);
+      return el;
+    }
+
+    // Tooltip management
+    let tipGroup = null;
+    function showTip(x, y, title, desc, href) {
+      hideTip();
+      tipGroup = group(stage);
+      tipGroup.setAttribute('class','tip');
+      const w = 260, h = 110, pad = 10;
+      const tx = x + 16, ty = y - h - 12;
+      const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      bg.setAttribute('x', tx); bg.setAttribute('y', ty); bg.setAttribute('rx', 12); bg.setAttribute('ry', 12);
+      bg.setAttribute('width', w); bg.setAttribute('height', h);
+      bg.setAttribute('fill', '#111827'); bg.setAttribute('opacity', '0.95');
+      tipGroup.appendChild(bg);
+      const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t1.setAttribute('x', tx + pad); t1.setAttribute('y', ty + pad + 4); t1.setAttribute('fill', '#fff');
+      t1.setAttribute('style','font-weight:700; font-size:12px;');
+      t1.textContent = title;
+      tipGroup.appendChild(t1);
+      const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t2.setAttribute('x', tx + pad); t2.setAttribute('y', ty + 28); t2.setAttribute('class', 'muted');
+      t2.textContent = desc;
+      tipGroup.appendChild(t2);
+      const link = document.createElementNS('http://www.w3.org/2000/svg','a');
+      link.setAttribute('href', href); link.setAttribute('target','_blank'); link.setAttribute('rel','noreferrer');
+      const t3 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t3.setAttribute('x', tx + pad); t3.setAttribute('y', ty + h - 12); t3.setAttribute('class','link');
+      t3.textContent = (lang==='ua' ? 'Відкрити сайт →' : 'Visit site →');
+      link.appendChild(t3);
+      tipGroup.appendChild(link);
+    }
+    function hideTip() {
+      if (tipGroup) { stage.removeChild(tipGroup); tipGroup = null; }
+    }
+
+    function render() {
+      stage.innerHTML = '';
+      const cx = 550, cy = 380;
+      const data = DATA[lang];
+      const step = 360 / data.length;
+
+      // center
+      circle(stage, cx, cy, 34, { fill:'#fff', stroke:'#111827', sw:2 });
+      text(stage, cx, cy, 'MSB × AI');
+
+      // categories
+      const positions = data.map((cat, i) => {
+        const pos = polar(cx, cy, 240, i*step);
+        line(stage, cx, cy, pos.x, pos.y, { stroke: cat.color, sw: 2, op: 0.35 });
+        // node
+        circle(stage, pos.x, pos.y, 38, { fill: cat.color, op: 0.15 });
+        circle(stage, pos.x, pos.y, 34, { fill:'#fff', stroke:cat.color, sw:2 });
+        const label = text(stage, pos.x, pos.y, cat.category);
+        // click to expand
+        label.style.cursor = 'pointer';
+        label.onclick = () => { expanded = (expanded === i ? null : i); render(); };
+        return { x: pos.x, y: pos.y };
+      });
+
+      // expanded items
+      if (expanded != null) {
+        const cat = data[expanded];
+        const base = positions[expanded];
+        circle(stage, base.x, base.y, 70, { fill:'none', stroke:cat.color, sd:'4 6', op:0.5 });
+        const items = cat.items;
+        const stepItem = 360 / items.length;
+        items.forEach((it, idx) => {
+          const p = polar(base.x, base.y, 120, idx*stepItem);
+          line(stage, base.x, base.y, p.x, p.y, { stroke:cat.color, sw:1.5, op:0.5 });
+          circle(stage, p.x, p.y, 26, { fill:cat.color, op:0.15 });
+          circle(stage, p.x, p.y, 22, { fill:'#fff', stroke:cat.color, sw:2 });
+          const t = text(stage, p.x, p.y, it.name, 'small');
+          t.style.cursor = 'pointer';
+          t.onmouseenter = () => showTip(p.x, p.y, it.name, it.desc, it.href);
+          t.onmouseleave = hideTip;
+          t.onclick = () => window.open(it.href, '_blank');
+        });
+      }
+    }
+
+    // Init
+    setLang(lang);
+  </script>
+</body>
+</html>
