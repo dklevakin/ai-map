@@ -117,6 +117,35 @@
       flex-wrap: wrap;
       gap: 12px;
     }
+    .bar-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .search-input {
+      flex: 1 1 240px;
+      min-width: 160px;
+      width: min(100%, 320px);
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #0f172a;
+      font-size: 14px;
+      line-height: 1.4;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    }
     .map-heading {
       margin: 0;
       font-size: 22px;
@@ -193,6 +222,13 @@
       fill: #60a5fa;
       text-decoration: underline;
     }
+    .search-hit text {
+      font-weight: 700;
+    }
+    .search-hit ellipse {
+      fill-opacity: 0.24;
+      stroke-width: 2.6;
+    }
     .site-footer {
       background: #0f172a;
       color: #e5e7eb;
@@ -215,6 +251,14 @@
     @media (max-width: 640px) {
       .hero-inner {
         padding: 36px 16px;
+      }
+      .bar-controls {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .search-input {
+        flex: 1 1 100%;
+        min-width: 0;
       }
       .hero-title {
         font-size: 26px;
@@ -254,9 +298,19 @@
     <div class="wrap main-content">
       <div class="bar">
         <h2 id="mapHeading" class="map-heading">Мапа категорій AI‑сервісів</h2>
-        <div class="language-toggle">
-          <button id="uaBtn" class="btn active">UA</button>
-          <button id="enBtn" class="btn">EN</button>
+        <div class="bar-controls">
+          <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            enterkeyhint="search"
+          />
+          <div class="language-toggle">
+            <button id="uaBtn" class="btn active">UA</button>
+            <button id="enBtn" class="btn">EN</button>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -1261,9 +1315,41 @@
       }, 0);
     }
 
+    function includesQuery(value, query) {
+      return typeof value === 'string' && value.toLowerCase().includes(query);
+    }
+
+    function createSearchMeta(cat, query) {
+      const entries = Array.isArray(cat.items) ? cat.items : [];
+      const branchInfos = entries.map((entry) => {
+        if (isGroup(entry)) {
+          const items = Array.isArray(entry.items) ? entry.items : [];
+          const itemInfos = items.map((svc) => ({
+            entry: svc,
+            match: includesQuery(svc.name, query) || includesQuery(svc.desc, query),
+          }));
+          const groupNameMatch = includesQuery(entry.group, query);
+          const hasMatch = groupNameMatch || itemInfos.some((info) => info.match);
+          return { type: 'group', entry, groupNameMatch, hasMatch, items: itemInfos };
+        }
+        const match = includesQuery(entry && entry.name, query) || includesQuery(entry && entry.desc, query);
+        return { type: 'item', entry, match };
+      });
+      const catNameMatch = includesQuery(cat.category, query);
+      const hasItemMatch = branchInfos.some((branch) => {
+        if (branch.type === 'group') return branch.items.some((item) => item.match);
+        return branch.match;
+      });
+      const hasGroupMatch = branchInfos.some((branch) => branch.type === 'group' && branch.groupNameMatch);
+      const hasMatch = catNameMatch || branchInfos.some((branch) => (branch.type === 'group' ? branch.hasMatch : branch.match));
+      return { hasMatch, catNameMatch, hasItemMatch, hasGroupMatch, branchInfos };
+    }
+
     // State
     let lang = localStorage.getItem('lang') || 'ua';
     let expanded = null; // index of category
+    let searchQuery = '';
+    let searchTimer = null;
     const expandedGroups = new Map();
 
     function getGroupState(cat) {
@@ -1279,6 +1365,7 @@
     const stage = document.getElementById('stage');
     const uaBtn = document.getElementById('uaBtn');
     const enBtn = document.getElementById('enBtn');
+    const searchInput = document.getElementById('searchInput');
     const heroTitleEl = document.getElementById('heroTitle');
     const heroSubtitleEl = document.getElementById('heroSubtitle');
     const heroDescriptionEl = document.getElementById('heroDescription');
@@ -1309,6 +1396,18 @@
         ua: 'Бібліотека перевірених AI сервісів для маркетингу, автоматизації та аналітики.',
         en: 'Curated AI tools for marketing, automation, and analytics teams.',
       },
+      searchPlaceholder: {
+        ua: 'Пошук сервісів…',
+        en: 'Search services…',
+      },
+      searchAria: {
+        ua: 'Пошук сервісів на мапі',
+        en: 'Search services on the map',
+      },
+      noResults: {
+        ua: 'Немає результатів за запитом',
+        en: 'No results for this query',
+      },
       infoNote: {
         ua: 'Іконки поруч із назвами допомагають швидко зорієнтуватися. Клікніть категорію, щоб побачити сервіси. Наведіть курсор — опис та посилання.',
         en: 'Icons highlight each tool. Click a category to expand and hover any service to read the description and open the link.',
@@ -1329,6 +1428,10 @@
       if (heroSubtitleEl) heroSubtitleEl.textContent = COPY.heroSubtitle[lang];
       if (heroDescriptionEl) heroDescriptionEl.textContent = COPY.heroDescription[lang];
       if (mapHeadingEl) mapHeadingEl.textContent = COPY.mapHeading[lang];
+      if (searchInput) {
+        searchInput.placeholder = COPY.searchPlaceholder[lang];
+        searchInput.setAttribute('aria-label', COPY.searchAria[lang]);
+      }
       if (infoNoteEl) infoNoteEl.textContent = COPY.infoNote[lang];
       if (footerRightsEl) footerRightsEl.textContent = COPY.footerRights[lang];
       if (footerTaglineEl) footerTaglineEl.textContent = COPY.footerTagline[lang];
@@ -1343,11 +1446,30 @@
       expanded = null;
       expandedGroups.clear();
       applyCopy();
+      if (searchInput) {
+        searchInput.value = searchQuery;
+      }
       render();
     }
 
     uaBtn.onclick = () => setLang('ua');
     enBtn.onclick = () => setLang('en');
+
+    if (searchInput) {
+      searchInput.value = searchQuery;
+      const commitSearch = () => {
+        searchQuery = searchInput.value;
+        render();
+      };
+      const scheduleSearch = () => {
+        if (searchTimer) {
+          clearTimeout(searchTimer);
+        }
+        searchTimer = setTimeout(commitSearch, 180);
+      };
+      searchInput.addEventListener('input', scheduleSearch);
+      searchInput.addEventListener('search', scheduleSearch);
+    }
 
     // Drawing primitives
     function group(parent) {
@@ -1501,10 +1623,6 @@
       const nodesLayer = group(stage);
 
       const data = DATA[lang];
-      const total = data.length;
-      const rightCount = Math.ceil(total / 2);
-      const leftCount = total - rightCount;
-
       const CATEGORY_GAP = 240;
       const ITEM_GAP = 250;
       const GROUP_GAP = 170;
@@ -1514,22 +1632,79 @@
       const CANVAS_WIDTH = 1200;
       const MIN_HEIGHT = 680;
 
-      const weights = data.map((cat, idx) => {
+      const query = (searchQuery || '').trim().toLowerCase();
+      const searchActive = query.length > 0;
+      const searchMeta = searchActive ? data.map((cat) => createSearchMeta(cat, query)) : [];
+      const visibleIndices = [];
+
+      data.forEach((cat, idx) => {
+        if (!searchActive) {
+          visibleIndices.push(idx);
+        } else if (searchMeta[idx] && searchMeta[idx].hasMatch) {
+          visibleIndices.push(idx);
+        }
+      });
+
+      if (searchActive && visibleIndices.length === 0) {
+        const height = MIN_HEIGHT;
+        stage.setAttribute('viewBox', `0 0 ${CANVAS_WIDTH} ${height}`);
+        stage.setAttribute('height', height);
+        stage.style.height = `${height}px`;
+        const message = createNode(nodesLayer, CANVAS_WIDTH / 2, height / 2, COPY.noResults[lang], {
+          fill: '#fff',
+          stroke: '#d1d5db',
+          sw: 1.6,
+          padX: 28,
+          padY: 18,
+          cls: 'normal',
+        });
+        message.text.setAttribute('fill', '#1f2937');
+        return;
+      }
+
+      const total = visibleIndices.length;
+      const rightCount = Math.ceil(total / 2);
+      const leftCount = total - rightCount;
+
+      const weights = visibleIndices.map((idx) => {
+        if (searchActive) {
+          const meta = searchMeta[idx];
+          if (!meta) return 1.4;
+          const entries = Array.isArray(data[idx].items) ? data[idx].items : [];
+          let visibleCount = 0;
+          entries.forEach((entry, entryIdx) => {
+            if (isGroup(entry)) {
+              const branchMeta = meta.branchInfos ? meta.branchInfos[entryIdx] : null;
+              if (!branchMeta || !branchMeta.hasMatch) return;
+              visibleCount += 1;
+              const matchedItems = branchMeta.items.filter((info) => info.match);
+              visibleCount += matchedItems.length;
+            } else if (entry && entry.name) {
+              const branchMeta = meta.branchInfos ? meta.branchInfos[entryIdx] : null;
+              if (branchMeta && branchMeta.match) {
+                visibleCount += 1;
+              }
+            }
+          });
+          return Math.max(1.6, visibleCount ? visibleCount * 0.9 : 1.4);
+        }
         if (expanded === idx) {
-          const groupState = getGroupState(cat);
-          const leafCount = countLeafItems(cat.items, groupState);
+          const groupState = getGroupState(data[idx]);
+          const leafCount = countLeafItems(data[idx].items, groupState);
           return Math.max(1.6, leafCount * 0.9);
         }
         return 1;
       });
+
       const sum = (arr) => arr.reduce((acc, val) => acc + val, 0);
       const rightWeight = sum(weights.slice(0, rightCount));
       const leftWeight = sum(weights.slice(rightCount));
+      const span = (weight, count) => (weight > 0 ? weight : Math.max(count, 1));
 
       const height = Math.max(
         MIN_HEIGHT,
-        MARGIN_Y * 2 + rightWeight * BASE_SPACING,
-        MARGIN_Y * 2 + leftWeight * BASE_SPACING
+        MARGIN_Y * 2 + span(rightWeight, rightCount) * BASE_SPACING,
+        MARGIN_Y * 2 + span(leftWeight, leftCount) * BASE_SPACING
       );
       const availableHeight = height - MARGIN_Y * 2;
 
@@ -1540,28 +1715,27 @@
       const rootX = CANVAS_WIDTH / 2;
       const rootY = height / 2;
 
-      const positions = new Array(total);
-      const layoutSide = (start, count, side) => {
-        if (count <= 0) return;
-        const indices = [];
-        for (let i = 0; i < count; i++) indices.push(start + i);
-        const totalWeight = sum(indices.map((idx) => weights[idx])) || count;
+      const positions = new Map();
+      const layoutSide = (subset, subsetWeights, side) => {
+        if (!subset.length) return;
+        const totalWeight = subsetWeights.reduce((acc, val) => acc + val, 0) || subset.length;
         let cursor = MARGIN_Y;
-        indices.forEach((idx) => {
-          const portion = weights[idx] / totalWeight;
+        subset.forEach((idx, order) => {
+          const weight = subsetWeights[order] || totalWeight / subset.length;
+          const portion = weight / totalWeight;
           const segment = portion * availableHeight;
           const centerY = cursor + segment / 2;
-          positions[idx] = {
+          positions.set(idx, {
             x: side === 'right' ? rootX + CATEGORY_GAP : rootX - CATEGORY_GAP,
             y: centerY,
             side,
-          };
+          });
           cursor += segment;
         });
       };
 
-      layoutSide(0, rightCount, 'right');
-      layoutSide(rightCount, leftCount, 'left');
+      layoutSide(visibleIndices.slice(0, rightCount), weights.slice(0, rightCount), 'right');
+      layoutSide(visibleIndices.slice(rightCount), weights.slice(rightCount), 'left');
 
       const rootLabel = 'AI Compass';
       const rootNode = createNode(nodesLayer, rootX, rootY, rootLabel, {
@@ -1573,10 +1747,11 @@
         cls: 'large',
       });
 
-      const catNodes = [];
-      data.forEach((cat, idx) => {
-        const pos = positions[idx];
+      const catNodes = new Array(data.length);
+      visibleIndices.forEach((idx) => {
+        const pos = positions.get(idx);
         if (!pos) return;
+        const cat = data[idx];
         const node = createNode(nodesLayer, pos.x, pos.y, cat.category, {
           fill: cat.color,
           fillOpacity: 0.12,
@@ -1586,26 +1761,34 @@
           padY: 16,
           cls: 'normal',
         });
-        node.group.style.cursor = 'pointer';
-        node.group.setAttribute('role', 'button');
-        node.group.setAttribute('tabindex', '0');
-        node.group.setAttribute('aria-label', cat.category);
-        node.group.addEventListener('click', () => {
-          expanded = expanded === idx ? null : idx;
-          render();
-        });
-        node.group.addEventListener('keypress', (evt) => {
-          if (evt.key === 'Enter' || evt.key === ' ') {
-            evt.preventDefault();
+        if (!searchActive) {
+          node.group.style.cursor = 'pointer';
+          node.group.setAttribute('role', 'button');
+          node.group.setAttribute('tabindex', '0');
+          node.group.setAttribute('aria-label', cat.category);
+          node.group.addEventListener('click', () => {
             expanded = expanded === idx ? null : idx;
             render();
+          });
+          node.group.addEventListener('keypress', (evt) => {
+            if (evt.key === 'Enter' || evt.key === ' ') {
+              evt.preventDefault();
+              expanded = expanded === idx ? null : idx;
+              render();
+            }
+          });
+        } else {
+          node.group.setAttribute('aria-label', cat.category);
+          if (searchMeta[idx] && (searchMeta[idx].catNameMatch || searchMeta[idx].hasItemMatch || searchMeta[idx].hasGroupMatch)) {
+            node.group.classList.add('search-hit');
           }
-        });
+        }
         catNodes[idx] = { ...node, pos, cat };
       });
 
-      const branchLayer = group(connectorsLayer);
-      catNodes.forEach((node) => {
+      const rootBranches = group(connectorsLayer);
+      visibleIndices.forEach((idx) => {
+        const node = catNodes[idx];
         if (!node) return;
         const { pos, cat } = node;
         const startX = pos.side === 'right' ? rootNode.x + rootNode.rx : rootNode.x - rootNode.rx;
@@ -1614,16 +1797,23 @@
         const endY = pos.y;
         const ctrlX = startX + (endX - startX) * 0.5;
         path(
-          branchLayer,
+          rootBranches,
           `M ${startX} ${startY} C ${ctrlX} ${startY}, ${ctrlX} ${endY}, ${endX} ${endY}`,
           { stroke: cat.color, sw: 2, op: 0.45 }
         );
       });
 
-      if (expanded != null && catNodes[expanded]) {
-        const node = catNodes[expanded];
+      const highlightLayer = group(connectorsLayer);
+
+      visibleIndices.forEach((idx) => {
+        const node = catNodes[idx];
+        if (!node) return;
         const { cat, pos } = node;
-        const highlight = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+        const meta = searchActive ? searchMeta[idx] : null;
+        const shouldExpand = searchActive ? !!(meta && (meta.hasItemMatch || meta.hasGroupMatch)) : expanded === idx;
+        if (!shouldExpand) return;
+
+        const highlight = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
         highlight.setAttribute('cx', node.x);
         highlight.setAttribute('cy', node.y);
         highlight.setAttribute('rx', node.rx + 28);
@@ -1632,45 +1822,75 @@
         highlight.setAttribute('stroke', cat.color);
         highlight.setAttribute('stroke-opacity', '0.55');
         highlight.setAttribute('stroke-dasharray', '8 12');
-        connectorsLayer.appendChild(highlight);
+        highlightLayer.appendChild(highlight);
 
         const entries = Array.isArray(cat.items) ? cat.items : [];
-        const groupState = getGroupState(cat);
+        const groupState = searchActive ? null : getGroupState(cat);
         const branches = [];
-        entries.forEach((entry) => {
+
+        entries.forEach((entry, entryIdx) => {
           if (isGroup(entry)) {
             const items = Array.isArray(entry.items) ? entry.items : [];
-            const expandedGroup = groupState.has(entry.group);
-            const slots = expandedGroup ? 1 + items.length : 1;
-            branches.push({ type: 'group', entry, items, expanded: expandedGroup, slots });
+            if (searchActive) {
+              const branchMeta = meta && meta.branchInfos ? meta.branchInfos[entryIdx] : null;
+              if (!branchMeta || !branchMeta.hasMatch) return;
+              const matchedItems = branchMeta.items.filter((info) => info.match).map((info) => info.entry);
+              branches.push({
+                type: 'group',
+                entry,
+                items: matchedItems,
+                expanded: true,
+                slots: 1 + matchedItems.length,
+                meta: branchMeta,
+              });
+            } else {
+              const expandedGroup = groupState.has(entry.group);
+              branches.push({
+                type: 'group',
+                entry,
+                items,
+                expanded: expandedGroup,
+                slots: expandedGroup ? 1 + items.length : 1,
+              });
+            }
           } else if (entry && entry.name) {
-            branches.push({ type: 'item', entry, slots: 1 });
+            if (searchActive) {
+              const branchMeta = meta && meta.branchInfos ? meta.branchInfos[entryIdx] : null;
+              if (!branchMeta || !branchMeta.match) return;
+              branches.push({ type: 'item', entry, slots: 1, highlight: true });
+            } else {
+              branches.push({ type: 'item', entry, slots: 1 });
+            }
           }
         });
 
-        const totalSlots = branches.reduce((sum, branch) => sum + branch.slots, 0);
-        if (totalSlots) {
-          const branchHeight = ITEM_SPACING * Math.max(0, totalSlots - 1);
-          const startY = node.y - branchHeight / 2;
-          const branchConnectors = group(connectorsLayer);
-          const nestedConnectors = group(connectorsLayer);
-          const groupLayer = group(nodesLayer);
-          const leafLayer = group(nodesLayer);
+        const totalSlots = branches.reduce((sumSlots, branch) => sumSlots + branch.slots, 0);
+        if (!totalSlots) return;
 
-          let slotCursor = 0;
-          branches.forEach((branch) => {
-            if (branch.type === 'group') {
-              const groupX = pos.side === 'right' ? pos.x + GROUP_GAP : pos.x - GROUP_GAP;
-              const groupY = startY + slotCursor * ITEM_SPACING;
-              const indicator = branch.expanded ? '▾' : '▸';
-              const groupNode = createNode(groupLayer, groupX, groupY, `${indicator} ${branch.entry.group}`, {
-                fill: '#fff',
-                stroke: cat.color,
-                sw: 1.6,
-                padX: 20,
-                padY: 12,
-                cls: 'small',
-              });
+        const branchHeight = ITEM_SPACING * Math.max(0, totalSlots - 1);
+        const startY = node.y - branchHeight / 2;
+        const branchConnectors = group(connectorsLayer);
+        const nestedConnectors = group(connectorsLayer);
+        const groupLayer = group(nodesLayer);
+        const leafLayer = group(nodesLayer);
+
+        let slotCursor = 0;
+        branches.forEach((branch) => {
+          if (branch.type === 'group') {
+            const groupX = pos.side === 'right' ? pos.x + GROUP_GAP : pos.x - GROUP_GAP;
+            const groupY = startY + slotCursor * ITEM_SPACING;
+            const hasItems = branch.items.length > 0;
+            const indicator = searchActive ? (hasItems ? '▾' : '•') : branch.expanded ? '▾' : '▸';
+            const labelText = branch.entry.group ? `${indicator} ${branch.entry.group}` : indicator;
+            const groupNode = createNode(groupLayer, groupX, groupY, labelText, {
+              fill: '#fff',
+              stroke: cat.color,
+              sw: 1.6,
+              padX: 20,
+              padY: 12,
+              cls: 'small',
+            });
+            if (!searchActive) {
               groupNode.group.style.cursor = 'pointer';
               groupNode.group.setAttribute('role', 'button');
               groupNode.group.setAttribute('tabindex', '0');
@@ -1691,52 +1911,23 @@
                   toggleGroup();
                 }
               });
+            } else if (branch.meta && (branch.meta.groupNameMatch || branch.items.length)) {
+              groupNode.group.classList.add('search-hit');
+            }
 
-              const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
-              const endBranchX = pos.side === 'right' ? groupX - groupNode.rx : groupX + groupNode.rx;
-              const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
-              path(
-                branchConnectors,
-                `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${groupY}, ${endBranchX} ${groupY}`,
-                { stroke: cat.color, sw: 1.6, op: 0.6 }
-              );
+            const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
+            const endBranchX = pos.side === 'right' ? groupX - groupNode.rx : groupX + groupNode.rx;
+            const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
+            path(
+              branchConnectors,
+              `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${groupY}, ${endBranchX} ${groupY}`,
+              { stroke: cat.color, sw: 1.6, op: 0.6 }
+            );
 
-              if (branch.expanded && branch.items.length) {
-                branch.items.forEach((svc, svcIdx) => {
-                  const slotIndex = slotCursor + 1 + svcIdx;
-                  const itemY = startY + slotIndex * ITEM_SPACING;
-                  const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
-                  const label = formatLabel(svc.name);
-                  const itemNode = createNode(leafLayer, itemX, itemY, label, {
-                    fill: '#fff',
-                    stroke: cat.color,
-                    sw: 1.5,
-                    padX: 20,
-                    padY: 12,
-                    cls: 'small',
-                  });
-                  itemNode.group.style.cursor = 'pointer';
-                  itemNode.group.setAttribute('aria-label', svc.name);
-                  itemNode.group.addEventListener('mouseenter', () =>
-                    showTip(itemX, itemY, label, svc.desc, svc.href)
-                  );
-                  itemNode.group.addEventListener('mouseleave', hideTip);
-                  itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
-                  const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
-                  const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
-                  const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
-                  path(
-                    nestedConnectors,
-                    `M ${startNestedX} ${groupY} C ${ctrlNestedX} ${groupY}, ${ctrlNestedX} ${itemY}, ${endNestedX} ${itemY}`,
-                    { stroke: cat.color, sw: 1.4, op: 0.55 }
-                  );
-                });
-              }
-
-              slotCursor += branch.slots;
-            } else {
-              const svc = branch.entry;
-              const itemY = startY + slotCursor * ITEM_SPACING;
+            const itemsToRender = searchActive ? branch.items : branch.expanded ? branch.items : [];
+            itemsToRender.forEach((svc, svcIdx) => {
+              const slotIndex = slotCursor + 1 + svcIdx;
+              const itemY = startY + slotIndex * ITEM_SPACING;
               const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
               const label = formatLabel(svc.name);
               const itemNode = createNode(leafLayer, itemX, itemY, label, {
@@ -1747,6 +1938,9 @@
                 padY: 12,
                 cls: 'small',
               });
+              if (searchActive) {
+                itemNode.group.classList.add('search-hit');
+              }
               itemNode.group.style.cursor = 'pointer';
               itemNode.group.setAttribute('aria-label', svc.name);
               itemNode.group.addEventListener('mouseenter', () =>
@@ -1754,21 +1948,55 @@
               );
               itemNode.group.addEventListener('mouseleave', hideTip);
               itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
-              const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
-              const endBranchX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
-              const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
+              const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
+              const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
+              const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
               path(
-                branchConnectors,
-                `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${itemY}, ${endBranchX} ${itemY}`,
-                { stroke: cat.color, sw: 1.6, op: 0.6 }
+                nestedConnectors,
+                `M ${startNestedX} ${groupY} C ${ctrlNestedX} ${groupY}, ${ctrlNestedX} ${itemY}, ${endNestedX} ${itemY}`,
+                { stroke: cat.color, sw: 1.4, op: 0.55 }
               );
+            });
 
-              slotCursor += branch.slots;
+            slotCursor += branch.slots;
+          } else {
+            const svc = branch.entry;
+            const itemY = startY + slotCursor * ITEM_SPACING;
+            const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
+            const label = formatLabel(svc.name);
+            const itemNode = createNode(leafLayer, itemX, itemY, label, {
+              fill: '#fff',
+              stroke: cat.color,
+              sw: 1.5,
+              padX: 20,
+              padY: 12,
+              cls: 'small',
+            });
+            if (searchActive && branch.highlight) {
+              itemNode.group.classList.add('search-hit');
             }
-          });
-        }
-      }
+            itemNode.group.style.cursor = 'pointer';
+            itemNode.group.setAttribute('aria-label', svc.name);
+            itemNode.group.addEventListener('mouseenter', () =>
+              showTip(itemX, itemY, label, svc.desc, svc.href)
+            );
+            itemNode.group.addEventListener('mouseleave', hideTip);
+            itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+            const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
+            const endBranchX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
+            const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
+            path(
+              branchConnectors,
+              `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${itemY}, ${endBranchX} ${itemY}`,
+              { stroke: cat.color, sw: 1.6, op: 0.6 }
+            );
+
+            slotCursor += branch.slots;
+          }
+        });
+      });
     }
+
 
     // Init
     setLang(lang);
