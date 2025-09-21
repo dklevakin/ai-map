@@ -1246,11 +1246,17 @@
       return !!(entry && Array.isArray(entry.items) && entry.items.length);
     }
 
-    function countLeafItems(entries) {
+    function countLeafItems(entries, groupState) {
       if (!Array.isArray(entries)) return 0;
       return entries.reduce((total, entry) => {
         if (!entry) return total;
-        if (isGroup(entry)) return total + entry.items.length;
+        if (isGroup(entry)) {
+          const items = Array.isArray(entry.items) ? entry.items : [];
+          if (groupState && groupState.has(entry.group)) {
+            return total + 1 + items.length;
+          }
+          return total + 1;
+        }
         return total + 1;
       }, 0);
     }
@@ -1258,6 +1264,18 @@
     // State
     let lang = localStorage.getItem('lang') || 'ua';
     let expanded = null; // index of category
+    const expandedGroups = new Map();
+
+    function getGroupState(cat) {
+      const key = `${lang}:${cat.category}`;
+      let state = expandedGroups.get(key);
+      if (!state) {
+        state = new Set();
+        expandedGroups.set(key, state);
+      }
+      return state;
+    }
+
     const stage = document.getElementById('stage');
     const uaBtn = document.getElementById('uaBtn');
     const enBtn = document.getElementById('enBtn');
@@ -1323,6 +1341,7 @@
       uaBtn.classList.toggle('active', l==='ua');
       enBtn.classList.toggle('active', l==='en');
       expanded = null;
+      expandedGroups.clear();
       applyCopy();
       render();
     }
@@ -1497,7 +1516,8 @@
 
       const weights = data.map((cat, idx) => {
         if (expanded === idx) {
-          const leafCount = countLeafItems(cat.items);
+          const groupState = getGroupState(cat);
+          const leafCount = countLeafItems(cat.items, groupState);
           return Math.max(1.6, leafCount * 0.9);
         }
         return 1;
@@ -1615,32 +1635,35 @@
         connectorsLayer.appendChild(highlight);
 
         const entries = Array.isArray(cat.items) ? cat.items : [];
+        const groupState = getGroupState(cat);
         const branches = [];
         entries.forEach((entry) => {
           if (isGroup(entry)) {
-            branches.push({ type: 'group', entry, size: entry.items.length });
+            const items = Array.isArray(entry.items) ? entry.items : [];
+            const expandedGroup = groupState.has(entry.group);
+            const slots = expandedGroup ? 1 + items.length : 1;
+            branches.push({ type: 'group', entry, items, expanded: expandedGroup, slots });
           } else if (entry && entry.name) {
-            branches.push({ type: 'item', entry, size: 1 });
+            branches.push({ type: 'item', entry, slots: 1 });
           }
         });
 
-        const totalLeaves = branches.reduce((sum, branch) => sum + branch.size, 0);
-        if (totalLeaves) {
-          const branchHeight = ITEM_SPACING * Math.max(0, totalLeaves - 1);
+        const totalSlots = branches.reduce((sum, branch) => sum + branch.slots, 0);
+        if (totalSlots) {
+          const branchHeight = ITEM_SPACING * Math.max(0, totalSlots - 1);
           const startY = node.y - branchHeight / 2;
           const branchConnectors = group(connectorsLayer);
           const nestedConnectors = group(connectorsLayer);
           const groupLayer = group(nodesLayer);
           const leafLayer = group(nodesLayer);
 
-          let cursor = 0;
+          let slotCursor = 0;
           branches.forEach((branch) => {
-            const centerIndex = cursor + (branch.size - 1) / 2;
-            const branchY = startY + centerIndex * ITEM_SPACING;
-
             if (branch.type === 'group') {
               const groupX = pos.side === 'right' ? pos.x + GROUP_GAP : pos.x - GROUP_GAP;
-              const groupNode = createNode(groupLayer, groupX, branchY, branch.entry.group, {
+              const groupY = startY + slotCursor * ITEM_SPACING;
+              const indicator = branch.expanded ? '▾' : '▸';
+              const groupNode = createNode(groupLayer, groupX, groupY, `${indicator} ${branch.entry.group}`, {
                 fill: '#fff',
                 stroke: cat.color,
                 sw: 1.6,
@@ -1648,47 +1671,72 @@
                 padY: 12,
                 cls: 'small',
               });
+              groupNode.group.style.cursor = 'pointer';
+              groupNode.group.setAttribute('role', 'button');
+              groupNode.group.setAttribute('tabindex', '0');
+              groupNode.group.setAttribute('aria-label', branch.entry.group);
+              groupNode.group.setAttribute('aria-expanded', branch.expanded ? 'true' : 'false');
+              const toggleGroup = () => {
+                if (groupState.has(branch.entry.group)) {
+                  groupState.delete(branch.entry.group);
+                } else {
+                  groupState.add(branch.entry.group);
+                }
+                render();
+              };
+              groupNode.group.addEventListener('click', toggleGroup);
+              groupNode.group.addEventListener('keypress', (evt) => {
+                if (evt.key === 'Enter' || evt.key === ' ') {
+                  evt.preventDefault();
+                  toggleGroup();
+                }
+              });
+
               const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
               const endBranchX = pos.side === 'right' ? groupX - groupNode.rx : groupX + groupNode.rx;
               const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
               path(
                 branchConnectors,
-                `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${branchY}, ${endBranchX} ${branchY}`,
+                `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${groupY}, ${endBranchX} ${groupY}`,
                 { stroke: cat.color, sw: 1.6, op: 0.6 }
               );
 
-              branch.entry.items.forEach((svc, svcIdx) => {
-                const leafIndex = cursor + svcIdx;
-                const itemY = startY + leafIndex * ITEM_SPACING;
-                const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
-                const label = formatLabel(svc.name);
-                const itemNode = createNode(leafLayer, itemX, itemY, label, {
-                  fill: '#fff',
-                  stroke: cat.color,
-                  sw: 1.5,
-                  padX: 20,
-                  padY: 12,
-                  cls: 'small',
+              if (branch.expanded && branch.items.length) {
+                branch.items.forEach((svc, svcIdx) => {
+                  const slotIndex = slotCursor + 1 + svcIdx;
+                  const itemY = startY + slotIndex * ITEM_SPACING;
+                  const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
+                  const label = formatLabel(svc.name);
+                  const itemNode = createNode(leafLayer, itemX, itemY, label, {
+                    fill: '#fff',
+                    stroke: cat.color,
+                    sw: 1.5,
+                    padX: 20,
+                    padY: 12,
+                    cls: 'small',
+                  });
+                  itemNode.group.style.cursor = 'pointer';
+                  itemNode.group.setAttribute('aria-label', svc.name);
+                  itemNode.group.addEventListener('mouseenter', () =>
+                    showTip(itemX, itemY, label, svc.desc, svc.href)
+                  );
+                  itemNode.group.addEventListener('mouseleave', hideTip);
+                  itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+                  const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
+                  const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
+                  const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
+                  path(
+                    nestedConnectors,
+                    `M ${startNestedX} ${groupY} C ${ctrlNestedX} ${groupY}, ${ctrlNestedX} ${itemY}, ${endNestedX} ${itemY}`,
+                    { stroke: cat.color, sw: 1.4, op: 0.55 }
+                  );
                 });
-                itemNode.group.style.cursor = 'pointer';
-                itemNode.group.setAttribute('aria-label', svc.name);
-                itemNode.group.addEventListener('mouseenter', () =>
-                  showTip(itemX, itemY, label, svc.desc, svc.href)
-                );
-                itemNode.group.addEventListener('mouseleave', hideTip);
-                itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
-                const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
-                const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
-                const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
-                path(
-                  nestedConnectors,
-                  `M ${startNestedX} ${branchY} C ${ctrlNestedX} ${branchY}, ${ctrlNestedX} ${itemY}, ${endNestedX} ${itemY}`,
-                  { stroke: cat.color, sw: 1.4, op: 0.55 }
-                );
-              });
+              }
+
+              slotCursor += branch.slots;
             } else {
               const svc = branch.entry;
-              const itemY = branchY;
+              const itemY = startY + slotCursor * ITEM_SPACING;
               const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
               const label = formatLabel(svc.name);
               const itemNode = createNode(leafLayer, itemX, itemY, label, {
@@ -1714,9 +1762,9 @@
                 `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${itemY}, ${endBranchX} ${itemY}`,
                 { stroke: cat.color, sw: 1.6, op: 0.6 }
               );
-            }
 
-            cursor += branch.size;
+              slotCursor += branch.slots;
+            }
           });
         }
       }
