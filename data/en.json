@@ -1,0 +1,440 @@
+[
+  {
+    "category": "LLM Assistants",
+    "color": "#2563eb",
+    "items": [
+      {
+        "name": "ChatGPT",
+        "href": "https://chat.openai.com/",
+        "desc": "Universal assistant for writing, ideation, and data analysis. Drafts articles, presentations, scripts, and emails in a conversational flow. Explains complex topics, produces tables, code, and presentation prototypes. Offers browsing, file analysis, and image generation modes."
+      },
+      {
+        "name": "Claude",
+        "href": "https://claude.ai/",
+        "desc": "Built for long-form documents and legal materials. Summarizes dozens of pages, highlights risks, and suggests revisions. Generates instructions, document templates, and handles sensitive data carefully. Prioritizes safety and explains its reasoning."
+      },
+      {
+        "name": "Google Gemini",
+        "href": "https://gemini.google.com/",
+        "desc": "Integrates with Google Workspace to enrich Docs, Sheets, Gmail, and Slides. Works with text, images, and code inside one chat interface. Summarizes email threads, analyzes spreadsheets, and creates designed slide decks. Supports voice prompts and mobile workflows."
+      },
+      {
+        "name": "Microsoft Copilot",
+        "href": "https://copilot.microsoft.com/",
+        "desc": "Embedded across Word, Excel, Outlook, PowerPoint, and Teams for enterprise use. Drafts reports, proposals, and replies by relying on your files. Recaps meetings, surfaces risks, and suggests next steps for the team. Leverages Microsoft 365 security and governance."
+      },
+      {
+        "name": "Perplexity AI",
+        "href": "https://www.perplexity.ai/",
+        "desc": "AI-native search assistant with cited sources. Blends conversational answers with live web results, summarises topics, and recommends follow-up questions and reading lists. Offers mobile apps, collections, and shared workspaces for teams."
+      },
+      {
+        "name": "Mistral Le Chat",
+        "href": "https://chat.mistral.ai/",
+        "desc": "European chat experience powered by Mistral models with privacy controls. Supports multiple languages, expert modes for code, document analysis, and translation. Provides an API and enterprise governance for data-sensitive use cases."
+      },
+      {
+        "name": "Pi by Inflection",
+        "href": "https://pi.ai/",
+        "desc": "Personal AI companion focused on thoughtful, supportive conversations. Helps brainstorm ideas, plan next steps, and learn new topics with an empathetic tone. Available across apps, SMS, and voice integrations."
+      },
+      {
+        "name": "You.com",
+        "href": "https://you.com/",
+        "desc": "AI search engine with a chat assistant that summarizes results and surfaces citations. Offers modes for coding, scholarly research, and image generation. Supports quick actions straight from the results page."
+      },
+      {
+        "name": "Character.AI",
+        "href": "https://beta.character.ai/",
+        "desc": "Platform for creating custom AI characters and role-play dialogues. Train bots with personality briefs, host group chats, and share characters with teammates. Useful for brainstorming, learning, and simulation scenarios."
+      }
+    ]
+  },
+  {
+    "category": "Image Generation",
+    "color": "#16a34a",
+    "items": [
+      {
+        "name": "Midjourney",
+        "href": "https://www.midjourney.com/",
+        "desc": "Delivers photorealistic and artistic visuals for marketing, design, and fashion. Runs through Discord with detailed prompts and style parameters. Lets teams test variations from fine art to product visualization in minutes. A vibrant community shares inspiration and ready-made style recipes."
+      },
+      {
+        "name": "Stable Diffusion",
+        "href": "https://stability.ai/",
+        "desc": "Open model core for image generation that can run locally or in the cloud. Supports composition control, inpainting, and custom checkpoints. Enables training branded models tailored to your product library. A broad ecosystem of plugins and UIs serves every skill level."
+      },
+      {
+        "name": "Leonardo AI",
+        "href": "https://leonardo.ai/",
+        "desc": "Focused on high-quality renders for games, advertising, and product design. Provides a style library and the ability to train personal generators. Offers batch creation, iterative editing, and collaborative workflows. Detailed controls manage color, pose, and scene ambience."
+      },
+      {
+        "name": "Canva AI",
+        "href": "https://www.canva.com/ai/",
+        "desc": "Combines image generation with editing inside Canva’s familiar interface. Produces social posts, presentations, and ads in minutes. Includes background removal, style copying, and shared brand assets. Ready-made templates and team spaces speed up collaboration."
+      },
+      {
+        "name": "Adobe Firefly",
+        "href": "https://www.adobe.com/products/firefly.html",
+        "desc": "Brings generative tools into Photoshop, Illustrator, and Express. Creates images, textures, and effects from textual prompts. Generative Fill enables context-aware edits and precise refinements. Trained on licensed datasets so outputs are safe for commercial use."
+      },
+      {
+        "name": "Ideogram AI",
+        "href": "https://ideogram.ai/",
+        "desc": "Creates images with crisp typography and logo fidelity. Ideal for posters, merch, and ad visuals where text accuracy matters. Includes prompt community features and brand-specific collections."
+      },
+      {
+        "name": "Playground AI",
+        "href": "https://playground.com/",
+        "desc": "Web studio that blends image generation and editing. Offers multiple models, masking tools, style presets, and collaboration features. Quickly exports galleries of variations in high resolution."
+      },
+      {
+        "name": "DALL·E",
+        "href": "https://openai.com/dall-e-3",
+        "desc": "OpenAI model for producing detailed illustrations and branded image variations. Delivers precise control over style, proportions, and scene composition. Integrates into ChatGPT with tools for rapid touch-ups and edits."
+      },
+      {
+        "name": "Krea AI",
+        "href": "https://www.krea.ai/",
+        "desc": "Real-time design platform for generating patterns, concepts, and moodboards. Includes a style library, prompt filters, and granular color control. Enables collaborative sessions and exports variations without extra software."
+      }
+    ]
+  },
+  {
+    "category": "Video Production",
+    "color": "#f59e0b",
+    "items": [
+      {
+        "name": "HeyGen",
+        "href": "https://www.heygen.com/",
+        "desc": "Generates personalized videos with avatars and synthesized speech. Ideal for training, onboarding, and localized messaging without a film crew. Upload scripts, choose voices and languages for each scene. Translation features add dubbed audio and subtitles automatically."
+      },
+      {
+        "name": "Synthesia",
+        "href": "https://www.synthesia.io/",
+        "desc": "Platform for training and marketing videos with more than 140 avatars. Turns a written script into a finished video in minutes. Includes course templates, varied voice styles, and gesture editing. Brand controls make it easy to deploy content inside LMS platforms."
+      },
+      {
+        "name": "Runway ML",
+        "href": "https://runwayml.com/",
+        "desc": "Provides tools for video generation, editing, and visual effects. Supports text-to-video, object removal, motion tracking, and reverse editing. Blends traditional timelines with generative models in one workspace. Collaborative modes and a model library expand creative options."
+      },
+      {
+        "name": "Pictory",
+        "href": "https://pictory.ai/",
+        "desc": "Automatically converts long videos or articles into short-form clips. Analyzes structure, finds key moments, and drafts a storyline. Adds subtitles, stock visuals, and AI voiceovers with minimal effort. Great for YouTube, blogs, and online courses."
+      },
+      {
+        "name": "OpusClip",
+        "href": "https://www.opus.pro/",
+        "desc": "Specializes in fast vertical clips tailored for social media. Detects high-impact segments from long videos and highlights key hooks. Generates captions, emojis, and titles to maximize retention. Includes A/B analytics and recommendations for posting schedules."
+      },
+      {
+        "name": "CapCut",
+        "href": "https://www.capcut.com/",
+        "desc": "Editor for rapid creation of vertical videos and social clips. Packs trending templates, auto captions, and an effects library. AI tools remove backgrounds, change voices, and upscale footage. Built for TikTok, Reels, and YouTube Shorts workflows."
+      },
+      {
+        "name": "Descript",
+        "href": "https://www.descript.com/",
+        "desc": "Turns audio and video into text for intuitive editing. Removes filler words, cleans audio, adds captions, and synthesizes realistic voices. Built for collaborative publishing workflows across podcast and video teams."
+      },
+      {
+        "name": "Lumen5",
+        "href": "https://lumen5.com/",
+        "desc": "Online studio that transforms articles, webinars, and blog posts into captioned videos. AI selects visuals, music, and pacing to match your script. Includes branded templates and ready-to-publish formats for social channels."
+      },
+      {
+        "name": "Rephrase.ai",
+        "href": "https://www.rephrase.ai/",
+        "desc": "Generates personalized videos with digital avatars tailored to each recipient. Perfect for sales, onboarding, and customer success messages. Offers an API for large-scale campaigns and CRM integrations."
+      },
+      {
+        "name": "Fliki",
+        "href": "https://fliki.ai/",
+        "desc": "Transforms text, articles, or tweets into ready-to-share videos. Features a library of lifelike voices, subtitles, and scene templates. Generates multilingual clips and exports social formats automatically."
+      }
+    ]
+  },
+  {
+    "category": "Process Automation",
+    "color": "#db2777",
+    "items": [
+      {
+        "group": "Integration platforms",
+        "items": [
+          {
+            "name": "Zapier",
+            "href": "https://zapier.com/",
+            "desc": "Connects thousands of SaaS tools without writing code. Automates repetitive workflows across CRM, marketing, finance, and support. Offers ready-made templates to launch automations in minutes. Built-in AI steps classify text, enrich data, and trigger decisions."
+          },
+          {
+            "name": "Make",
+            "href": "https://www.make.com/",
+            "desc": "Visual scenario builder with flexible conditions and parallel branches. Handles complex logic, loops, and bulk data operations. Bridges internal systems and APIs into unified flows. AI modules classify, summarize, and generate content mid-process."
+          },
+          {
+            "name": "n8n",
+            "href": "https://n8n.io/",
+            "desc": "Open-source automation platform you can self-host. Gives full control over data, extensions, and JavaScript customizations. Orchestrates intricate workflows, webhooks, and custom nodes. A vibrant community shares ready-to-use snippets for AI integrations."
+          },
+          {
+            "name": "Workato",
+            "href": "https://www.workato.com/",
+            "desc": "Enterprise iPaaS connecting apps, databases, and bots. Automates workflows with AI suggestions, governance controls, and reusable recipes. Handles complex logic, data mappings, and real-time monitoring."
+          }
+        ]
+      },
+      {
+        "group": "RPA & digital workers",
+        "items": [
+          {
+            "name": "UiPath",
+            "href": "https://www.uipath.com/",
+            "desc": "Enterprise-grade robotic process automation suite. Captures user actions, reads documents, and deploys digital workers. Studio, Orchestrator, and Test Suite cover the automation lifecycle. Built-in AI skills process images, text, and email at scale."
+          },
+          {
+            "name": "Power Automate",
+            "href": "https://powerautomate.microsoft.com/",
+            "desc": "Microsoft’s cloud platform for workflow automation and RPA. Integrates deeply with Microsoft 365, Dynamics, Azure, and third-party services. Builds bots that trigger on events, schedules, or approvals. Copilot assists with designing flows using natural language."
+          }
+        ]
+      },
+      {
+        "name": "Bardeen",
+        "href": "https://www.bardeen.ai/",
+        "desc": "Browser automation co-pilot that removes repetitive web tasks. Scrapes data, fills forms, creates tasks, and updates CRMs with a click. Ships with ready-made playbooks and an AI helper to build new flows."
+      },
+      {
+        "name": "Levity",
+        "href": "https://www.levity.ai/",
+        "desc": "No-code automation platform powered by custom AI classifiers. Train models on emails, images, or forms to categorize requests and trigger workflows automatically. Connects to Slack, Gmail, Zendesk, and more without writing code."
+      },
+      {
+        "name": "Axiom.ai",
+        "href": "https://axiom.ai/",
+        "desc": "Browser automation extension for teams who need repeatable web actions. Launch scrapers, form fills, and back-office routines without scripting. Supports scheduling, Google Sheets, and API calls to build digital assistants."
+      }
+    ]
+  },
+  {
+    "category": "Learning & Development",
+    "color": "#7c3aed",
+    "items": [
+      {
+        "name": "Coursera",
+        "href": "https://www.coursera.org/",
+        "desc": "Global platform with programs from leading universities and companies. Offers AI, analytics, and leadership tracks for entire teams. Personalized recommendations adapt to goals and progress. Industry-recognized certificates validate employee skills."
+      },
+      {
+        "name": "Udemy",
+        "href": "https://www.udemy.com/",
+        "desc": "Marketplace with a vast library of hands-on courses. Lets learners study at their own pace with lifetime access to materials. Provides business subscriptions with progress analytics and content suggestions. Regularly refreshes catalogues in AI, development, and business."
+      },
+      {
+        "name": "Docebo",
+        "href": "https://www.docebo.com/",
+        "desc": "Corporate LMS with AI-driven personalization. Automatically builds learning paths based on roles and skills. Includes a content marketplace, social learning, and coaching features. Delivers performance analytics and HR integrations."
+      },
+      {
+        "name": "LearnWorlds",
+        "href": "https://www.learnworlds.com/",
+        "desc": "Platform for launching branded academies and selling courses. Features interactive video, certification, and gamification tools. Customizes branding, pricing, and marketing campaigns. AI helpers generate modules, quizzes, and lesson descriptions."
+      },
+      {
+        "name": "Evolv AI",
+        "href": "https://www.evolv.ai/",
+        "desc": "Experimentation and personalization platform for digital products. Uses AI to test hundreds of content and UX variations simultaneously. Automatically tailors experiences to audience segments. Provides deep analytics on conversion and revenue impact."
+      },
+      {
+        "name": "Mindsmith",
+        "href": "https://www.mindsmith.com/",
+        "desc": "Microlearning platform with AI-generated lessons. Lets subject matter experts build interactive modules, flashcards, and quizzes in minutes. Tracks learner progress and evolves content based on feedback."
+      },
+      {
+        "name": "Sana AI",
+        "href": "https://www.sana.ai/",
+        "desc": "Enterprise knowledge platform with natural-language answers. Centralizes docs, videos, and FAQs, generates learning playlists, and supports employees with instant responses. Integrates with daily tools and delivers actionable analytics."
+      },
+      {
+        "name": "Workera",
+        "href": "https://www.workera.ai/",
+        "desc": "Skills intelligence platform with AI-guided assessments. Diagnoses capability gaps, recommends personalized learning plans, and curates partner content automatically. Gives HR teams deep analytics and plugs into LMS ecosystems."
+      }
+    ]
+  },
+  {
+    "category": "Marketing & Content",
+    "color": "#0ea5e9",
+    "items": [
+      {
+        "group": "Video & clips",
+        "items": [
+          {
+            "name": "CapCut",
+            "href": "https://www.capcut.com/",
+            "desc": "Editor for rapid creation of vertical videos and social clips. Packs trending templates, auto captions, and an effects library. AI tools remove backgrounds, change voices, and upscale footage. Built for TikTok, Reels, and YouTube Shorts workflows."
+          },
+          {
+            "name": "VEED.io",
+            "href": "https://www.veed.io/",
+            "desc": "Online studio for video editing and captioning. Supports screen recording, podcast production, and team collaboration. AI transcribes, cleans audio, and translates subtitles. Templates cover webinars, ads, and course content."
+          }
+        ]
+      },
+      {
+        "group": "Content & copywriting",
+        "items": [
+          {
+            "name": "Copy.ai",
+            "href": "https://www.copy.ai/",
+            "desc": "Generates marketing copy and creative briefs in seconds. Produces variations of ads, product descriptions, and outreach emails. Libraries store brand tones, personas, and campaign assets. Automated workflows build content directly from your data."
+          },
+          {
+            "name": "Jasper",
+            "href": "https://www.jasper.ai/",
+            "desc": "AI assistant for content marketing teams. Provides brand voice, style guides, and collaborative projects. Writes articles, landing pages, scripts, and SEO briefs at scale. Integrates with CMS tools and reports on content performance."
+          },
+          {
+            "name": "Writesonic",
+            "href": "https://writesonic.com/",
+            "desc": "AI writing suite for marketing copy, ads, and SEO. Produces articles, product descriptions, landing pages, and chatbots tuned to your brand voice. Includes fact-checking mode and integrations with WordPress and HubSpot."
+          },
+          {
+            "name": "Notion AI",
+            "href": "https://www.notion.so/product/ai",
+            "desc": "Embedded in Notion to craft docs, knowledge bases, and plans. Structures meeting notes, summarizes research, and generates tasks. Transforms raw text into lists, tables, or OKRs instantly. Designed for collaborative work with permissions and templates."
+          },
+          {
+            "name": "Predis.ai",
+            "href": "https://predis.ai/",
+            "desc": "AI assistant for social content campaigns. Analyzes competitors, recommends topics, hashtags, and visual layouts, and drafts captions in your brand voice. Builds posting calendars and auto-generates matching graphics."
+          }
+        ]
+      },
+      {
+        "group": "SMM & chatbots",
+        "items": [
+          {
+            "name": "Tidio",
+            "href": "https://www.tidio.com/",
+            "desc": "Live chat platform with AI bots for sales and support. Answers repetitive questions and routes leads to agents automatically. Tracks visitor behavior to trigger personalized offers. Orchestrates email, messenger, and CRM integrations."
+          },
+          {
+            "name": "ManyChat",
+            "href": "https://www.manychat.com/",
+            "desc": "Chatbot builder for Instagram, Facebook, and WhatsApp. Designs funnels with autoresponders and AI-powered replies. Segments audiences, launches broadcasts, and runs surveys. Connects to Shopify, HubSpot, and other marketing stacks."
+          },
+          {
+            "name": "Lately AI",
+            "href": "https://www.lately.ai/",
+            "desc": "Repurposes long-form content into high-performing social posts. Learns from past campaigns to match tone and key messages. Automatically drafts publishing calendars and A/B variations."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Analytics & BI",
+    "color": "#059669",
+    "items": [
+      {
+        "name": "Power BI",
+        "href": "https://powerbi.microsoft.com/",
+        "desc": "Microsoft’s flagship business intelligence platform. Connects to hundreds of data sources and builds interactive dashboards. Helps discover trends, forecast metrics, and craft reports. Copilot suggests visuals and answers questions in natural language."
+      },
+      {
+        "name": "Tableau",
+        "href": "https://www.tableau.com/",
+        "desc": "Flexible data visualization and exploration tool. Handles large datasets and builds narrative dashboards. Explain Data and Data Stories interpret metrics with AI assistance. Publishes in cloud or on-prem with granular governance."
+      },
+      {
+        "name": "MonkeyLearn",
+        "href": "https://monkeylearn.com/",
+        "desc": "AI platform for text and feedback analytics. Trains custom classifiers and extractors without coding. Ideal for monitoring NPS, social media, and support tickets. Integrations connect with Zapier, Zendesk, and BI dashboards."
+      },
+      {
+        "name": "Crayon",
+        "href": "https://www.crayon.co/",
+        "desc": "Competitive intelligence solution with AI-driven insights. Tracks competitor moves, website changes, and content releases. Produces digests, alerts, and battlecards for sales teams. Marketing teams react faster to shifts in the market."
+      },
+      {
+        "name": "Crux",
+        "href": "https://www.cruxinformatics.com/",
+        "desc": "Data operations platform for sourcing and delivering enterprise data. Automates ingestion, cleaning, and normalization from external providers. Ships ready-made connectors for financial and alternative datasets. AI monitors data quality and completeness continuously."
+      },
+      {
+        "name": "Tellius",
+        "href": "https://www.tellius.com/",
+        "desc": "Augmented analytics that answers questions in natural language. Uncovers metric drivers, runs what-if scenarios, and builds dashboards without coding. Includes embedded ML models for forecasting."
+      },
+      {
+        "name": "ThoughtSpot",
+        "href": "https://www.thoughtspot.com/",
+        "desc": "Search-driven analytics platform with AI guidance. Ask questions in natural language, instantly generate charts, and surface trends. Supports collaboration, embedded dashboards, and connections to modern cloud data warehouses."
+      },
+      {
+        "name": "Obviously AI",
+        "href": "https://www.obviously.ai/",
+        "desc": "No-code predictive analytics for business teams. Upload data and let AI build models, measure accuracy, and explain the drivers. Ideal for rapid experimentation and operational decisions."
+      }
+    ]
+  },
+  {
+    "category": "Industry Solutions",
+    "color": "#dc2626",
+    "items": [
+      {
+        "name": "Xero",
+        "href": "https://www.xero.com/",
+        "desc": "Cloud accounting for small and mid-sized businesses. Imports bank transactions automatically and reconciles payments. Generates financial reports, invoices, and client reminders. AI insights forecast cash flow and flag anomalies."
+      },
+      {
+        "name": "QuickBooks",
+        "href": "https://quickbooks.intuit.com/",
+        "desc": "Comprehensive suite for accounting, payroll, and expenses. Syncs with banks, payment processors, and CRM systems. Builds tax reports, budgets, and dashboards in real time. AI tools streamline transaction categorization and planning."
+      },
+      {
+        "name": "AdCreative.ai",
+        "href": "https://www.adcreative.ai/",
+        "desc": "Generates ad banners and copy tailored to your brand. Analyzes colors, audiences, and past performance. Suggests dozens of creative variations with predicted CTR. Integrates with Meta, Google Ads, and retargeting platforms."
+      },
+      {
+        "name": "Shopify AI",
+        "href": "https://www.shopify.com/",
+        "desc": "AI capabilities inside Shopify for product copy, email, and chat support. Delivers personalized recommendations and pop-ups for shoppers. Auto-generates SEO tags, titles, and collection descriptions. Runs inside the admin panel with no extra plugins."
+      },
+      {
+        "name": "Wix AI",
+        "href": "https://www.wix.com/ai",
+        "desc": "AI builder that crafts websites and content automatically. Collects a short brief then produces layouts, copy, and imagery. Optimizes SEO, guides campaigns, and reviews visitor behavior. Ideal for small businesses and freelancers."
+      },
+      {
+        "name": "Planner 5D",
+        "href": "https://planner5d.com/",
+        "desc": "Interior design platform enhanced with AI assistance. Builds room layouts, 3D renders, and project budgets quickly. Massive library of furniture, styles, and auto-placement tools. Serves designers, developers, and DIY creators."
+      },
+      {
+        "name": "Autodesk AI",
+        "href": "https://www.autodesk.com/solutions/ai",
+        "desc": "Suite of AI features across Autodesk products for design and construction. Optimizes structures, reduces material waste, and plans schedules. Combines data from BIM, IoT, and field reports for smarter decisions. Accelerates coordination and quality control for large teams."
+      },
+      {
+        "name": "Fashwell AI",
+        "href": "https://www.fashwell.com/",
+        "desc": "Visual search and recommendation engine for fashion retail. Analyzes catalogues, user photos, and trend data. Matches products by style, color, and fit in real time. Lifts conversion rates and basket size for online stores."
+      },
+      {
+        "name": "Corti",
+        "href": "https://www.corti.ai/",
+        "desc": "AI coach for contact centers and emergency teams. Listens to calls in real time, suggests next best actions, and logs key details into CRMs. Improves response speed and quality assurance."
+      },
+      {
+        "name": "Viz.ai",
+        "href": "https://www.viz.ai/",
+        "desc": "Clinical AI platform for detecting strokes and cardiac events early. Analyzes imaging data, alerts specialists, and orchestrates care teams within minutes. Integrates with hospital systems and meets regulatory standards."
+      }
+    ]
+  }
+]
