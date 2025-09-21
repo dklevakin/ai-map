@@ -11,10 +11,11 @@
     .btn { border:0; padding:6px 10px; border-radius:8px; cursor:pointer; background:#e5e7eb; }
     .btn.active { background:#2563eb; color:#fff; }
     .card { background:#fff; border-radius:16px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); overflow:auto; }
-    svg { display:block; width:100%; height:780px; }
+    svg { display:block; width:100%; height:auto; min-height:640px; }
     .tip { pointer-events:none; }
     .small { font-size:10px; font-weight:600; fill:#111827; }
     .normal { font-size:12px; font-weight:600; fill:#111827; }
+    .large { font-size:16px; font-weight:700; fill:#111827; }
     .muted { font-size:11px; fill:#d1d5db; }
     .link { font-size:11px; fill:#60a5fa; text-decoration:underline; }
   </style>
@@ -134,12 +135,6 @@
       ],
     };
 
-    // Helpers
-    const polar = (cx, cy, r, angleDeg) => {
-      const a = (angleDeg - 90) * (Math.PI / 180);
-      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-    };
-
     // State
     let lang = localStorage.getItem('lang') || 'ua';
     let expanded = null; // index of category
@@ -160,41 +155,48 @@
     enBtn.onclick = () => setLang('en');
 
     // Drawing primitives
-    function circle(svg, cx, cy, r, opts={}) {
-      const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      el.setAttribute('cx', cx); el.setAttribute('cy', cy); el.setAttribute('r', r);
-      if (opts.fill) el.setAttribute('fill', opts.fill);
-      if (opts.stroke) el.setAttribute('stroke', opts.stroke);
-      if (opts.sw) el.setAttribute('stroke-width', opts.sw);
-      if (opts.op) el.setAttribute('opacity', opts.op);
-      if (opts.sd) el.setAttribute('stroke-dasharray', opts.sd);
-      svg.appendChild(el);
+    function group(parent) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','g');
+      parent.appendChild(el);
       return el;
     }
-    function line(svg, x1,y1,x2,y2, opts={}) {
-      const el = document.createElementNS('http://www.w3.org/2000/svg','line');
-      el.setAttribute('x1',x1); el.setAttribute('y1',y1);
-      el.setAttribute('x2',x2); el.setAttribute('y2',y2);
+    function path(parent, d, opts={}) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg','path');
+      el.setAttribute('d', d);
+      el.setAttribute('fill', opts.fill || 'none');
       if (opts.stroke) el.setAttribute('stroke', opts.stroke);
       if (opts.sw) el.setAttribute('stroke-width', opts.sw);
       if (opts.op) el.setAttribute('stroke-opacity', opts.op);
-      svg.appendChild(el);
+      if (opts.sd) el.setAttribute('stroke-dasharray', opts.sd);
+      parent.appendChild(el);
       return el;
     }
-    function text(svg, x,y, str, cls='normal') {
-      const el = document.createElementNS('http://www.w3.org/2000/svg','text');
-      el.setAttribute('x', x); el.setAttribute('y', y);
-      el.setAttribute('text-anchor','middle');
-      el.setAttribute('dominant-baseline','middle');
-      el.setAttribute('class', cls);
-      el.textContent = str;
-      svg.appendChild(el);
-      return el;
-    }
-    function group(svg) {
-      const el = document.createElementNS('http://www.w3.org/2000/svg','g');
-      svg.appendChild(el);
-      return el;
+    function createNode(parent, x, y, label, opts={}) {
+      const g = group(parent);
+      g.setAttribute('transform', `translate(${x},${y})`);
+      const textEl = document.createElementNS('http://www.w3.org/2000/svg','text');
+      textEl.setAttribute('text-anchor','middle');
+      textEl.setAttribute('dominant-baseline','middle');
+      textEl.setAttribute('class', opts.cls || 'normal');
+      textEl.textContent = label;
+      g.appendChild(textEl);
+      const bbox = textEl.getBBox();
+      const padX = opts.padX ?? 18;
+      const padY = opts.padY ?? 12;
+      const rx = bbox.width / 2 + padX;
+      const ry = bbox.height / 2 + padY;
+      const ell = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+      ell.setAttribute('cx', 0);
+      ell.setAttribute('cy', 0);
+      ell.setAttribute('rx', rx);
+      ell.setAttribute('ry', ry);
+      ell.setAttribute('fill', opts.fill || '#fff');
+      if (opts.fillOpacity != null) ell.setAttribute('fill-opacity', opts.fillOpacity);
+      if (opts.stroke) ell.setAttribute('stroke', opts.stroke);
+      if (opts.sw) ell.setAttribute('stroke-width', opts.sw);
+      if (opts.op) ell.setAttribute('opacity', opts.op);
+      g.insertBefore(ell, textEl);
+      return { group: g, text: textEl, ellipse: ell, rx, ry, x, y };
     }
 
     // Tooltip management
@@ -204,7 +206,15 @@
       tipGroup = group(stage);
       tipGroup.setAttribute('class','tip');
       const w = 260, h = 110, pad = 10;
-      const tx = x + 16, ty = y - h - 12;
+      const vb = (stage.getAttribute('viewBox') || '0 0 1100 760').split(' ').map(Number);
+      const viewW = vb[2] || 1100;
+      const viewH = vb[3] || 760;
+      let tx = x + 18;
+      let ty = y - h - 14;
+      if (tx + w > viewW - 12) tx = x - w - 18;
+      if (tx < 12) tx = 12;
+      if (ty < 12) ty = y + 18;
+      if (ty + h > viewH - 12) ty = Math.max(12, viewH - h - 12);
       const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
       bg.setAttribute('x', tx); bg.setAttribute('y', ty); bg.setAttribute('rx', 12); bg.setAttribute('ry', 12);
       bg.setAttribute('width', w); bg.setAttribute('height', h);
@@ -228,51 +238,184 @@
       tipGroup.appendChild(link);
     }
     function hideTip() {
-      if (tipGroup) { stage.removeChild(tipGroup); tipGroup = null; }
+      if (tipGroup) {
+        if (tipGroup.parentNode) tipGroup.parentNode.removeChild(tipGroup);
+        tipGroup = null;
+      }
     }
 
     function render() {
+      hideTip();
       stage.innerHTML = '';
-      const cx = 550, cy = 380;
+
+      const connectorsLayer = group(stage);
+      const nodesLayer = group(stage);
+
       const data = DATA[lang];
-      const step = 360 / data.length;
+      const total = data.length;
+      const rightCount = Math.ceil(total / 2);
+      const leftCount = total - rightCount;
 
-      // center
-      circle(stage, cx, cy, 34, { fill:'#fff', stroke:'#111827', sw:2 });
-      text(stage, cx, cy, 'MSB × AI');
+      const CATEGORY_GAP = 240;
+      const ITEM_GAP = 220;
+      const BASE_SPACING = 110;
+      const ITEM_SPACING = 64;
+      const MARGIN_Y = 120;
+      const CANVAS_WIDTH = 1100;
+      const MIN_HEIGHT = 680;
 
-      // categories
-      const positions = data.map((cat, i) => {
-        const pos = polar(cx, cy, 240, i*step);
-        line(stage, cx, cy, pos.x, pos.y, { stroke: cat.color, sw: 2, op: 0.35 });
-        // node
-        circle(stage, pos.x, pos.y, 38, { fill: cat.color, op: 0.15 });
-        circle(stage, pos.x, pos.y, 34, { fill:'#fff', stroke:cat.color, sw:2 });
-        const label = text(stage, pos.x, pos.y, cat.category);
-        // click to expand
-        label.style.cursor = 'pointer';
-        label.onclick = () => { expanded = (expanded === i ? null : i); render(); };
-        return { x: pos.x, y: pos.y };
+      const weights = data.map((cat, idx) => {
+        if (expanded === idx) {
+          return Math.max(1.6, cat.items.length * 0.9);
+        }
+        return 1;
+      });
+      const sum = (arr) => arr.reduce((acc, val) => acc + val, 0);
+      const rightWeight = sum(weights.slice(0, rightCount));
+      const leftWeight = sum(weights.slice(rightCount));
+
+      const height = Math.max(
+        MIN_HEIGHT,
+        MARGIN_Y * 2 + rightWeight * BASE_SPACING,
+        MARGIN_Y * 2 + leftWeight * BASE_SPACING
+      );
+      const availableHeight = height - MARGIN_Y * 2;
+
+      stage.setAttribute('viewBox', `0 0 ${CANVAS_WIDTH} ${height}`);
+      stage.setAttribute('height', height);
+      stage.style.height = `${height}px`;
+
+      const rootX = CANVAS_WIDTH / 2;
+      const rootY = height / 2;
+
+      const positions = new Array(total);
+      const layoutSide = (start, count, side) => {
+        if (count <= 0) return;
+        const indices = [];
+        for (let i = 0; i < count; i++) indices.push(start + i);
+        const totalWeight = sum(indices.map((idx) => weights[idx])) || count;
+        let cursor = MARGIN_Y;
+        indices.forEach((idx) => {
+          const portion = weights[idx] / totalWeight;
+          const segment = portion * availableHeight;
+          const centerY = cursor + segment / 2;
+          positions[idx] = {
+            x: side === 'right' ? rootX + CATEGORY_GAP : rootX - CATEGORY_GAP,
+            y: centerY,
+            side,
+          };
+          cursor += segment;
+        });
+      };
+
+      layoutSide(0, rightCount, 'right');
+      layoutSide(rightCount, leftCount, 'left');
+
+      const rootNode = createNode(nodesLayer, rootX, rootY, 'MSB × AI', {
+        fill: '#fff',
+        stroke: '#111827',
+        sw: 2,
+        padX: 30,
+        padY: 20,
+        cls: 'large',
       });
 
-      // expanded items
-      if (expanded != null) {
-        const cat = data[expanded];
-        const base = positions[expanded];
-        circle(stage, base.x, base.y, 70, { fill:'none', stroke:cat.color, sd:'4 6', op:0.5 });
-        const items = cat.items;
-        const stepItem = 360 / items.length;
-        items.forEach((it, idx) => {
-          const p = polar(base.x, base.y, 120, idx*stepItem);
-          line(stage, base.x, base.y, p.x, p.y, { stroke:cat.color, sw:1.5, op:0.5 });
-          circle(stage, p.x, p.y, 26, { fill:cat.color, op:0.15 });
-          circle(stage, p.x, p.y, 22, { fill:'#fff', stroke:cat.color, sw:2 });
-          const t = text(stage, p.x, p.y, it.name, 'small');
-          t.style.cursor = 'pointer';
-          t.onmouseenter = () => showTip(p.x, p.y, it.name, it.desc, it.href);
-          t.onmouseleave = hideTip;
-          t.onclick = () => window.open(it.href, '_blank');
+      const catNodes = [];
+      data.forEach((cat, idx) => {
+        const pos = positions[idx];
+        if (!pos) return;
+        const node = createNode(nodesLayer, pos.x, pos.y, cat.category, {
+          fill: cat.color,
+          fillOpacity: 0.12,
+          stroke: cat.color,
+          sw: 2,
+          padX: 26,
+          padY: 16,
+          cls: 'normal',
         });
+        node.group.style.cursor = 'pointer';
+        node.group.setAttribute('role', 'button');
+        node.group.setAttribute('tabindex', '0');
+        node.group.setAttribute('aria-label', cat.category);
+        node.group.addEventListener('click', () => {
+          expanded = expanded === idx ? null : idx;
+          render();
+        });
+        node.group.addEventListener('keypress', (evt) => {
+          if (evt.key === 'Enter' || evt.key === ' ') {
+            evt.preventDefault();
+            expanded = expanded === idx ? null : idx;
+            render();
+          }
+        });
+        catNodes[idx] = { ...node, pos, cat };
+      });
+
+      const branchLayer = group(connectorsLayer);
+      catNodes.forEach((node) => {
+        if (!node) return;
+        const { pos, cat } = node;
+        const startX = pos.side === 'right' ? rootNode.x + rootNode.rx : rootNode.x - rootNode.rx;
+        const startY = rootNode.y;
+        const endX = pos.side === 'right' ? pos.x - node.rx : pos.x + node.rx;
+        const endY = pos.y;
+        const ctrlX = startX + (endX - startX) * 0.5;
+        path(
+          branchLayer,
+          `M ${startX} ${startY} C ${ctrlX} ${startY}, ${ctrlX} ${endY}, ${endX} ${endY}`,
+          { stroke: cat.color, sw: 2, op: 0.45 }
+        );
+      });
+
+      if (expanded != null && catNodes[expanded]) {
+        const node = catNodes[expanded];
+        const { cat, pos } = node;
+        const highlight = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+        highlight.setAttribute('cx', node.x);
+        highlight.setAttribute('cy', node.y);
+        highlight.setAttribute('rx', node.rx + 28);
+        highlight.setAttribute('ry', node.ry + 24);
+        highlight.setAttribute('fill', 'none');
+        highlight.setAttribute('stroke', cat.color);
+        highlight.setAttribute('stroke-opacity', '0.55');
+        highlight.setAttribute('stroke-dasharray', '8 12');
+        connectorsLayer.appendChild(highlight);
+
+        const items = cat.items;
+        const itemCount = items.length;
+        if (itemCount) {
+          const branchHeight = ITEM_SPACING * (itemCount - 1);
+          const startY = node.y - branchHeight / 2;
+          const itemConnectors = group(connectorsLayer);
+          const itemLayer = group(nodesLayer);
+
+          items.forEach((item, idx) => {
+            const itemY = startY + idx * ITEM_SPACING;
+            const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
+            const itemNode = createNode(itemLayer, itemX, itemY, item.name, {
+              fill: '#fff',
+              stroke: cat.color,
+              sw: 1.5,
+              padX: 20,
+              padY: 12,
+              cls: 'small',
+            });
+            itemNode.group.style.cursor = 'pointer';
+            itemNode.group.addEventListener('mouseenter', () =>
+              showTip(itemX, itemY, item.name, item.desc, item.href)
+            );
+            itemNode.group.addEventListener('mouseleave', hideTip);
+            itemNode.group.addEventListener('click', () => window.open(item.href, '_blank'));
+            const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
+            const endBranchX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
+            const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
+            path(
+              itemConnectors,
+              `M ${startBranchX} ${node.y} C ${ctrlBranchX} ${node.y}, ${ctrlBranchX} ${itemY}, ${endBranchX} ${itemY}`,
+              { stroke: cat.color, sw: 1.6, op: 0.6 }
+            );
+          });
+        }
       }
     }
 
