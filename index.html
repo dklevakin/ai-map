@@ -1291,6 +1291,8 @@
 
     const FALLBACK_ICON = '✨';
 
+    const nodeSizeCache = new Map();
+
     function formatLabel(name) {
       const icon = ICONS[name] || FALLBACK_ICON;
       return `${icon} ${name}`;
@@ -1445,6 +1447,7 @@
       enBtn.classList.toggle('active', l==='en');
       expanded = null;
       expandedGroups.clear();
+      nodeSizeCache.clear();
       applyCopy();
       if (searchInput) {
         searchInput.value = searchQuery;
@@ -1497,11 +1500,29 @@
       textEl.setAttribute('class', opts.cls || 'normal');
       textEl.textContent = label;
       g.appendChild(textEl);
-      const bbox = textEl.getBBox();
       const padX = opts.padX ?? 18;
       const padY = opts.padY ?? 12;
-      const rx = bbox.width / 2 + padX;
-      const ry = bbox.height / 2 + padY;
+      const classKey = opts.cls || 'normal';
+      const cachedByLabel = nodeSizeCache.get(label);
+      let width;
+      let height;
+      if (cachedByLabel && cachedByLabel.has(classKey)) {
+        const cachedSize = cachedByLabel.get(classKey);
+        width = cachedSize.width;
+        height = cachedSize.height;
+      } else {
+        const bbox = textEl.getBBox();
+        width = bbox.width;
+        height = bbox.height;
+        let entry = cachedByLabel;
+        if (!entry) {
+          entry = new Map();
+          nodeSizeCache.set(label, entry);
+        }
+        entry.set(classKey, { width, height });
+      }
+      const rx = width / 2 + padX;
+      const ry = height / 2 + padY;
       const ell = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
       ell.setAttribute('cx', 0);
       ell.setAttribute('cy', 0);
