@@ -1,56 +1,53 @@
-# Requirements — AI Compass
+# Requirements — AI Compass SPA
 
 ## 1. Context and Scope
-- **Product description:** a static web map of AI services for SMBs, implemented in `index.html` without third-party dependencies.
-- **System boundaries:** the site runs fully on the client, has no backend, and only links out to public external resources.
+- **Product description:** a React-based single-page application that visualizes a curated catalog of AI services as an interactive mind map and accessible list.
+- **System boundaries:** the site remains client-side only; Vite builds a static bundle that can be deployed to any static host (Cloudflare Pages, GitHub Pages) without a backend.
 - **Key stakeholders:**
-  - Business owners and operations managers who decide which AI tools to adopt.
-  - Marketing and product teams selecting tools for specific campaigns.
-  - The site maintenance team that updates the catalog and keeps localizations in sync.
+  - Business owners, marketing teams, and product managers selecting AI tools.
+  - Maintainers curating the catalog and localizations.
+  - Accessibility advocates and mobile-first users who need alternate navigation modes.
 
 ## 2. Functional Requirements
-### 2.1 Content Structure
-1. The system must store categories, subcategories (groups), and services in two localized JSON datasets (`data/ua.json` and `data/en.json`) to keep translations aligned.
-2. Every service entry must include a name, short description, and hyperlink to the official resource.
-3. Categories and groups must have unique colors/titles to stay visually distinct on the map.
-4. Optional metadata such as documentation, code samples, and community links may be stored in `data/resources.json` and merged with services by matching the service name, slug, or official URL.
+### 2.1 Content & Data Management
+1. Store localized catalog data in `public/data/{ua,en}.json`; each service must provide `name`, `href`, and `desc`.
+2. Persist supplemental resources (docs, repos, community, tags) in `public/data/resources.json`, matched by slug/name/domain.
+3. Cache fetched datasets in `localStorage` and warm up the inactive language in the background for faster switches.
+4. Resolve recognizable service logos via domain lookups (Clearbit) with a branded fallback asset.
 
-### 2.2 Map Interactivity
-5. After the page loads, the user must see a radial diagram with the “AI Compass” central node.
-6. Clicking a category must expand or collapse its related services; clicking again returns it to the default state.
-7. Groups inside categories must expand/collapse independently so long lists remain readable.
-8. Hovering over a service must provide a visual focus cue (expanded node) without hiding existing cards; clicking must open a persistent detail card with the description and available resource links.
-9. The official site and supplemental resources must open from the detail card in new tabs to avoid losing the map context.
-10. Icons next to services must reflect the tool type and speed up scanning for the right solution.
+### 2.2 User Interface & Interactions
+5. Render the AI Compass mind map in SVG with expandable categories, groups, and service nodes.
+6. Display the service logo inside each node and prevent overlaps between nodes and connector paths.
+7. Provide an alternate accordion/list view optimized for mobile widths (<900px) and low-vision navigation.
+8. Implement language (UA/EN) and theme (dark/light) toggles; remember user preferences across sessions.
+9. Surface a persistent detail panel with description, category/group context, tags, and actionable resource links opening in new tabs.
+10. Support keyboard navigation: categories, groups, and services must be focusable, respond to `Enter`/`Space`, and the detail panel must expose a close control.
 
-### 2.3 Localization and Management
-11. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
-12. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
-13. Categories and services on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility, and pressing `Esc` must dismiss an open detail card.
-14. The catalog must document manual update instructions for future content editors, including how to maintain the resource metadata file.
+### 2.3 Search & Filtering
+11. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
+12. When a search is active, auto-expand matching branches in the map and list to reveal results.
 
-### 2.4 Deployment and Documentation
-15. The site must open directly from the file system or through any static hosting without a build step.
-16. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
-17. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
+### 2.4 Deployment & Tooling
+13. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
+14. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
+15. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
 
 ## 3. Non-functional Requirements
-| ID | Requirement | Type |
+| ID  | Requirement | Type |
 | --- | --- | --- |
-| NF-1 | The solution must work offline and without a server component. | Reliability / Autonomy |
-| NF-2 | `index.html` must be self-contained and avoid external libraries for rendering the map. | Architecture |
-| NF-3 | The interface must be readable on screens from 1024px and remain usable on tablets/mobile devices. | Usability |
-| NF-4 | All text and data must be stored in UTF-8 to support Ukrainian and English languages. | Compatibility |
-| NF-5 | Interaction logic must stay understandable without reading the code thanks to comments and documentation. | Maintainability |
-| NF-6 | Catalog expansion must not significantly degrade performance; position calculations run on the client in O(n). | Performance |
-| NF-7 | The code must follow accessibility principles: focusable elements, ARIA attributes, and sufficient contrast. | Accessibility |
+| NF-1 | The SPA must remain static-host friendly; build artifacts are plain HTML/CSS/JS with no server dependencies. | Architecture |
+| NF-2 | Initial bundle size should remain lean (<400 KB gzip) and leverage code-splitting or lazy data loading if catalog growth threatens this budget. | Performance |
+| NF-3 | Provide a fully responsive experience: mind map for ≥1024px, list/accordion mode for narrow screens and toggleable on demand. | Usability |
+| NF-4 | Respect accessibility basics: sufficient contrast, focus outlines, keyboard operability, aria labels for controls and the details panel. | Accessibility |
+| NF-5 | Use TypeScript for component contracts and utilities to improve maintainability and onboarding. | Maintainability |
+| NF-6 | Document data-editing procedures so non-developers can update JSON files confidently. | Documentation |
 
 ## 4. Constraints and Assumptions
-- The project does not store user data and does not require a privacy policy.
-- Users need a modern browser with SVG and LocalStorage support.
-- Traffic analytics requires integrating third-party tools (not included in the base version).
+- The catalog remains public and unauthenticated; no personal data is collected.
+- Service logos are loaded from external providers (e.g., Clearbit). If a logo fails, the UI must fall back to the local placeholder.
+- Editors update JSON content via Git; no CMS is provided at this stage.
 
 ## 5. Open Questions
-- Is there a need for JSON or Google Sheets import/export of the catalog?
-- What is the review process for new services before publication, and who owns it?
-- Should we integrate with CRM/Slack to notify stakeholders about catalog updates?
+- Should we add analytics hooks (e.g., Plausible) in the build pipeline?
+- Do we need offline support (service worker) now that the bundle exceeds a single file?
+- Would an automated image cache or local logo repository be preferable to third-party logo lookups?

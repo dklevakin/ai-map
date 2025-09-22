@@ -1,64 +1,62 @@
-# AI Compass — User Guide
+# AI Compass — User Guide (SPA Edition)
 
 ## Project Overview
-AI Compass is a static website featuring an interactive map of artificial intelligence services tailored for small and medium-sized businesses. The catalog is presented as a radial diagram that visualizes the relationships between each category and service. All logic and data live in a single `index.html` file, so the solution requires no build step, works offline, and can be hosted on any static platform with ease.
+AI Compass is a React/Vite single-page application that visualizes a bilingual catalog of AI services. The experience combines a radial SVG mind map, searchable list/accordion mode, and a persistent detail panel with curated resources. The UI is themed, responsive, and accessible from keyboard and screen readers.
 
 ## Purpose and Goals
-- **Target audience:** marketing teams, operations managers, and entrepreneurs who are searching for reliable AI tools for their business workflows.
-- **Primary goal:** help visitors quickly navigate the AI landscape, choose solutions for specific tasks, and jump to the official product pages.
+- **Target audience:** marketing teams, founders, and product managers researching AI tooling.
+- **Primary goal:** help visitors discover trusted AI services, compare options by category, and jump to official resources quickly.
 
 ## Key Features
-- Radial map with the “AI Compass” central node and color-coded service categories.
-- Toggle between Ukrainian and English content localizations.
-- Expandable categories, groups, and subgroups with detailed service descriptions.
-- Click-to-open detail cards that surface extended descriptions plus curated links to docs, repos, and examples.
-- Visual icons next to service names for instant recognition of the service type.
-- Adaptive canvas height for large catalogs plus keyboard navigation support.
+- Mind map canvas with expandable categories, groups, and logo-enhanced service nodes.
+- Accessible accordion/list mode for mobile (<900px) and low-vision users (toggle available on desktop).
+- UA/EN language switcher, dark/light theme toggle, and persistent preferences via `localStorage`.
+- Search with instant highlighting across categories, groups, and service descriptions.
+- Detail panel containing localized copy, tags, and curated resource links that open in new tabs.
 
-## How to Use the Site
-### Quick Start
-1. Open `index.html` in your browser, or launch a local server with `python3 -m http.server 8000` and navigate to `http://localhost:8000`.
-2. Review the banner at the top of the page—it explains the catalog’s focus.
-3. Read the hero section, which briefly outlines the purpose of the mind map.
+## How to Run the App
+### Local Development
+```bash
+npm install
+npm run dev
+```
+Open the Vite dev server URL (default `http://localhost:5173`). Hot module replacement keeps the map responsive while editing components or data.
 
-### Navigating the Map
-1. The “AI Compass” node sits in the center, with branches extending into categories (marketing, automation, analytics, etc.).
-2. Click a category to expand its services. Click again to collapse it.
-3. When a category contains groups (for example, “Video & Clips” inside Marketing), click the group heading to reveal all services inside it.
+### Production Build
+```bash
+npm run build
+npm run preview # optional local preview of the production bundle
+```
+The optimized assets are generated in `dist/` and can be hosted on any static platform.
 
-### Service Details
-- Hover over a service to gently expand the node for easier targeting.
-- Click a service name to open its detail card. The card stays open until you open another service, click the empty background, press the × button, or press `Esc`.
-- Each card lists the description, optional tags, and a stack of helpful links: the official site plus documentation, getting-started guides, repositories, or community hubs sourced from `data/resources.json`.
-- Use the links inside the card to open resources in a new tab; the map remains unchanged in the background.
-- Each service is paired with an icon that represents its specialization (for example,  for DALL·E).
+## Navigating the Map
+1. The “AI Compass” node sits at the center; categories radiate to the left and right. Each node includes a service logo for easier recognition.
+2. Click a category to expand its groups/services. Use the list mode toggle for a linear view if preferred.
+3. Hover or focus a service to emphasize the node. Click (or press `Enter`/`Space`) to open its detail card on the right.
+4. Use the search field to filter the map; matching categories, groups, and services expand automatically in both map and list views.
 
-### Switching Languages
-- Use the **UA** and **EN** buttons in the control panel to switch the content language.
-- The selected language is stored in LocalStorage, so returning visitors see their last preference automatically.
+## Detail Panel
+- Displays the service name, category, and group context.
+- Shows the localized description, tags, and curated resource links (docs, repos, communities, etc.).
+- Primary “Open website” action opens the official site in a new tab.
+- Close the panel via the button or keyboard (`Esc`).
 
-### Keyboard Controls
-- Categories receive focus and react to the `Enter` or `Space` keys, allowing navigation without a mouse.
-- Services are also focusable: press `Enter` or `Space` to toggle the detail card, and press `Esc` to dismiss it.
-- You can also close an open card by clicking the empty canvas background or pressing the × button.
-
-## Updating the Catalog
-- Catalog data lives in `data/ua.json` and `data/en.json`. Each category contains a list of services with `name`, `href`, and `desc` fields, plus optional groups structured as `group` → `items`.
-- Add or update a service in both language files to keep translations aligned; the rendering logic stays unchanged.
-- Additional metadata (documentation, repos, examples, tags) can be stored in `data/resources.json`. Entries are matched by service name or slug (falling back to the official URL) and automatically merged into the detail card.
-- Icons are configured through the `ICONS` dictionary inside `index.html`. If a service is not listed, the fallback ✨ icon is used.
+## Editing the Catalog
+- Update `public/data/ua.json` and `public/data/en.json` for localized categories, groups, and services. Keep translations aligned.
+- Manage optional resources in `public/data/resources.json`. Entries can include localized labels for links; tags are rendered as chips in the detail panel.
+- New services should include official URLs so the logo resolver can fetch recognizable branding. Missing logos automatically fall back to the branded placeholder (`public/assets/service-placeholder.svg`).
+- After data changes, run `npm run dev` to preview or `npm run build` to produce deployable assets.
 
 ## Deployment
-- **Local:** open `index.html` directly or spin up any simple HTTP server.
-- **Cloudflare Pages:** create a project, leave the build command empty, and set the output directory to the root (`/`).
-- **GitHub Pages:** publish from the `main` branch and point the source to the repository root. No extra settings are required because the site is static.
+- **Cloudflare Pages:** configure the project with `npm run build` as the build command and `dist` as the output directory.
+- **GitHub Pages:** publish the `dist/` folder through GitHub Actions or manual deployment (e.g., `gh-pages` branch).
 
-## Documentation on GitHub Pages
-1. The `/doc` folder contains this guide and supporting files.
-2. In GitHub Pages settings you can publish the documentation separately by selecting the `/doc` folder as the source.
-3. To apply a GitHub Pages theme, add a `_config.yml` file with the theme name to this folder.
+## Accessibility & Mobile Tips
+- Keyboard users can tab through categories, groups, and services; focus states are visible.
+- The list/accordion view automatically activates under 900px width and can be toggled manually with the view switcher.
+- High-contrast themes (dark/light) ensure readability across environments.
 
-## Additional Resources
-- [Requirements.md](./Requirements.md) — functional and non-functional requirements.
-- [Backlog.md](./Backlog.md) — proposed improvements and future tasks.
-- [ADR](./adr) — architecture decisions made during the project.
+## Documentation Map
+- [Requirements](./Requirements.md) — updated functional & non-functional scope.
+- [Backlog](./Backlog.md) — roadmap of future improvements.
+- [ADR](./adr) — architecture decisions (SPA migration captured in ADR 0001).

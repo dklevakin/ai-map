@@ -1,20 +1,22 @@
-# ADR 0001: Static Single-File Architecture
+# ADR 0001: React SPA Architecture
 
 - **Status:** Accepted
-- **Date:** 2025-09-21
-- **Context:** initial repository (`initial commit`, PR draft)
+- **Date:** 2025-03-05
+- **Context:** migration from the single-file prototype to a maintainable SPA
 
 ## Context
-The first release of AI Compass needed a straightforward way to publish the AI service catalog without a backend and with as few files as possible. The team wanted a solution that:
-- could be deployed to GitHub Pages or Cloudflare Pages without CI/CD or Node.js;
-- worked offline (simply save the page);
-- remained transparent for non-technical editors who can open the source and update the data manually.
+The original release packaged HTML, CSS, JS, and catalog data into one `index.html` to guarantee zero build steps and extreme portability. As the catalog expanded, the monolithic script became hard to maintain: adding features (search, accessibility improvements, alternate views) required copy-pasting large DOM blocks, and non-technical editors struggled with growing inline logic. The team also needed mobile-first navigation and recognizable service branding that exceeded the limits of the legacy approach.
 
 ## Decision
-We chose a “single-file app” architecture: all HTML, CSS, JavaScript, and data are placed inside `index.html`. No third-party libraries or package managers are used. The application runs entirely on the client and renders SVG graphics for the map.
+Adopt a React + Vite single-page application:
+- Split the UI into typed components (mind map canvas, accordion list, detail panel) stored in `src/`.
+- Load localized JSON datasets from `public/data` and cache them via `localStorage`.
+- Use Vite to bundle and optimize the SPA for static hosting; provide `npm run dev` / `npm run build` workflows.
+- Render service nodes with SVG + logos, apply accessibility best practices, and introduce a responsive list mode.
 
 ## Consequences
-- ✅ The project is easy to deploy on any static hosting and can even be opened directly from the file system.
-- ✅ Content updates require only editing one file without a build pipeline.
-- ⚠️ Scaling the code base demands careful structuring of sections within `index.html` as the file grows in size.
-- ⚠️ The lack of a build step limits the ability to use TypeScript/SCSS and modular organization without additional tooling.
+- ✅ Modular codebase with clear separation of concerns, easier testing, and room for future features.
+- ✅ Modern tooling (TypeScript, React, Vite) improves developer experience and hot reloading.
+- ✅ Cloudflare Pages and GitHub Pages deployments still work after adding a lightweight build step.
+- ⚠️ Editors must run the build or rely on CI; documentation now includes instructions for the new pipeline.
+- ⚠️ Logo fetching depends on external providers; fallbacks must be maintained for reliability.
