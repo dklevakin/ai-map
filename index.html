@@ -284,11 +284,178 @@
       border: 1px solid var(--color-card-border);
       transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
+    .content-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .map-column {
+      flex: 1 1 600px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .details-panel {
+      flex: 0 1 340px;
+      min-width: min(100%, 320px);
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-card-border);
+      border-radius: 16px;
+      box-shadow: var(--color-card-shadow);
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+    .details-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .details-empty {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--info-note-color);
+    }
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .details-category {
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--info-note-color);
+    }
+    .details-title {
+      margin: 4px 0 0;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--color-hero-title);
+      transition: color 0.3s ease;
+    }
+    .details-description {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-text-primary);
+    }
+    .details-close {
+      border: none;
+      background: transparent;
+      color: var(--info-note-color);
+      font-size: 20px;
+      line-height: 1;
+      padding: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .details-close:hover,
+    .details-close:focus-visible {
+      background: rgba(148, 163, 184, 0.18);
+      color: var(--color-text-primary);
+      outline: none;
+    }
+    .details-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .details-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--info-note-color);
+    }
+    .details-tag-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .details-tag-list li {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--color-banner-pill-bg);
+      color: var(--color-banner-pill-text);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .details-link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .details-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(148, 163, 184, 0.16);
+      color: var(--color-button-text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .details-link:hover,
+    .details-link:focus-visible {
+      background: rgba(96, 165, 250, 0.2);
+      color: var(--color-button-active-text);
+      outline: none;
+    }
+    .details-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: var(--color-button-active-bg);
+      color: var(--color-button-active-text);
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .details-primary:hover,
+    .details-primary:focus-visible {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      outline: none;
+    }
+    .is-hidden {
+      display: none !important;
+    }
     svg {
       display: block;
       width: 100%;
       height: auto;
       min-height: 640px;
+    }
+    .service-node ellipse {
+      transition: transform 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
+    }
+    .service-node.service-hover ellipse {
+      stroke-width: 2.2 !important;
+      filter: drop-shadow(0 6px 14px rgba(15, 23, 42, 0.45));
+    }
+    .service-node.service-selected ellipse {
+      stroke-width: 2.6 !important;
+      filter: drop-shadow(0 0 0 4px rgba(37, 99, 235, 0.35));
     }
     .info-note {
       color: var(--info-note-color);
@@ -360,6 +527,15 @@
       gap: 8px;
       align-items: center;
     }
+    @media (max-width: 960px) {
+      .content-grid {
+        flex-direction: column;
+      }
+      .details-panel {
+        width: 100%;
+        min-width: 0;
+      }
+    }
     @media (max-width: 640px) {
       .hero-inner {
         padding: 36px 16px;
@@ -401,7 +577,7 @@
       <h1 id="heroTitle" class="hero-title">Ваш компас у світі ШІ сервісів</h1>
       <p id="heroSubtitle" class="hero-subtitle">Відкривайте перевірені платформи для бізнесу, творчості й автоматизації.</p>
       <p id="heroDescription" class="hero-description">
-        Перемикайте мову, обирайте категорію та натискайте на сервіси, щоб швидко знайти потрібний інструмент і перейти на його сайт.
+        Перемикайте мову, обирайте категорію та відкривайте картки сервісів із описом, посиланнями й корисними матеріалами.
       </p>
     </div>
   </header>
@@ -429,12 +605,48 @@
           </div>
         </div>
       </div>
-      <div class="card">
-        <svg id="stage" viewBox="0 0 1100 760" aria-label="Mind map canvas"></svg>
+      <div class="content-grid">
+        <div class="map-column">
+          <div class="card">
+            <svg id="stage" viewBox="0 0 1100 760" aria-label="Mind map canvas"></svg>
+          </div>
+          <p id="infoNote" class="info-note">
+            Клікніть категорію, щоб побачити сервіси, а потім натисніть на будь-який вузол, щоб відкрити картку з описом і корисними посиланнями.
+          </p>
+        </div>
+        <aside id="detailsPanel" class="details-panel" aria-live="polite" aria-label="Service details">
+          <div id="detailsEmpty" class="details-empty">
+            <p id="detailsEmptyText">Обери сервіс, щоб переглянути деталі.</p>
+          </div>
+          <article id="detailsCard" class="details-card is-hidden" aria-labelledby="detailsTitle">
+            <header class="details-header">
+              <div class="details-heading">
+                <p id="detailsCategory" class="details-category"></p>
+                <h3 id="detailsTitle" class="details-title"></h3>
+              </div>
+              <button id="detailsCloseBtn" class="details-close" type="button" aria-label="Закрити картку">
+                <span aria-hidden="true">×</span>
+              </button>
+            </header>
+            <p id="detailsDescription" class="details-description"></p>
+            <div id="detailsTagsSection" class="details-section is-hidden">
+              <span id="detailsTagsLabel" class="details-section-title"></span>
+              <ul id="detailsTagsList" class="details-tag-list"></ul>
+            </div>
+            <div id="detailsLinksSection" class="details-section is-hidden">
+              <span id="detailsLinksLabel" class="details-section-title"></span>
+              <div id="detailsLinksList" class="details-link-list"></div>
+            </div>
+            <a
+              id="detailsPrimaryLink"
+              class="details-primary is-hidden"
+              target="_blank"
+              rel="noreferrer"
+              href="#"
+            ></a>
+          </article>
+        </aside>
       </div>
-      <p id="infoNote" class="info-note">
-        Іконки поруч із назвами допомагають швидко зорієнтуватися. Клікніть категорію, щоб побачити сервіси. Наведіть курсор — опис та посилання.
-      </p>
     </div>
   </main>
 
@@ -662,12 +874,390 @@
     };
 
     const FALLBACK_ICON = '✨';
+    const HIDDEN_CLASS = 'is-hidden';
+
+    const RESOURCE_LINK_LABELS = {
+      docs: { ua: 'Документація', en: 'Docs' },
+      documentation: { ua: 'Документація', en: 'Documentation' },
+      gettingStarted: { ua: 'Початок роботи', en: 'Getting started' },
+      quickstart: { ua: 'Швидкий старт', en: 'Quickstart' },
+      guide: { ua: 'Гайд', en: 'Guide' },
+      handbook: { ua: 'Посібник', en: 'Handbook' },
+      examples: { ua: 'Приклади', en: 'Examples' },
+      templates: { ua: 'Шаблони', en: 'Templates' },
+      repo: { ua: 'Репозиторій', en: 'Repository' },
+      repository: { ua: 'Репозиторій', en: 'Repository' },
+      sdk: { ua: 'SDK', en: 'SDK' },
+      api: { ua: 'API', en: 'API Reference' },
+      reference: { ua: 'Референс', en: 'Reference' },
+      blog: { ua: 'Блог', en: 'Blog' },
+      updates: { ua: 'Оновлення', en: 'Updates' },
+      changelog: { ua: 'Changelog', en: 'Changelog' },
+      roadmap: { ua: 'Дорожня карта', en: 'Roadmap' },
+      community: { ua: 'Спільнота', en: 'Community' },
+      forum: { ua: 'Форум', en: 'Forum' },
+      support: { ua: 'Підтримка', en: 'Support' },
+      faq: { ua: 'FAQ', en: 'FAQ' },
+      academy: { ua: 'Академія', en: 'Academy' },
+      training: { ua: 'Навчання', en: 'Training' },
+      tutorials: { ua: 'Туторіали', en: 'Tutorials' },
+      webinar: { ua: 'Вебінар', en: 'Webinar' },
+      events: { ua: 'Події', en: 'Events' },
+      newsletter: { ua: 'Розсилка', en: 'Newsletter' },
+      youtube: { ua: 'YouTube', en: 'YouTube' },
+      demo: { ua: 'Демо', en: 'Demo' },
+      playground: { ua: 'Playground', en: 'Playground' },
+      showcase: { ua: 'Приклади', en: 'Showcase' },
+    };
+
+    const RESOURCE_LINK_ORDER = [
+      'docs',
+      'documentation',
+      'gettingStarted',
+      'quickstart',
+      'guide',
+      'handbook',
+      'examples',
+      'templates',
+      'sdk',
+      'api',
+      'reference',
+      'repo',
+      'repository',
+      'community',
+      'forum',
+      'support',
+      'faq',
+      'academy',
+      'training',
+      'tutorials',
+      'webinar',
+      'events',
+      'blog',
+      'updates',
+      'changelog',
+      'roadmap',
+      'newsletter',
+      'playground',
+      'showcase',
+      'youtube',
+      'demo',
+    ];
 
     const nodeSizeCache = new Map();
+
+    function ensureResourceMetadata() {
+      if (resourcesPromise) {
+        return resourcesPromise;
+      }
+      resourcesPromise = fetch('data/resources.json')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to load resources metadata: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((json) => {
+          resourcesByName.clear();
+          if (json && Array.isArray(json.services)) {
+            json.services.forEach((entry) => {
+              if (!entry) return;
+              const { name, slug, href } = entry;
+              if (name) {
+                resourcesByName.set(name, entry);
+              }
+              if (slug) {
+                resourcesByName.set(slug, entry);
+              }
+              if (href) {
+                resourcesByName.set(href, entry);
+              }
+            });
+          }
+          resourcesError = null;
+          return resourcesByName;
+        })
+        .catch((error) => {
+          resourcesError = error;
+          console.warn('Unable to load extended resource metadata', error);
+          return resourcesByName;
+        });
+      return resourcesPromise;
+    }
+
+    function getResourceEntry(serviceName) {
+      if (!serviceName) return null;
+      return resourcesByName.get(serviceName) || null;
+    }
+
+    function resolveCustomLabel(labelValue) {
+      if (!labelValue) return null;
+      if (typeof labelValue === 'string') return labelValue;
+      if (typeof labelValue === 'object') {
+        const localized = labelValue[lang];
+        if (localized) return localized;
+        if (labelValue.en) return labelValue.en;
+        const fallback = Object.values(labelValue).find((value) => typeof value === 'string' && value.trim().length);
+        return fallback || null;
+      }
+      return null;
+    }
+
+    function formatKeyLabel(key) {
+      if (!key) return '';
+      const entry = RESOURCE_LINK_LABELS[key];
+      if (entry) {
+        return entry[lang] || entry.en || Object.values(entry)[0] || key;
+      }
+      const spaced = key
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!spaced) return key;
+      return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+    }
+
+    function normalizeResourceLinks(links) {
+      if (!links || typeof links !== 'object') return [];
+      const items = [];
+      const seen = new Set();
+      const pushLink = (key, href, label) => {
+        if (!href || typeof href !== 'string') return;
+        const trimmed = href.trim();
+        if (!trimmed) return;
+        const fingerprint = `${key}:${trimmed}`;
+        if (seen.has(fingerprint)) return;
+        seen.add(fingerprint);
+        const resolvedLabel = label && label.trim().length ? label : formatKeyLabel(key);
+        items.push({ key, href: trimmed, label: resolvedLabel });
+      };
+      Object.entries(links).forEach(([key, value]) => {
+        if (!value) return;
+        if (Array.isArray(value)) {
+          value.forEach((entry) => {
+            if (!entry) return;
+            if (typeof entry === 'string') {
+              pushLink(key, entry, null);
+            } else if (typeof entry === 'object') {
+              pushLink(key, entry.href, resolveCustomLabel(entry.label));
+            }
+          });
+        } else if (typeof value === 'object') {
+          pushLink(key, value.href, resolveCustomLabel(value.label));
+        } else if (typeof value === 'string') {
+          pushLink(key, value, null);
+        }
+      });
+      const orderMap = new Map();
+      RESOURCE_LINK_ORDER.forEach((key, index) => {
+        orderMap.set(key, index);
+      });
+      items.sort((a, b) => {
+        const orderA = orderMap.has(a.key) ? orderMap.get(a.key) : Number.POSITIVE_INFINITY;
+        const orderB = orderMap.has(b.key) ? orderMap.get(b.key) : Number.POSITIVE_INFINITY;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        return a.label.localeCompare(b.label, lang === 'ua' ? 'uk' : 'en', { sensitivity: 'base' });
+      });
+      return items;
+    }
+
+    function updateServiceHighlights(activeKey) {
+      serviceNodeRegistry.forEach((entry, key) => {
+        if (!entry || !entry.group) return;
+        if (key === activeKey) {
+          entry.group.classList.add('service-selected');
+        } else {
+          entry.group.classList.remove('service-selected');
+        }
+      });
+    }
+
+    function showEmptyDetails() {
+      if (detailsCardEl) detailsCardEl.classList.add(HIDDEN_CLASS);
+      if (detailsEmptyEl) detailsEmptyEl.classList.remove(HIDDEN_CLASS);
+      if (detailsPanel) detailsPanel.classList.remove('has-selection');
+      if (detailsLinksList) detailsLinksList.innerHTML = '';
+      if (detailsTagsList) detailsTagsList.innerHTML = '';
+      if (detailsTagsSection) detailsTagsSection.classList.add(HIDDEN_CLASS);
+      if (detailsLinksSection) detailsLinksSection.classList.add(HIDDEN_CLASS);
+      if (detailsPrimaryLink) detailsPrimaryLink.classList.add(HIDDEN_CLASS);
+    }
+
+    function renderServiceDetails(data) {
+      if (!data || !detailsPanel || !detailsCardEl || !detailsEmptyEl) {
+        showEmptyDetails();
+        return;
+      }
+      if (!resourcesPromise) {
+        ensureResourceMetadata();
+      }
+      const resourceEntry =
+        getResourceEntry(data.slug) ||
+        getResourceEntry(data.href) ||
+        getResourceEntry(data.name);
+      if (resourceEntry && selectedServiceData && selectedServiceData.key === data.key) {
+        if (resourceEntry.slug && selectedServiceData.slug !== resourceEntry.slug) {
+          selectedServiceData.slug = resourceEntry.slug;
+        }
+      }
+      const tags = resourceEntry && Array.isArray(resourceEntry.tags) ? resourceEntry.tags.filter((tag) => typeof tag === 'string' && tag.trim().length) : [];
+      const links = resourceEntry && resourceEntry.links ? normalizeResourceLinks(resourceEntry.links) : [];
+
+      detailsEmptyEl.classList.add(HIDDEN_CLASS);
+      detailsCardEl.classList.remove(HIDDEN_CLASS);
+      detailsPanel.classList.add('has-selection');
+
+      if (detailsTitleEl) detailsTitleEl.textContent = data.name || '';
+      if (detailsCategoryEl) {
+        const base = data.category || '';
+        const groupLabel = data.group || '';
+        detailsCategoryEl.textContent = groupLabel ? (base ? `${base} · ${groupLabel}` : groupLabel) : base;
+      }
+      if (detailsDescriptionEl) detailsDescriptionEl.textContent = data.desc || '';
+
+      if (detailsTagsSection && detailsTagsList) {
+        detailsTagsList.innerHTML = '';
+        if (tags.length) {
+          tags.forEach((tag) => {
+            const li = document.createElement('li');
+            li.textContent = tag;
+            detailsTagsList.appendChild(li);
+          });
+          detailsTagsSection.classList.remove(HIDDEN_CLASS);
+        } else {
+          detailsTagsSection.classList.add(HIDDEN_CLASS);
+        }
+      }
+
+      if (detailsLinksSection && detailsLinksList) {
+        detailsLinksList.innerHTML = '';
+        if (links.length) {
+          links.forEach((link) => {
+            const anchor = document.createElement('a');
+            anchor.className = 'details-link';
+            anchor.href = link.href;
+            anchor.target = '_blank';
+            anchor.rel = 'noreferrer';
+            anchor.textContent = link.label;
+            const icon = document.createElement('span');
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = '↗';
+            anchor.appendChild(icon);
+            detailsLinksList.appendChild(anchor);
+          });
+          detailsLinksSection.classList.remove(HIDDEN_CLASS);
+        } else {
+          detailsLinksSection.classList.add(HIDDEN_CLASS);
+        }
+      }
+
+      if (detailsPrimaryLink) {
+        if (data.href) {
+          detailsPrimaryLink.href = data.href;
+          detailsPrimaryLink.classList.remove(HIDDEN_CLASS);
+          const actionLabel = COPY.detailsPrimary[lang];
+          detailsPrimaryLink.textContent = actionLabel;
+          detailsPrimaryLink.setAttribute('aria-label', `${actionLabel}: ${data.name}`);
+          detailsPrimaryLink.setAttribute('title', COPY.detailsPrimaryTitle[lang]);
+        } else {
+          detailsPrimaryLink.classList.add(HIDDEN_CLASS);
+        }
+      }
+    }
+
+    function selectServiceEntry(serviceKey, entry) {
+      if (!entry || !entry.service) {
+        return;
+      }
+      const serviceId = entry.serviceId || makeServiceKey(entry.service);
+      if (!serviceId) {
+        return;
+      }
+      const occurrence = typeof entry.occurrence === 'number' ? entry.occurrence : 0;
+      const effectiveKey = serviceKey || buildCompositeKey(serviceId, occurrence);
+      selectedServiceKey = effectiveKey;
+      selectedServiceId = serviceId;
+      selectedServiceOccurrence = occurrence;
+      selectedServiceData = {
+        key: effectiveKey,
+        name: entry.service.name || '',
+        desc: entry.service.desc || '',
+        href: entry.service.href || '',
+        category: entry.categoryName || '',
+        group: entry.groupName || '',
+        slug: serviceId,
+        language: entry.language || lang,
+      };
+      updateServiceHighlights(selectedServiceKey);
+      renderServiceDetails(selectedServiceData);
+    }
+
+    function clearSelection() {
+      selectedServiceKey = null;
+      selectedServiceId = null;
+      selectedServiceOccurrence = null;
+      selectedServiceData = null;
+      updateServiceHighlights(null);
+      showEmptyDetails();
+    }
+
+    function refreshSelectionFromRegistry() {
+      const key = selectedServiceKey || (selectedServiceId ? buildCompositeKey(selectedServiceId, selectedServiceOccurrence) : '');
+      if (!key) {
+        showEmptyDetails();
+        return;
+      }
+      const entry = serviceNodeRegistry.get(key);
+      updateServiceHighlights(key);
+      if (entry && entry.service) {
+        selectedServiceData = {
+          key,
+          name: entry.service.name || (selectedServiceData && selectedServiceData.name) || '',
+          desc: entry.service.desc || (selectedServiceData && selectedServiceData.desc) || '',
+          href: entry.service.href || (selectedServiceData && selectedServiceData.href) || '',
+          category: entry.categoryName || (selectedServiceData && selectedServiceData.category) || '',
+          group: entry.groupName || (selectedServiceData && selectedServiceData.group) || '',
+          slug: entry.serviceId || (selectedServiceData && selectedServiceData.slug) || '',
+          language: entry.language || lang,
+        };
+        selectedServiceKey = key;
+        selectedServiceId = entry.serviceId || selectedServiceId;
+        selectedServiceOccurrence = typeof entry.occurrence === 'number' ? entry.occurrence : selectedServiceOccurrence;
+      }
+      if (selectedServiceData) {
+        renderServiceDetails(selectedServiceData);
+      } else {
+        showEmptyDetails();
+      }
+    }
 
     function formatLabel(name) {
       const icon = ICONS[name] || FALLBACK_ICON;
       return `${icon} ${name}`;
+    }
+
+    function slugify(text) {
+      if (!text) return '';
+      return text
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function makeServiceKey(service) {
+      if (!service || !service.name) return '';
+      return slugify(service.name);
+    }
+
+    function buildCompositeKey(serviceId, occurrence) {
+      if (!serviceId) return '';
+      const index = typeof occurrence === 'number' ? occurrence : 0;
+      return `${serviceId}__${index}`;
     }
 
     function isGroup(entry) {
@@ -728,6 +1318,14 @@
     const THEME_STORAGE_KEY = 'theme';
     let theme = localStorage.getItem(THEME_STORAGE_KEY) === 'light' ? 'light' : 'dark';
     let themeColors = {};
+    const serviceNodeRegistry = new Map();
+    const resourcesByName = new Map();
+    let resourcesPromise = null;
+    let resourcesError = null;
+    let selectedServiceKey = null;
+    let selectedServiceId = null;
+    let selectedServiceOccurrence = null;
+    let selectedServiceData = null;
 
     function getGroupState(cat, currentLang = lang) {
       const key = `${currentLang}:${cat.category}`;
@@ -752,6 +1350,21 @@
     const footerRightsEl = document.getElementById('footerRights');
     const footerTaglineEl = document.getElementById('footerTagline');
     const themeButtons = Array.from(document.querySelectorAll('[data-theme-option]'));
+    const detailsPanel = document.getElementById('detailsPanel');
+    const detailsEmptyEl = document.getElementById('detailsEmpty');
+    const detailsEmptyTextEl = document.getElementById('detailsEmptyText');
+    const detailsCardEl = document.getElementById('detailsCard');
+    const detailsTitleEl = document.getElementById('detailsTitle');
+    const detailsCategoryEl = document.getElementById('detailsCategory');
+    const detailsDescriptionEl = document.getElementById('detailsDescription');
+    const detailsTagsSection = document.getElementById('detailsTagsSection');
+    const detailsTagsLabel = document.getElementById('detailsTagsLabel');
+    const detailsTagsList = document.getElementById('detailsTagsList');
+    const detailsLinksSection = document.getElementById('detailsLinksSection');
+    const detailsLinksLabel = document.getElementById('detailsLinksLabel');
+    const detailsLinksList = document.getElementById('detailsLinksList');
+    const detailsPrimaryLink = document.getElementById('detailsPrimaryLink');
+    const detailsCloseBtn = document.getElementById('detailsCloseBtn');
 
     const COPY = {
       heroTitle: {
@@ -763,8 +1376,8 @@
         en: 'Discover trusted platforms for business, creativity, and automation.',
       },
       heroDescription: {
-        ua: 'Перемикайте мову, обирайте категорію та натискайте на сервіси, щоб швидко знайти потрібний інструмент і перейти на його сайт.',
-        en: 'Switch the language, pick a category, and click services to quickly find the right tool and jump to its official site.',
+        ua: 'Перемикайте мову, обирайте категорію та відкривайте картки сервісів із описом, посиланнями й корисними матеріалами.',
+        en: 'Switch languages, explore categories, and open service cards to review descriptions, links, and helpful resources.',
       },
       mapHeading: {
         ua: 'Мапа категорій AI‑сервісів',
@@ -787,8 +1400,8 @@
         en: 'No results for this query',
       },
       infoNote: {
-        ua: 'Іконки поруч із назвами допомагають швидко зорієнтуватися. Клікніть категорію, щоб побачити сервіси. Наведіть курсор — опис та посилання.',
-        en: 'Icons highlight each tool. Click a category to expand and hover any service to read the description and open the link.',
+        ua: 'Клікніть категорію, щоб побачити сервіси. Натисніть на вузол — відкриється картка з описом і добіркою посилань. Наведіть, щоб підсвітити.',
+        en: 'Click a category to reveal services. Select any node to open a detail card with the description and curated links. Hover to highlight.',
       },
       footerRights: {
         ua: 'Усі права захищені · 2024',
@@ -814,6 +1427,34 @@
         ua: 'Не вдалося завантажити дані',
         en: 'Failed to load data',
       },
+      detailsRegion: {
+        ua: 'Картка вибраного сервісу',
+        en: 'Selected service details',
+      },
+      detailsEmpty: {
+        ua: 'Оберіть сервіс на мапі, щоб побачити опис і корисні матеріали.',
+        en: 'Pick a service on the map to see its description and helpful resources.',
+      },
+      detailsPrimary: {
+        ua: 'Відкрити сайт',
+        en: 'Open website',
+      },
+      detailsPrimaryTitle: {
+        ua: 'Відкрити сайт сервісу в новій вкладці',
+        en: 'Open the service website in a new tab',
+      },
+      detailsTagsLabel: {
+        ua: 'Теги',
+        en: 'Tags',
+      },
+      detailsLinksLabel: {
+        ua: 'Корисні посилання',
+        en: 'Helpful links',
+      },
+      detailsClose: {
+        ua: 'Закрити картку',
+        en: 'Close card',
+      },
     };
 
     function applyCopy() {
@@ -829,6 +1470,19 @@
       if (infoNoteEl) infoNoteEl.textContent = COPY.infoNote[lang];
       if (footerRightsEl) footerRightsEl.textContent = COPY.footerRights[lang];
       if (footerTaglineEl) footerTaglineEl.textContent = COPY.footerTagline[lang];
+      if (detailsPanel) detailsPanel.setAttribute('aria-label', COPY.detailsRegion[lang]);
+      if (detailsEmptyTextEl) detailsEmptyTextEl.textContent = COPY.detailsEmpty[lang];
+      if (detailsTagsLabel) detailsTagsLabel.textContent = COPY.detailsTagsLabel[lang];
+      if (detailsLinksLabel) detailsLinksLabel.textContent = COPY.detailsLinksLabel[lang];
+      if (detailsPrimaryLink) {
+        detailsPrimaryLink.textContent = COPY.detailsPrimary[lang];
+        detailsPrimaryLink.setAttribute('title', COPY.detailsPrimaryTitle[lang]);
+      }
+      if (detailsCloseBtn) {
+        const label = COPY.detailsClose[lang];
+        detailsCloseBtn.setAttribute('aria-label', label);
+        detailsCloseBtn.setAttribute('title', label);
+      }
       const themeSuffix = lang === 'ua' ? 'тема' : 'theme';
       themeButtons.forEach((btn) => {
         if (!btn) return;
@@ -903,6 +1557,27 @@
         }
       });
     });
+
+    if (detailsCloseBtn) {
+      detailsCloseBtn.addEventListener('click', () => {
+        clearSelection();
+        detailsCloseBtn.blur();
+      });
+    }
+
+    document.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Escape' && selectedServiceKey) {
+        clearSelection();
+      }
+    });
+
+    if (stage) {
+      stage.addEventListener('click', (evt) => {
+        if (evt.target === stage && selectedServiceKey) {
+          clearSelection();
+        }
+      });
+    }
 
     async function setLang(l) {
       lang = l;
@@ -1120,6 +1795,8 @@
       const activeLang = lang;
       const palette = themeColors.surface ? themeColors : readThemeColors();
       hideTip();
+      serviceNodeRegistry.clear();
+      const serviceOccurrences = new Map();
       const hadMeasureText = measureTextEl && measureTextEl.parentNode === stage;
       stage.innerHTML = '';
 
@@ -1507,13 +2184,53 @@
               if (searchActive) {
                 itemNode.group.classList.add('search-hit');
               }
+              const serviceId = makeServiceKey(svc);
+              const occurrence = serviceOccurrences.get(serviceId) || 0;
+              serviceOccurrences.set(serviceId, occurrence + 1);
+              const serviceKey = buildCompositeKey(serviceId, occurrence);
+              const registryEntry = {
+                group: itemNode.group,
+                service: svc,
+                categoryName: cat.category,
+                groupName: branch.entry && branch.entry.group ? branch.entry.group : '',
+                language: activeLang,
+                serviceId,
+                occurrence,
+              };
+              if (serviceKey) {
+                serviceNodeRegistry.set(serviceKey, registryEntry);
+                itemNode.group.dataset.serviceKey = serviceKey;
+              }
+              itemNode.group.classList.add('service-node');
               itemNode.group.style.cursor = 'pointer';
               itemNode.group.setAttribute('aria-label', svc.name);
-              itemNode.group.addEventListener('mouseenter', () =>
-                showTip(itemX, itemY, label, svc.desc, svc.href)
-              );
-              itemNode.group.addEventListener('mouseleave', hideTip);
-              itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+              itemNode.group.setAttribute('role', 'button');
+              itemNode.group.setAttribute('tabindex', '0');
+              const toggleHover = (state) => {
+                if (state) {
+                  itemNode.group.classList.add('service-hover');
+                } else {
+                  itemNode.group.classList.remove('service-hover');
+                }
+              };
+              itemNode.group.addEventListener('mouseenter', () => toggleHover(true));
+              itemNode.group.addEventListener('mouseleave', () => toggleHover(false));
+              itemNode.group.addEventListener('focus', () => toggleHover(true));
+              itemNode.group.addEventListener('blur', () => toggleHover(false));
+              const handleSelect = () => {
+                selectServiceEntry(serviceKey, registryEntry);
+              };
+              itemNode.group.addEventListener('click', (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+                handleSelect();
+              });
+              itemNode.group.addEventListener('keypress', (evt) => {
+                if (evt.key === 'Enter' || evt.key === ' ') {
+                  evt.preventDefault();
+                  handleSelect();
+                }
+              });
               const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
               const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
               const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
@@ -1541,13 +2258,53 @@
             if (searchActive && branch.highlight) {
               itemNode.group.classList.add('search-hit');
             }
+            const serviceId = makeServiceKey(svc);
+            const occurrence = serviceOccurrences.get(serviceId) || 0;
+            serviceOccurrences.set(serviceId, occurrence + 1);
+            const serviceKey = buildCompositeKey(serviceId, occurrence);
+            const registryEntry = {
+              group: itemNode.group,
+              service: svc,
+              categoryName: cat.category,
+              groupName: '',
+              language: activeLang,
+              serviceId,
+              occurrence,
+            };
+            if (serviceKey) {
+              serviceNodeRegistry.set(serviceKey, registryEntry);
+              itemNode.group.dataset.serviceKey = serviceKey;
+            }
+            itemNode.group.classList.add('service-node');
             itemNode.group.style.cursor = 'pointer';
             itemNode.group.setAttribute('aria-label', svc.name);
-            itemNode.group.addEventListener('mouseenter', () =>
-              showTip(itemX, itemY, label, svc.desc, svc.href)
-            );
-            itemNode.group.addEventListener('mouseleave', hideTip);
-            itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+            itemNode.group.setAttribute('role', 'button');
+            itemNode.group.setAttribute('tabindex', '0');
+            const toggleHover = (state) => {
+              if (state) {
+                itemNode.group.classList.add('service-hover');
+              } else {
+                itemNode.group.classList.remove('service-hover');
+              }
+            };
+            itemNode.group.addEventListener('mouseenter', () => toggleHover(true));
+            itemNode.group.addEventListener('mouseleave', () => toggleHover(false));
+            itemNode.group.addEventListener('focus', () => toggleHover(true));
+            itemNode.group.addEventListener('blur', () => toggleHover(false));
+            const handleSelect = () => {
+              selectServiceEntry(serviceKey, registryEntry);
+            };
+            itemNode.group.addEventListener('click', (evt) => {
+              evt.preventDefault();
+              evt.stopPropagation();
+              handleSelect();
+            });
+            itemNode.group.addEventListener('keypress', (evt) => {
+              if (evt.key === 'Enter' || evt.key === ' ') {
+                evt.preventDefault();
+                handleSelect();
+              }
+            });
             const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
             const endBranchX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
             const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
@@ -1561,10 +2318,21 @@
           }
         });
       });
+
+      refreshSelectionFromRegistry();
     }
 
 
     // Init
+    ensureResourceMetadata()
+      .then(() => {
+        if (selectedServiceData) {
+          renderServiceDetails(selectedServiceData);
+        }
+      })
+      .catch(() => {
+        // already logged inside ensureResourceMetadata
+      });
     applyThemeAttributes(theme);
     setLang(lang).catch((error) => {
       console.error('Failed to initialize language', error);
