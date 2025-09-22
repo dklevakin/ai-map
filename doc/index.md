@@ -28,8 +28,8 @@ AI Compass is a static website featuring an interactive map of artificial intell
 
 ### Service Details
 - Hover over a service to gently expand the node for easier targeting.
-- Click a service name to open its detail card. The card stays open until you click the canvas, open another service, or press `Esc`.
-- Each card lists the description and a stack of helpful links: the official site plus optional documentation, getting-started guides, repositories, or community hubs sourced from `data/resources.json`.
+- Click a service name to open its detail card. The card stays open until you open another service, click the empty background, press the × button, or press `Esc`.
+- Each card lists the description, optional tags, and a stack of helpful links: the official site plus documentation, getting-started guides, repositories, or community hubs sourced from `data/resources.json`.
 - Use the links inside the card to open resources in a new tab; the map remains unchanged in the background.
 - Each service is paired with an icon that represents its specialization (for example,  for DALL·E).
 
@@ -40,12 +40,12 @@ AI Compass is a static website featuring an interactive map of artificial intell
 ### Keyboard Controls
 - Categories receive focus and react to the `Enter` or `Space` keys, allowing navigation without a mouse.
 - Services are also focusable: press `Enter` or `Space` to toggle the detail card, and press `Esc` to dismiss it.
-- You can also close an open card by clicking an empty area of the canvas.
+- You can also close an open card by clicking the empty canvas background or pressing the × button.
 
 ## Updating the Catalog
 - Catalog data lives in `data/ua.json` and `data/en.json`. Each category contains a list of services with `name`, `href`, and `desc` fields, plus optional groups structured as `group` → `items`.
 - Add or update a service in both language files to keep translations aligned; the rendering logic stays unchanged.
-- Additional metadata (documentation, repos, examples, tags) can be stored in `data/resources.json`. Entries are matched by `href` or `slug` and automatically merged into the detail card.
+- Additional metadata (documentation, repos, examples, tags) can be stored in `data/resources.json`. Entries are matched by service name or slug (falling back to the official URL) and automatically merged into the detail card.
 - Icons are configured through the `ICONS` dictionary inside `index.html`. If a service is not listed, the fallback ✨ icon is used.
 
 ## Deployment

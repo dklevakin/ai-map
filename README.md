@@ -68,7 +68,7 @@ python3 -m http.server 8000
 ## Editing Content
 
 - Categories and items are defined in `data/ua.json` and `data/en.json`. Keep translations aligned between the two files when you add or edit services.
-- Rich metadata such as documentation, getting-started guides, code samples, or community links lives in `data/resources.json`. Entries are matched by `href`/`slug` and appear in the service detail card when present.
+- Rich metadata such as documentation, getting-started guides, code samples, or community links lives in `data/resources.json`. Entries are matched by service name or slug (falling back to the official URL) and appear in the detail card when present.
 - To add a tool: update the localized JSON datasets (name, href, desc) and optionally add resource links/tags in `resources.json`.
 - The mind‑map layout is calculated radially; category click expands nodes; clicking a service opens the persistent detail card with links, and the official site opens from the card.
 

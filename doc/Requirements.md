@@ -13,7 +13,7 @@
 1. The system must store categories, subcategories (groups), and services in two localized JSON datasets (`data/ua.json` and `data/en.json`) to keep translations aligned.
 2. Every service entry must include a name, short description, and hyperlink to the official resource.
 3. Categories and groups must have unique colors/titles to stay visually distinct on the map.
-4. Optional metadata such as documentation, code samples, and community links may be stored in `data/resources.json` and merged with services by `href`/`slug`.
+4. Optional metadata such as documentation, code samples, and community links may be stored in `data/resources.json` and merged with services by matching the service name, slug, or official URL.
 
 ### 2.2 Map Interactivity
 5. After the page loads, the user must see a radial diagram with the “AI Compass” central node.
