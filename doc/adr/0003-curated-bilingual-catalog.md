@@ -1,4 +1,4 @@
-# ADR 0003: Curated Bilingual Catalog with Icons
+# ADR 0003: Curated Bilingual Catalog with Branded Visuals
 
 - **Status:** Accepted
 - **Date:** 2025-09-21
@@ -10,12 +10,14 @@ The initial service list was short and failed to reflect key business use cases.
 ## Decision
 - Enrich the `DATA` object with detailed service descriptions in Ukrainian and English while keeping the `ua` and `en` arrays synchronized.
 - Standardize the structure of categories and groups, adding subgroups (for example, “Video & Clips” and “Content & Copywriting”).
-- Add an `ICONS` dictionary that maps popular services to relevant emoji and falls back to ✨ when undefined.
+- Add branded visuals next to each service name. The implementation now resolves real product logos automatically with a
+  graceful fallback badge when a logo cannot be retrieved.
 - Update page text blocks (banner, hero, notes, footer) to support bilingual display.
 
 ## Consequences
 - ✅ Users receive context and usage scenarios without leaving the site.
 - ✅ Bilingual support makes the product suitable for an international audience.
-- ✅ Icons speed up visual scanning and help differentiate services.
+- ✅ Logos speed up visual scanning and help differentiate services.
 - ⚠️ The larger dataset requires thorough translation review with each update.
-- ⚠️ Maintaining icons demands keeping the `ICONS` dictionary in sync when adding new services.
+- ⚠️ Maintaining logo quality requires curating the `LOGO_OVERRIDES` map or per-entry `logo` fields whenever automatic
+  detection is insufficient.

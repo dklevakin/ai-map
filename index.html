@@ -310,6 +310,13 @@
       font-weight: 600;
       fill: var(--node-text);
     }
+    .node-logo {
+      pointer-events: none;
+      shape-rendering: geometricPrecision;
+    }
+    .node-logo-fallback {
+      filter: saturate(0) brightness(1.25);
+    }
     .large {
       font-size: 16px;
       font-weight: 700;
@@ -492,88 +499,93 @@
       return promise;
     }
 
-    const ICONS = {
-      'ChatGPT': '🧠',
-      'Claude': '🪶',
-      'Google Gemini': '✨',
-      'Microsoft Copilot': '🧭',
-      'Perplexity AI': '🔎',
-      'Mistral Le Chat': '🌬️',
-      'Pi by Inflection': '💬',
-      'You.com': '🔍',
-      'Character.AI': '🎭',
-      'Midjourney': '🎨',
-      'Stable Diffusion': '🌀',
-      'Leonardo AI': '🖌️',
-      'Canva AI': '🖼️',
-      'Adobe Firefly': '🔥',
-      'Ideogram AI': '🔤',
-      'Playground AI': '🛝',
-      'DALL·E': '🧩',
-      'Krea AI': '🌈',
-      'HeyGen': '🗣️',
-      'Synthesia': '🎬',
-      'Runway ML': '🎞️',
-      'Pictory': '🪄',
-      'OpusClip': '📱',
-      'Descript': '🎙️',
-      'Lumen5': '📽️',
-      'Rephrase.ai': '🗣️',
-      'Fliki': '🔊',
-      'Zapier': '⚡',
-      'Make': '🧩',
-      'n8n': '🪢',
-      'UiPath': '🏭',
-      'Power Automate': '🔁',
-      'Bardeen': '🛠️',
-      'Levity': '⚙️',
-      'Axiom.ai': '🧪',
-      'Workato': '🤝',
-      'Coursera': '🎓',
-      'Udemy': '📚',
-      'Docebo': '🏫',
-      'LearnWorlds': '🌐',
-      'Evolv AI': '📈',
-      'Mindsmith': '🧠',
-      'Sana AI': '💡',
-      'Workera': '🧬',
-      'CapCut': '✂️',
-      'VEED.io': '📼',
-      'Copy.ai': '✍️',
-      'Jasper': '🤖',
-      'Notion AI': '🗃️',
-      'Predis.ai': '📝',
-      'Tidio': '💬',
-      'ManyChat': '🤳',
-      'Writesonic': '🚀',
-      'Lately AI': '📊',
-      'Power BI': '📊',
-      'Tableau': '📈',
-      'MonkeyLearn': '🐒',
-      'Crayon': '🖍️',
-      'Crux': '🧱',
-      'Tellius': '🔮',
-      'ThoughtSpot': '🌟',
-      'Obviously AI': '🤔',
-      'Xero': '💼',
-      'QuickBooks': '🧾',
-      'AdCreative.ai': '🎯',
-      'Shopify AI': '🛒',
-      'Wix AI': '🏗️',
-      'Planner 5D': '🏠',
-      'Autodesk AI': '🏢',
-      'Fashwell AI': '👗',
-      'Corti': '📞',
-      'Viz.ai': '🩺',
+    const FALLBACK_LOGO_SRC = 'assets/default-logo.svg';
+
+    const LOGO_OVERRIDES = {
+      'ChatGPT': { domain: 'openai.com' },
+      'Google Gemini': { domain: 'google.com' },
+      'Microsoft Copilot': { domain: 'microsoft.com' },
+      'Mistral Le Chat': { domain: 'mistral.ai' },
+      'Character.AI': { domain: 'character.ai' },
+      'Power Automate': { domain: 'microsoft.com' },
+      'Power BI': { domain: 'powerbi.com' },
+      'QuickBooks': { domain: 'quickbooks.com' },
     };
 
-    const FALLBACK_ICON = '✨';
+    const LOGO_HOST_OVERRIDES = {
+      'gemini.google.com': 'google.com',
+      'copilot.microsoft.com': 'microsoft.com',
+      'powerautomate.microsoft.com': 'microsoft.com',
+      'powerbi.microsoft.com': 'powerbi.com',
+      'quickbooks.intuit.com': 'quickbooks.com',
+    };
 
-    const nodeSizeCache = new Map();
+    const SUBDOMAIN_STRIP_PREFIXES = new Set(['app', 'apps', 'beta', 'chat', 'studio']);
 
-    function formatLabel(name) {
-      const icon = ICONS[name] || FALLBACK_ICON;
-      return `${icon} ${name}`;
+    function normalizeLogoHost(rawHost) {
+      if (!rawHost) return '';
+      const lower = rawHost.toLowerCase();
+      if (LOGO_HOST_OVERRIDES[lower]) {
+        return LOGO_HOST_OVERRIDES[lower];
+      }
+      let host = lower;
+      if (host.startsWith('www.')) {
+        host = host.slice(4);
+      }
+      const segments = host.split('.');
+      if (segments.length > 2 && SUBDOMAIN_STRIP_PREFIXES.has(segments[0])) {
+        host = segments.slice(1).join('.');
+      }
+      return host;
+    }
+
+    function resolveLogoSource(service) {
+      if (!service) return null;
+      if (service.logo) {
+        return service.logo;
+      }
+      const override = LOGO_OVERRIDES[service.name];
+      if (override) {
+        if (typeof override === 'string') {
+          if (/^(?:https?:|data:|assets\//)/.test(override)) {
+            return override;
+          }
+          return `https://logo.clearbit.com/${override}`;
+        }
+        if (override.src) {
+          return override.src;
+        }
+        if (override.domain) {
+          return `https://logo.clearbit.com/${override.domain}`;
+        }
+      }
+      const href = service.href;
+      if (!href) return null;
+      try {
+        const url = new URL(href);
+        const normalized = normalizeLogoHost(url.hostname || '');
+        if (!normalized) return null;
+        return `https://logo.clearbit.com/${normalized}`;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function formatLabel(service) {
+      if (!service) {
+        return { text: '', iconHref: FALLBACK_LOGO_SRC, fallbackHref: FALLBACK_LOGO_SRC };
+      }
+      if (typeof service === 'string') {
+        return { text: service, iconHref: FALLBACK_LOGO_SRC, fallbackHref: FALLBACK_LOGO_SRC };
+      }
+      const text = service.name || '';
+      const iconHref = resolveLogoSource(service) || FALLBACK_LOGO_SRC;
+      return {
+        text,
+        iconHref,
+        fallbackHref: FALLBACK_LOGO_SRC,
+        cacheKey: text,
+      };
     }
 
     function isGroup(entry) {
@@ -817,7 +829,6 @@
       enBtn.classList.toggle('active', l==='en');
       expanded = null;
       expandedGroups.clear();
-      nodeSizeCache.clear();
       applyCopy();
       if (searchInput) {
         searchInput.value = searchQuery;
@@ -871,39 +882,114 @@
       parent.appendChild(el);
       return el;
     }
+    const LOGO_CLIP_PATH_ID = 'node-logo-rounded';
+
+    function ensureLogoClipPath() {
+      if (!stage) return null;
+      let clip = stage.querySelector(`#${LOGO_CLIP_PATH_ID}`);
+      if (clip) {
+        return `url(#${LOGO_CLIP_PATH_ID})`;
+      }
+      let defs = stage.querySelector('defs');
+      if (!defs) {
+        defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        if (stage.firstChild) {
+          stage.insertBefore(defs, stage.firstChild);
+        } else {
+          stage.appendChild(defs);
+        }
+      }
+      clip = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+      clip.setAttribute('id', LOGO_CLIP_PATH_ID);
+      clip.setAttribute('clipPathUnits', 'objectBoundingBox');
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', 0);
+      rect.setAttribute('y', 0);
+      rect.setAttribute('width', 1);
+      rect.setAttribute('height', 1);
+      rect.setAttribute('rx', 0.22);
+      rect.setAttribute('ry', 0.22);
+      clip.appendChild(rect);
+      defs.appendChild(clip);
+      return `url(#${LOGO_CLIP_PATH_ID})`;
+    }
+
     function createNode(parent, x, y, label, opts={}) {
       const g = group(parent);
       g.setAttribute('transform', `translate(${x},${y})`);
-      const textEl = document.createElementNS('http://www.w3.org/2000/svg','text');
-      textEl.setAttribute('text-anchor','middle');
-      textEl.setAttribute('dominant-baseline','middle');
-      textEl.setAttribute('class', opts.cls || 'normal');
-      textEl.textContent = label;
-      g.appendChild(textEl);
       const padX = opts.padX ?? 18;
       const padY = opts.padY ?? 12;
       const classKey = opts.cls || 'normal';
-      const cachedByLabel = nodeSizeCache.get(label);
-      let width;
-      let height;
-      if (cachedByLabel && cachedByLabel.has(classKey)) {
-        const cachedSize = cachedByLabel.get(classKey);
-        width = cachedSize.width;
-        height = cachedSize.height;
-      } else {
-        const bbox = textEl.getBBox();
-        width = bbox.width;
-        height = bbox.height;
-        let entry = cachedByLabel;
-        if (!entry) {
-          entry = new Map();
-          nodeSizeCache.set(label, entry);
+      const labelGroup = group(g);
+      labelGroup.setAttribute('class', 'node-label');
+
+      const toText = (value) => {
+        if (value == null) return '';
+        return typeof value === 'string' ? value : String(value);
+      };
+
+      let textEl;
+
+      if (label && typeof label === 'object' && !(label instanceof String)) {
+        const iconSize = label.iconSize ?? (classKey === 'small' ? 20 : classKey === 'large' ? 30 : 24);
+        const iconGap = label.iconGap ?? (classKey === 'small' ? 8 : classKey === 'large' ? 14 : 10);
+        let cursorX = 0;
+        const clipUrl = ensureLogoClipPath();
+        const fallbackSrc = label.fallbackHref || FALLBACK_LOGO_SRC;
+        const iconHref = label.iconHref || fallbackSrc;
+        if (iconHref) {
+          const iconEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+          iconEl.setAttribute('width', iconSize);
+          iconEl.setAttribute('height', iconSize);
+          iconEl.setAttribute('x', cursorX);
+          iconEl.setAttribute('y', -iconSize / 2);
+          iconEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          iconEl.setAttribute('class', 'node-logo');
+          iconEl.setAttribute('focusable', 'false');
+          iconEl.setAttribute('aria-hidden', 'true');
+          iconEl.setAttribute('referrerpolicy', label.referrerPolicy || 'no-referrer');
+          if (clipUrl) {
+            iconEl.setAttribute('clip-path', clipUrl);
+          }
+          const applyHref = (value) => {
+            iconEl.setAttribute('href', value);
+            iconEl.setAttributeNS('http://www.w3.org/1999/xlink', 'href', value);
+          };
+          applyHref(iconHref);
+          if (fallbackSrc && iconHref !== fallbackSrc) {
+            const handleError = () => {
+              iconEl.removeEventListener('error', handleError);
+              applyHref(fallbackSrc);
+              iconEl.classList.add('node-logo-fallback');
+            };
+            iconEl.addEventListener('error', handleError);
+          }
+          labelGroup.appendChild(iconEl);
+          cursorX += iconSize + iconGap;
         }
-        entry.set(classKey, { width, height });
+        textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textEl.setAttribute('x', cursorX);
+        textEl.setAttribute('y', 0);
+        textEl.setAttribute('text-anchor', 'start');
+        textEl.setAttribute('dominant-baseline', 'middle');
+        textEl.setAttribute('class', classKey);
+        textEl.textContent = toText(label.text);
+        labelGroup.appendChild(textEl);
+      } else {
+        textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textEl.setAttribute('text-anchor', 'middle');
+        textEl.setAttribute('dominant-baseline', 'middle');
+        textEl.setAttribute('class', classKey);
+        textEl.textContent = toText(label);
+        labelGroup.appendChild(textEl);
       }
+
+      const bbox = labelGroup.getBBox();
+      const width = bbox.width;
+      const height = bbox.height;
       const rx = width / 2 + padX;
       const ry = height / 2 + padY;
-      const ell = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+      const ell = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
       ell.setAttribute('cx', 0);
       ell.setAttribute('cy', 0);
       ell.setAttribute('rx', rx);
@@ -913,7 +999,12 @@
       if (opts.stroke) ell.setAttribute('stroke', opts.stroke);
       if (opts.sw) ell.setAttribute('stroke-width', opts.sw);
       if (opts.op) ell.setAttribute('opacity', opts.op);
-      g.insertBefore(ell, textEl);
+      g.insertBefore(ell, labelGroup);
+
+      const centerX = bbox.x + width / 2;
+      const centerY = bbox.y + height / 2;
+      labelGroup.setAttribute('transform', `translate(${-centerX}, ${-centerY})`);
+
       return { group: g, text: textEl, ellipse: ell, rx, ry, x, y };
     }
 
@@ -1400,7 +1491,7 @@
               const slotIndex = slotCursor + 1 + svcIdx;
               const itemY = startY + slotIndex * ITEM_SPACING;
               const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
-              const label = formatLabel(svc.name);
+              const label = formatLabel(svc);
               const itemNode = createNode(leafLayer, itemX, itemY, label, {
                 fill: palette.surface,
                 stroke: cat.color,
@@ -1415,7 +1506,7 @@
               itemNode.group.style.cursor = 'pointer';
               itemNode.group.setAttribute('aria-label', svc.name);
               itemNode.group.addEventListener('mouseenter', () =>
-                showTip(itemX, itemY, label, svc.desc, svc.href)
+                showTip(itemX, itemY, svc.name, svc.desc, svc.href)
               );
               itemNode.group.addEventListener('mouseleave', hideTip);
               itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
@@ -1434,7 +1525,7 @@
             const svc = branch.entry;
             const itemY = startY + slotCursor * ITEM_SPACING;
             const itemX = pos.side === 'right' ? pos.x + ITEM_GAP : pos.x - ITEM_GAP;
-            const label = formatLabel(svc.name);
+            const label = formatLabel(svc);
             const itemNode = createNode(leafLayer, itemX, itemY, label, {
               fill: palette.surface,
               stroke: cat.color,
@@ -1449,7 +1540,7 @@
             itemNode.group.style.cursor = 'pointer';
             itemNode.group.setAttribute('aria-label', svc.name);
             itemNode.group.addEventListener('mouseenter', () =>
-              showTip(itemX, itemY, label, svc.desc, svc.href)
+              showTip(itemX, itemY, svc.name, svc.desc, svc.href)
             );
             itemNode.group.addEventListener('mouseleave', hideTip);
             itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));

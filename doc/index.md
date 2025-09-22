@@ -12,7 +12,7 @@ AI Compass is a static website featuring an interactive map of artificial intell
 - Toggle between Ukrainian and English content localizations.
 - Expandable categories, groups, and subgroups with detailed service descriptions.
 - Tooltips that surface extended descriptions and direct links to each service on hover.
-- Visual icons next to service names for instant recognition of the service type.
+- Real product logos next to service names for instant recognition.
 - Adaptive canvas height for large catalogs plus keyboard navigation support.
 
 ## How to Use the Site
@@ -29,7 +29,7 @@ AI Compass is a static website featuring an interactive map of artificial intell
 ### Service Details
 - Hover over a service name to see a tooltip containing the description, key use cases, and an active link.
 - Click the service name inside the tooltip to open the official website in a new tab.
-- Each service is paired with an icon that represents its specialization (for example,  for DALL·E).
+- Each service is paired with its official logo when available; a neutral fallback badge is shown otherwise.
 
 ### Switching Languages
 - Use the **UA** and **EN** buttons in the control panel to switch the content language.
@@ -42,7 +42,9 @@ AI Compass is a static website featuring an interactive map of artificial intell
 ## Updating the Catalog
 - Catalog data lives in the `DATA` constant inside `index.html`. Each category contains a list of services with `name`, `href`, and `desc` fields, plus optional groups structured as `group` → `items`.
 - To add a service, insert an object into the relevant language array (`ua` and `en`) and keep the translations aligned.
-- Icons are configured through the `ICONS` dictionary. If a service is not listed, the fallback ✨ icon is used.
+- Logos are resolved automatically from each service link (via [logo.clearbit.com](https://logo.clearbit.com/)).
+  Use the `LOGO_OVERRIDES` map in `index.html` to point a service to a different domain or local asset, or set the optional
+  `logo` field directly in the dataset. When a logo cannot be retrieved, the generic `assets/default-logo.svg` badge is used.
 
 ## Deployment
 - **Local:** open `index.html` directly or spin up any simple HTTP server.

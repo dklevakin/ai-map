@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Default service logo">
+  <defs>
+    <linearGradient id="default-logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    <linearGradient id="default-logo-spark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#default-logo-gradient)" />
+  <circle cx="32" cy="32" r="20" fill="rgba(248, 250, 252, 0.18)" />
+  <path d="M32 17 L35.6 27.4 L46.8 30.4 L36.9 34.2 L34 46.5 L32 37.4 L30 46.5 L27.1 34.2 L17.2 30.4 L28.4 27.4 Z" fill="url(#default-logo-spark)" />
+  <circle cx="32" cy="32" r="4" fill="#0f172a" fill-opacity="0.75" />
+</svg>
