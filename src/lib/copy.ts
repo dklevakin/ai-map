@@ -13,6 +13,14 @@ export const COPY = {
     ua: 'Перемикайте мову, обирайте категорію та відкривайте картки сервісів із описом, посиланнями й корисними матеріалами.',
     en: 'Switch languages, explore categories, and open service cards to review descriptions, links, and helpful resources.',
   },
+  heroCtaLabel: {
+    ua: 'Перейти до каталогу',
+    en: 'Explore the catalog',
+  },
+  heroCtaTitle: {
+    ua: 'Перейти до розділу з мапою та списком сервісів',
+    en: 'Jump to the map and list of services',
+  },
   banner: {
     ua: 'Бібліотека перевірених AI сервісів для маркетингу, автоматизації та аналітики.',
     en: 'Curated AI tools for marketing, automation, and analytics teams.',

@@ -229,6 +229,40 @@ input:focus-visible {
   gap: 12px;
 }
 
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #38bdf8 0%, #6366f1 48%, #ec4899 100%);
+  color: #f8fafc;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border: none;
+  box-shadow: 0 18px 38px rgba(99, 102, 241, 0.35);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.hero__cta:hover,
+.hero__cta:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 46px rgba(99, 102, 241, 0.45);
+  filter: brightness(1.05);
+}
+
+body[data-theme='light'] .hero__cta {
+  box-shadow: 0 16px 34px rgba(99, 102, 241, 0.26);
+}
+
+body[data-theme='light'] .hero__cta:hover,
+body[data-theme='light'] .hero__cta:focus-visible {
+  box-shadow: 0 20px 42px rgba(99, 102, 241, 0.34);
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -625,6 +659,16 @@ svg text.link {
 
   .controls {
     justify-content: flex-start;
+  }
+
+  .hero__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero__cta {
+    width: 100%;
   }
 
   .search__input {
