@@ -27,7 +27,8 @@
 11. Support keyboard navigation: categories, groups, services, and hero controls must be focusable, respond to `Enter`/`Space`,
     and the detail panel must expose a close control.
 12. Highlight a prominent hero CTA that links directly to the catalog section, keeps a high-contrast treatment, and scales to
-    full width on small screens.
+    full width on small screens; enrich the hero brand with localized highlight cards and an interface preview that remain
+    legible across themes.
 
 ### 2.3 Search & Filtering
 13. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
@@ -46,7 +47,7 @@
 | NF-1 | The SPA must remain static-host friendly; build artifacts are plain HTML/CSS/JS with no server dependencies. | Architecture |
 | NF-2 | Initial bundle size should remain lean (<400 KB gzip) and leverage code-splitting or lazy data loading if catalog growth threatens this budget. | Performance |
 | NF-3 | Provide a fully responsive experience: mind map for ≥1024px, list/accordion mode for narrow screens and toggleable on demand. | Usability |
-| NF-4 | Respect accessibility basics: sufficient contrast, focus outlines, keyboard operability, aria labels for controls and the details panel. | Accessibility |
+| NF-4 | Respect accessibility basics: sufficient contrast, focus outlines, keyboard operability, aria labels for controls and the details panel, and ensure animated hero treatments honor `prefers-reduced-motion`. | Accessibility |
 | NF-5 | Use TypeScript for component contracts and utilities to improve maintainability and onboarding. | Maintainability |
 | NF-6 | Document data-editing procedures so non-developers can update JSON files confidently. | Documentation |
 | NF-7 | Asset URLs must degrade gracefully when deployed behind a subpath or CDN prefix, avoiding blank screens due to broken absolute references. | Reliability |
