@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">AI Compass logomark</title>
+  <desc id="desc">Circular compass needle combined with AI circuit nodes</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+    <linearGradient id="needle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#cbd5f5" />
+    </linearGradient>
+  </defs>
+  <circle cx="80" cy="80" r="70" fill="url(#bg)" />
+  <g fill="none" stroke="#0f172a" stroke-width="3" opacity="0.28">
+    <path d="M36 48h22" />
+    <path d="M42 112h28" />
+    <path d="M102 118h26" />
+    <path d="M116 44h18" />
+    <circle cx="48" cy="48" r="6" fill="#0f172a" stroke="none" />
+    <circle cx="56" cy="112" r="6" fill="#0f172a" stroke="none" />
+    <circle cx="118" cy="118" r="6" fill="#0f172a" stroke="none" />
+    <circle cx="126" cy="44" r="6" fill="#0f172a" stroke="none" />
+  </g>
+  <g transform="translate(80 80) rotate(-18)">
+    <polygon points="0,-50 14,0 0,50 -14,0" fill="url(#needle)" />
+    <circle cx="0" cy="0" r="10" fill="#0f172a" />
+    <circle cx="0" cy="0" r="4" fill="#38bdf8" />
+  </g>
+</svg>

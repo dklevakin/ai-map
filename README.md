@@ -1,14 +1,23 @@
-# AI Tools Mind‑map (Static)
+# AI Compass — SPA Mind Map of AI Services
 
-Interactive mind‑map of AI tools for SMBs. Single‑file static site (`index.html`) built with pure HTML/SVG/vanilla JS — no build step, works offline. Click any service to open a richer detail card with its description, official site, documentation, and other helpful resources.
+AI Compass is now a modular single-page application built with React and Vite. It renders an interactive mind map of curated AI services for SMBs, supports bilingual content, and includes an accessible list/accordion view for mobile and low-vision users. Each service node shows a recognizable logo and opens a detail card with descriptions and resource links.
 
-## Quick Start (Local)
+## Quick Start
 
-Open `index.html` in your browser, or run a local server:
 ```bash
-python3 -m http.server 8000
-# open http://localhost:8000
+npm install
+npm run dev
 ```
+
+Open the local dev server URL (default `http://localhost:5173`) to explore the map with hot reloading.
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+The optimized output is written to `dist/`.
 
 ## Documentation
 
@@ -17,60 +26,57 @@ python3 -m http.server 8000
 - [Backlog](doc/Backlog.md)
 - [Architecture Decision Records](doc/adr)
 
-## Deploy to **Cloudflare Pages**
+## Deploy
 
-1. Create a new Pages project and connect your GitHub repo.
-2. **Build command**: _empty_ (no build step).  
-3. **Output directory**: `/` (root).  
-4. Deploy. Cloudflare will serve `index.html` from the root.
+### Cloudflare Pages
 
-> Tip: If you later add a build step, update the build command/output in Pages settings.
+1. Connect the repository to a Pages project.
+2. **Build command:** `npm run build`
+3. **Output directory:** `dist`
+4. Cloudflare installs dependencies, runs the build, and serves the generated SPA. Asset and data paths resolve via the Vite `base` option (`./` by default), so no extra rewrites are required.
 
-## Deploy to **GitHub Pages** (optional)
+### GitHub Pages
 
-- **Option A (root)**: Settings → Pages → Source: `main` → Root.  
-- **Option B (`/docs` folder)**: Move `index.html` into `/docs`, then set Pages Source to `/docs`.
-
-## Custom Domain / DNS
-
-- Cloudflare Pages: attach your domain in **Pages → Custom domains** (free SSL).  
-- GitHub Pages: add your domain, create `CNAME` DNS record to `username.github.io`, commit a `CNAME` file with your domain name.
+1. Run `npm run build` locally or in CI.
+2. Publish the `dist/` folder (for example, push the contents to the `gh-pages` branch or enable GitHub Actions to deploy the build). The bundle respects the configured base URL, so hosting from a project subpath works without manual URL rewrites.
 
 ## Project Structure
 
 ```
 /
-├─ index.html            # Production single-file app (vanilla, no deps)
-├─ data/                 # Localized datasets and resource metadata
-│  ├─ ua.json            # Ukrainian catalog
-│  ├─ en.json            # English catalog
-│  └─ resources.json     # Optional docs/repos/examples per service
-├─ doc/                  # Documentation and ADRs
-│  ├─ index.md           # User and maintainer guide
-│  ├─ Requirements.md    # Consolidated requirements
-│  ├─ Backlog.md         # Improvement backlog
-│  └─ adr/               # Architecture decisions
-│     ├─ 0001-static-single-file-architecture.md
-│     ├─ 0002-adaptive-radial-layout.md
-│     ├─ 0003-curated-bilingual-catalog.md
-│     ├─ 0004-collapsible-subcategories.md
-│     └─ 0005-service-detail-cards.md
-├─ examples/
-│  └─ react-babel/       # Alternative React+Babel+CDN version (no build)
-├─ .github/workflows/
-│  └─ pages.yml          # (Optional) CI to test link integrity
-├─ .editorconfig
-├─ .gitignore
-├─ LICENSE
-└─ README.md
+├─ index.html                # Vite entry point
+├─ package.json              # SPA scripts & dependencies
+├─ public/
+│  ├─ assets/                # Brand logo, favicon, service placeholder
+│  └─ data/                  # Localized datasets + resource metadata
+│     ├─ ua.json
+│     ├─ en.json
+│     └─ resources.json
+├─ src/
+│  ├─ App.tsx                # Layout, state management, view toggles
+│  ├─ components/            # Mind map canvas, accordion, details card, logos
+│  ├─ hooks/                 # Media-query helpers
+│  ├─ lib/                   # Data loading, catalog utilities, copy, base-path helpers
+│  ├─ styles/                # Theme-aware CSS variables and layout styles
+│  └─ main.tsx               # SPA bootstrap
+├─ doc/                      # Documentation and ADRs
+└─ ...
 ```
 
 ## Editing Content
 
-- Categories and items are defined in `data/ua.json` and `data/en.json`. Keep translations aligned between the two files when you add or edit services.
-- Rich metadata such as documentation, getting-started guides, code samples, or community links lives in `data/resources.json`. Entries are matched by service name or slug (falling back to the official URL) and appear in the detail card when present.
-- To add a tool: update the localized JSON datasets (name, href, desc) and optionally add resource links/tags in `resources.json`.
-- The mind‑map layout is calculated radially; category click expands nodes; clicking a service opens the persistent detail card with links, and the official site opens from the card.
+- Catalog data lives in `public/data/ua.json` and `public/data/en.json`. Update both files when adding or editing services to keep translations aligned.
+- Extended resources (docs, repos, examples, communities) live in `public/data/resources.json`. Entries are matched by service slug, name, or official domain.
+- Logos are resolved automatically from the service URL via Clearbit, with a branded placeholder fallback.
+- The legacy `data/` directory has been removed; update any custom scripts to read from `public/data/` instead.
+
+## Features
+
+- React-driven mind map with animated SVG nodes and connectors.
+- Theme toggle (dark/light) and language switcher (UA/EN).
+- Search filtering across categories, groups, and services.
+- Accessible list/accordion mode for mobile and assistive technologies.
+- Detail panel with localized copy, tags, and actionable resource links.
 
 ## License
 

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">AI Compass default service logo</title>
+  <defs>
+    <linearGradient id="p" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="80" height="80" rx="20" fill="url(#p)" />
+  <path d="M48 24 L60 48 L48 72 L36 48 Z" fill="#38bdf8" />
+  <circle cx="48" cy="48" r="10" fill="#e2e8f0" />
+  <circle cx="48" cy="48" r="4" fill="#0f172a" />
+</svg>
