@@ -459,9 +459,72 @@
       ua: 'data/ua.json',
       en: 'data/en.json',
     };
+    const CATALOG_VERSION = '2024-06-08';
+    const CATALOG_CACHE_PREFIX = 'catalog';
+    const CATALOG_CACHE_MAX_AGE_MS = 1000 * 60 * 60 * 24; // 24 hours
+    let datasetWarmupScheduled = false;
 
     function getDatasetPath(language) {
       return DATA_PATHS[language] || DATA_PATHS.ua;
+    }
+
+    function getDatasetStorageKey(language) {
+      return `${CATALOG_CACHE_PREFIX}:${language}:${CATALOG_VERSION}`;
+    }
+
+    function removeStoredDataset(language) {
+      if (typeof localStorage === 'undefined') return;
+      try {
+        localStorage.removeItem(getDatasetStorageKey(language));
+      } catch (error) {
+        console.warn(`Failed to remove cached dataset for ${language}`, error);
+      }
+    }
+
+    function readStoredDataset(language) {
+      if (typeof localStorage === 'undefined') {
+        return null;
+      }
+      const key = getDatasetStorageKey(language);
+      try {
+        const serialized = localStorage.getItem(key);
+        if (!serialized) {
+          return null;
+        }
+        const payload = JSON.parse(serialized);
+        if (!payload || typeof payload !== 'object') {
+          removeStoredDataset(language);
+          return null;
+        }
+        const { data, cachedAt } = payload;
+        if (data == null) {
+          removeStoredDataset(language);
+          return null;
+        }
+        const timestamp = typeof cachedAt === 'number' ? cachedAt : 0;
+        if (!timestamp || Date.now() - timestamp > CATALOG_CACHE_MAX_AGE_MS) {
+          removeStoredDataset(language);
+          return null;
+        }
+        return data;
+      } catch (error) {
+        console.warn(`Failed to read cached dataset for ${language}`, error);
+        removeStoredDataset(language);
+        return null;
+      }
+    }
+
+    function writeStoredDataset(language, data) {
+      if (typeof localStorage === 'undefined') {
+        return;
+      }
+      const key = getDatasetStorageKey(language);
+      try {
+        const payload = JSON.stringify({ cachedAt: Date.now(), data });
+        localStorage.setItem(key, payload);
+      } catch (error) {
+        console.warn(`Failed to persist dataset cache for ${language}`, error);
+      }
     }
 
     async function loadDataset(language) {
@@ -471,6 +534,13 @@
       if (datasetPromises.has(language)) {
         return datasetPromises.get(language);
       }
+
+      const stored = readStoredDataset(language);
+      if (stored !== null) {
+        datasetCache.set(language, stored);
+        return stored;
+      }
+
       const pathValue = getDatasetPath(language);
       const promise = fetch(pathValue)
         .then((response) => {
@@ -481,6 +551,7 @@
         })
         .then((json) => {
           datasetCache.set(language, json);
+          writeStoredDataset(language, json);
           datasetPromises.delete(language);
           return json;
         })
@@ -490,6 +561,29 @@
         });
       datasetPromises.set(language, promise);
       return promise;
+    }
+
+    function scheduleDatasetWarmup(primaryLanguage) {
+      if (datasetWarmupScheduled) {
+        return;
+      }
+      datasetWarmupScheduled = true;
+      const languages = Object.keys(DATA_PATHS).filter((code) => code !== primaryLanguage);
+      if (!languages.length) {
+        return;
+      }
+      const warmup = () => {
+        languages.forEach((code) => {
+          loadDataset(code).catch((error) => {
+            console.warn(`Failed to prefetch dataset for ${code}`, error);
+          });
+        });
+      };
+      if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(() => warmup(), { timeout: 2000 });
+      } else {
+        setTimeout(warmup, 400);
+      }
     }
 
     const ICONS = {
@@ -823,6 +917,7 @@
         searchInput.value = searchQuery;
       }
       await render();
+      scheduleDatasetWarmup(l);
     }
 
     uaBtn.onclick = () => {
