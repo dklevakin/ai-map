@@ -17,9 +17,16 @@ passes contrast checks.
   toggle controls.
 - Update responsive breakpoints so the CTA expands to the full width of the hero actions stack on narrow screens, ensuring it
   remains the primary target on mobile.
+- Introduce hero highlight cards with iconography and a live-preview tile so the brand block communicates the catalog’s unique
+  value visually while keeping copy localized.
+- Extend theme variables to drive background gradients, spotlight glows, and decorative SVG overlays, and wire animations to
+  respect `prefers-reduced-motion`.
 
 ## Consequences
 - ✅ Users immediately see how to jump into the catalog, reducing drop-off from visitors who land on the hero and hesitate.
+- ✅ The enriched hero brand educates newcomers through quick-read highlights and a stylized preview without waiting for scroll.
 - ✅ The shared copy module now stores the CTA strings, simplifying future adjustments and keeping localization consistent.
 - ⚠️ The design team must maintain the gradient treatment and contrast ratios whenever brand colors change, otherwise the CTA may
   fall out of compliance.
+- ⚠️ Additional hero-specific custom properties (gradients, overlays, icon colors) need auditing whenever themes evolve so the
+  preview tile and highlights stay legible on small screens.

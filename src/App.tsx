@@ -12,6 +12,7 @@ import { COPY } from './lib/copy';
 import { loadCatalog, loadResourceCatalog, warmupCatalog } from './lib/data';
 import { MindMapCanvas } from './components/MindMapCanvas';
 import { DetailsPanel } from './components/DetailsPanel';
+import { HeroHighlights } from './components/HeroHighlights';
 import { ListAccordion } from './components/ListAccordion';
 import { LanguageToggle } from './components/LanguageToggle';
 import { ThemeToggle } from './components/ThemeToggle';
@@ -251,6 +252,12 @@ export default function App() {
   const heroBadgeLabel = COPY.heroBadge[language];
   const heroCtaLabel = COPY.heroCtaLabel[language];
   const heroCtaTitle = COPY.heroCtaTitle[language];
+  const heroHighlights = COPY.heroHighlights[language];
+  const heroPreview = {
+    badge: COPY.heroPreviewBadge[language],
+    title: COPY.heroPreviewTitle[language],
+    caption: COPY.heroPreviewCaption[language],
+  };
 
   return (
     <div className="app">
@@ -263,16 +270,19 @@ export default function App() {
       <header className="hero">
         <div className="wrap hero__inner">
           <div className="hero__brand">
-            <img src={HERO_LOGO} alt="AI Compass logomark" className="hero__logo" />
-            <div className="hero__title-block">
-              <span className="hero__badge">
-                <img src={HERO_BADGE_LOGO} alt="" className="hero__badge-logo" />
-                {heroBadgeLabel}
-              </span>
-              <h1 className="hero__title">{COPY.heroTitle[language]}</h1>
-              <p className="hero__subtitle">{COPY.heroSubtitle[language]}</p>
-              <p className="hero__description">{COPY.heroDescription[language]}</p>
+            <div className="hero__brand-header">
+              <img src={HERO_LOGO} alt="AI Compass logomark" className="hero__logo" />
+              <div className="hero__title-block">
+                <span className="hero__badge">
+                  <img src={HERO_BADGE_LOGO} alt="" className="hero__badge-logo" />
+                  {heroBadgeLabel}
+                </span>
+                <h1 className="hero__title">{COPY.heroTitle[language]}</h1>
+                <p className="hero__subtitle">{COPY.heroSubtitle[language]}</p>
+                <p className="hero__description">{COPY.heroDescription[language]}</p>
+              </div>
             </div>
+            <HeroHighlights items={heroHighlights} preview={heroPreview} />
           </div>
           <div className="hero__actions">
             <div className="hero__toggles">
