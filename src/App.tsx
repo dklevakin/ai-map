@@ -13,9 +13,13 @@ import { loadCatalog, loadResourceCatalog, warmupCatalog } from './lib/data';
 import { MindMapCanvas } from './components/MindMapCanvas';
 import { DetailsPanel } from './components/DetailsPanel';
 import { ListAccordion } from './components/ListAccordion';
+import { LanguageToggle } from './components/LanguageToggle';
+import { ThemeToggle } from './components/ThemeToggle';
+import { ViewToggle } from './components/ViewToggle';
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { buildCompositeKey, findResourceEntry, makeServiceKey } from './lib/catalog';
 import { withBase } from './lib/paths';
+import type { ThemeMode, ViewMode } from './types/ui';
 
 const LANG_STORAGE_KEY = 'ai-compass:language';
 const THEME_STORAGE_KEY = 'ai-compass:theme';
@@ -45,9 +49,6 @@ function safeSetItem(key: string, value: string): void {
     console.warn(`Unable to persist "${key}" in localStorage`, error);
   }
 }
-
-type ThemeMode = 'light' | 'dark';
-type ViewMode = 'map' | 'list';
 
 function readStoredLanguage(): LanguageCode {
   if (typeof window === 'undefined') {
@@ -274,59 +275,12 @@ export default function App() {
             </div>
           </div>
           <div className="hero__actions">
-            <div className="controls" role="group" aria-label="Language switcher">
-              <button
-                type="button"
-                className="control-button"
-                aria-pressed={language === 'ua'}
-                onClick={() => handleLanguageChange('ua')}
-              >
-                UA
-              </button>
-              <button
-                type="button"
-                className="control-button"
-                aria-pressed={language === 'en'}
-                onClick={() => handleLanguageChange('en')}
-              >
-                EN
-              </button>
+            <div className="hero__toggles">
+              <LanguageToggle value={language} onChange={handleLanguageChange} />
+              <ThemeToggle value={theme} language={language} onChange={handleThemeChange} />
             </div>
-            <div className="controls" role="group" aria-label="Theme switcher">
-              <button
-                type="button"
-                className="control-button"
-                aria-pressed={theme === 'dark'}
-                onClick={() => handleThemeChange('dark')}
-              >
-                🌙 {COPY.themeDark[language]}
-              </button>
-              <button
-                type="button"
-                className="control-button"
-                aria-pressed={theme === 'light'}
-                onClick={() => handleThemeChange('light')}
-              >
-                ☀️ {COPY.themeLight[language]}
-              </button>
-            </div>
-            <div className="controls" role="group" aria-label={COPY.viewModeLabel[language]}>
-              <div className="view-toggle">
-                <button
-                  type="button"
-                  aria-pressed={viewMode === 'map'}
-                  onClick={() => setViewMode('map')}
-                >
-                  {COPY.viewMap[language]}
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={viewMode === 'list'}
-                  onClick={() => setViewMode('list')}
-                >
-                  {COPY.viewList[language]}
-                </button>
-              </div>
+            <div className="hero__view">
+              <ViewToggle value={viewMode} language={language} onChange={setViewMode} />
             </div>
             <a
               className="hero__cta"

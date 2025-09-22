@@ -13,6 +13,18 @@ export const COPY = {
     ua: 'Перемикайте мову, обирайте категорію та відкривайте картки сервісів із описом, посиланнями й корисними матеріалами.',
     en: 'Switch languages, explore categories, and open service cards to review descriptions, links, and helpful resources.',
   },
+  languageToggleLabel: {
+    ua: 'Перемикач мови',
+    en: 'Language switcher',
+  },
+  languageToggleOptionUa: {
+    ua: 'Українська мова',
+    en: 'Ukrainian language',
+  },
+  languageToggleOptionEn: {
+    ua: 'Англійська мова',
+    en: 'English language',
+  },
   heroCtaLabel: {
     ua: 'Перейти до каталогу',
     en: 'Explore the catalog',
@@ -65,6 +77,18 @@ export const COPY = {
     ua: 'Світла',
     en: 'Light',
   },
+  themeToggleLabel: {
+    ua: 'Перемикач теми',
+    en: 'Theme switcher',
+  },
+  themeToggleDark: {
+    ua: 'Темна тема',
+    en: 'Dark theme',
+  },
+  themeToggleLight: {
+    ua: 'Світла тема',
+    en: 'Light theme',
+  },
   viewMap: {
     ua: 'Мапа',
     en: 'Map',
@@ -72,6 +96,14 @@ export const COPY = {
   viewList: {
     ua: 'Список',
     en: 'List',
+  },
+  viewModeMapDescription: {
+    ua: 'Показати мапу зв’язків сервісів',
+    en: 'Show the relationship map',
+  },
+  viewModeListDescription: {
+    ua: 'Перейти до спискового вигляду',
+    en: 'Switch to the list view',
   },
   loading: {
     ua: 'Завантаження…',
