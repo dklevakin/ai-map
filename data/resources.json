@@ -1,0 +1,531 @@
+{
+    "services": [
+        {
+            "name": "ChatGPT",
+            "slug": "chatgpt",
+            "href": "https://chat.openai.com/",
+            "links": {
+                "docs": "https://platform.openai.com/docs",
+                "gettingStarted": "https://platform.openai.com/docs/quickstart",
+                "examples": "https://platform.openai.com/examples",
+                "repo": [
+                    {
+                        "href": "https://github.com/openai/openai-cookbook",
+                        "label": {
+                            "en": "OpenAI Cookbook",
+                            "ua": "OpenAI Cookbook"
+                        }
+                    }
+                ],
+                "community": "https://community.openai.com/"
+            },
+            "tags": [
+                "LLM assistant",
+                "Multimodal",
+                "Plugins"
+            ]
+        },
+        {
+            "name": "Claude",
+            "slug": "claude",
+            "href": "https://claude.ai/",
+            "links": {
+                "docs": "https://docs.anthropic.com/claude",
+                "gettingStarted": "https://docs.anthropic.com/claude/docs/quickstart",
+                "examples": "https://docs.anthropic.com/claude/page/examples",
+                "blog": "https://www.anthropic.com/index"
+            },
+            "tags": [
+                "LLM assistant",
+                "Enterprise",
+                "Compliance"
+            ]
+        },
+        {
+            "name": "Google Gemini",
+            "slug": "google-gemini",
+            "href": "https://gemini.google.com/",
+            "links": {
+                "docs": "https://ai.google.dev/",
+                "gettingStarted": "https://ai.google.dev/gemini-api/docs/get-started",
+                "examples": "https://ai.google.dev/examples",
+                "tutorials": "https://ai.google.dev/learn"
+            },
+            "tags": [
+                "Multimodal",
+                "Workspace",
+                "APIs"
+            ]
+        },
+        {
+            "name": "Microsoft Copilot",
+            "slug": "microsoft-copilot",
+            "href": "https://copilot.microsoft.com/",
+            "links": {
+                "docs": "https://learn.microsoft.com/microsoft-365-copilot/overview",
+                "gettingStarted": "https://learn.microsoft.com/microsoft-365-copilot/get-started",
+                "support": "https://support.microsoft.com/copilot"
+            },
+            "tags": [
+                "Productivity",
+                "Office",
+                "Enterprise"
+            ]
+        },
+        {
+            "name": "Perplexity AI",
+            "slug": "perplexity",
+            "href": "https://www.perplexity.ai/",
+            "links": {
+                "docs": "https://docs.perplexity.ai/",
+                "gettingStarted": "https://docs.perplexity.ai/docs/getting-started",
+                "examples": "https://docs.perplexity.ai/docs/examples",
+                "blog": "https://www.perplexity.ai/hub"
+            },
+            "tags": [
+                "Search",
+                "Answer engine",
+                "Citations"
+            ]
+        },
+        {
+            "name": "Mistral Le Chat",
+            "slug": "mistral-le-chat",
+            "href": "https://chat.mistral.ai/",
+            "links": {
+                "docs": "https://docs.mistral.ai/",
+                "gettingStarted": "https://docs.mistral.ai/getting-started/",
+                "repo": "https://github.com/mistralai/mistral-src"
+            },
+            "tags": [
+                "European",
+                "LLM",
+                "APIs"
+            ]
+        },
+        {
+            "name": "Pi by Inflection",
+            "slug": "pi-inflection",
+            "href": "https://pi.ai/",
+            "links": {
+                "support": "https://support.inflection.ai/hc/en-us",
+                "blog": "https://inflection.ai/news"
+            },
+            "tags": [
+                "Personal assistant",
+                "Voice",
+                "Empathetic"
+            ]
+        },
+        {
+            "name": "Character.AI",
+            "slug": "character-ai",
+            "href": "https://beta.character.ai/",
+            "links": {
+                "support": "https://support.character.ai/hc/en-us",
+                "blog": "https://blog.character.ai/"
+            },
+            "tags": [
+                "Roleplay",
+                "Creators",
+                "Community"
+            ]
+        },
+        {
+            "name": "Midjourney",
+            "slug": "midjourney",
+            "href": "https://www.midjourney.com/",
+            "links": {
+                "docs": "https://docs.midjourney.com/",
+                "gettingStarted": "https://docs.midjourney.com/docs/quick-start",
+                "tutorials": "https://docs.midjourney.com/docs/prompting",
+                "community": "https://discord.gg/midjourney"
+            },
+            "tags": [
+                "Discord",
+                "Generative art",
+                "High fidelity"
+            ]
+        },
+        {
+            "name": "Stable Diffusion",
+            "slug": "stable-diffusion",
+            "href": "https://stability.ai/",
+            "links": {
+                "docs": "https://platform.stability.ai/docs/getting-started",
+                "tutorials": "https://platform.stability.ai/docs/tutorials",
+                "repo": "https://github.com/Stability-AI/stablediffusion"
+            },
+            "tags": [
+                "Open source",
+                "Diffusion",
+                "Custom models"
+            ]
+        },
+        {
+            "name": "Leonardo AI",
+            "slug": "leonardo-ai",
+            "href": "https://leonardo.ai/",
+            "links": {
+                "docs": "https://docs.leonardo.ai/",
+                "gettingStarted": "https://docs.leonardo.ai/docs/getting-started",
+                "examples": "https://leonardo.ai/gallery"
+            },
+            "tags": [
+                "Creative suite",
+                "Training",
+                "Workflows"
+            ]
+        },
+        {
+            "name": "Canva AI",
+            "slug": "canva-ai",
+            "href": "https://www.canva.com/ai/",
+            "links": {
+                "support": "https://www.canva.com/help/article/canva-ai-tools/",
+                "tutorials": "https://www.canva.com/learn/tag/ai/"
+            },
+            "tags": [
+                "Design",
+                "No-code",
+                "Templates"
+            ]
+        },
+        {
+            "name": "Adobe Firefly",
+            "slug": "adobe-firefly",
+            "href": "https://www.adobe.com/products/firefly.html",
+            "links": {
+                "docs": "https://helpx.adobe.com/firefly/using/overview.html",
+                "gettingStarted": "https://helpx.adobe.com/firefly/using/firefly-quickstart.html",
+                "community": "https://community.adobe.com/t5/adobe-firefly/ct-p/ct-adobe-firefly-community"
+            },
+            "tags": [
+                "Creative Cloud",
+                "Commercial-safe",
+                "Generative fill"
+            ]
+        },
+        {
+            "name": "Ideogram AI",
+            "slug": "ideogram-ai",
+            "href": "https://ideogram.ai/",
+            "links": {
+                "support": "https://help.ideogram.ai/en/",
+                "community": "https://discord.gg/ideogram"
+            },
+            "tags": [
+                "Typography",
+                "Logos",
+                "Community"
+            ]
+        },
+        {
+            "name": "Playground AI",
+            "slug": "playground-ai",
+            "href": "https://playground.com/",
+            "links": {
+                "docs": "https://playground.com/learn",
+                "tutorials": "https://playground.com/discover"
+            },
+            "tags": [
+                "Browser editor",
+                "Realtime",
+                "Collaboration"
+            ]
+        },
+        {
+            "name": "DALL\u00b7E",
+            "slug": "dall-e",
+            "href": "https://openai.com/dall-e-3",
+            "links": {
+                "docs": "https://platform.openai.com/docs/guides/images",
+                "examples": "https://platform.openai.com/examples#image-generation",
+                "repo": "https://github.com/openai/openai-cookbook"
+            },
+            "tags": [
+                "Illustration",
+                "OpenAI",
+                "API"
+            ]
+        },
+        {
+            "name": "Krea AI",
+            "slug": "krea-ai",
+            "href": "https://www.krea.ai/",
+            "links": {
+                "support": "https://help.krea.ai/en/",
+                "community": "https://discord.gg/krea"
+            },
+            "tags": [
+                "Realtime",
+                "Design patterns",
+                "Collaboration"
+            ]
+        },
+        {
+            "name": "HeyGen",
+            "slug": "heygen",
+            "href": "https://www.heygen.com/",
+            "links": {
+                "docs": "https://docs.heygen.com/",
+                "gettingStarted": "https://docs.heygen.com/docs/getting-started",
+                "examples": "https://docs.heygen.com/docs/sample-use-cases"
+            },
+            "tags": [
+                "Avatars",
+                "Localization",
+                "API"
+            ]
+        },
+        {
+            "name": "Synthesia",
+            "slug": "synthesia",
+            "href": "https://www.synthesia.io/",
+            "links": {
+                "docs": "https://help.synthesia.io/en/",
+                "gettingStarted": "https://help.synthesia.io/en/collections/3600101-getting-started",
+                "examples": "https://www.synthesia.io/examples"
+            },
+            "tags": [
+                "Training videos",
+                "Avatar studio",
+                "Localization"
+            ]
+        },
+        {
+            "name": "Runway ML",
+            "slug": "runway-ml",
+            "href": "https://runwayml.com/",
+            "links": {
+                "docs": "https://learn.runwayml.com/",
+                "gettingStarted": "https://learn.runwayml.com/runway/getting-started",
+                "tutorials": "https://learn.runwayml.com/runway/tutorials"
+            },
+            "tags": [
+                "Video editing",
+                "Gen-2",
+                "Creative"
+            ]
+        },
+        {
+            "name": "Pictory",
+            "slug": "pictory",
+            "href": "https://pictory.ai/",
+            "links": {
+                "docs": "https://support.pictory.ai/en/",
+                "gettingStarted": "https://support.pictory.ai/en/collections/3324329-getting-started"
+            },
+            "tags": [
+                "Repurposing",
+                "Highlights",
+                "AI editing"
+            ]
+        },
+        {
+            "name": "OpusClip",
+            "slug": "opusclip",
+            "href": "https://www.opus.pro/",
+            "links": {
+                "docs": "https://help.opus.pro/en/",
+                "tutorials": "https://learn.opus.pro/"
+            },
+            "tags": [
+                "Shorts",
+                "Auto-caption",
+                "Creators"
+            ]
+        },
+        {
+            "name": "Descript",
+            "slug": "descript",
+            "href": "https://www.descript.com/",
+            "links": {
+                "docs": "https://help.descript.com/en/",
+                "gettingStarted": "https://help.descript.com/en/articles/3264755-getting-started-with-descript",
+                "tutorials": "https://academy.descript.com/"
+            },
+            "tags": [
+                "Transcription",
+                "Podcasting",
+                "Collaboration"
+            ]
+        },
+        {
+            "name": "Lumen5",
+            "slug": "lumen5",
+            "href": "https://lumen5.com/",
+            "links": {
+                "docs": "https://help.lumen5.com/en/",
+                "gettingStarted": "https://help.lumen5.com/en/collections/160375-getting-started"
+            },
+            "tags": [
+                "Marketing",
+                "Templates",
+                "Automation"
+            ]
+        },
+        {
+            "name": "Rephrase.ai",
+            "slug": "rephrase-ai",
+            "href": "https://www.rephrase.ai/",
+            "links": {
+                "docs": "https://help.rephrase.ai/en/"
+            },
+            "tags": [
+                "Personalization",
+                "Avatars",
+                "API"
+            ]
+        },
+        {
+            "name": "Fliki",
+            "slug": "fliki",
+            "href": "https://fliki.ai/",
+            "links": {
+                "docs": "https://help.fliki.ai/en/",
+                "gettingStarted": "https://help.fliki.ai/en/collections/3361520-getting-started"
+            },
+            "tags": [
+                "Text to video",
+                "Multilingual",
+                "Voiceover"
+            ]
+        },
+        {
+            "name": "Zapier",
+            "slug": "zapier",
+            "href": "https://zapier.com/",
+            "links": {
+                "docs": "https://zapier.com/help/",
+                "gettingStarted": "https://zapier.com/help/create/basics/get-started-guide",
+                "apiReference": "https://platform.zapier.com/docs",
+                "community": "https://community.zapier.com/"
+            },
+            "tags": [
+                "Automation",
+                "Integrations",
+                "No-code"
+            ]
+        },
+        {
+            "name": "Make",
+            "slug": "make",
+            "href": "https://www.make.com/",
+            "links": {
+                "docs": "https://www.make.com/en/help",
+                "gettingStarted": "https://www.make.com/en/help/getting-started",
+                "templates": "https://www.make.com/en/templates"
+            },
+            "tags": [
+                "Automation",
+                "Scenarios",
+                "Visual builder"
+            ]
+        },
+        {
+            "name": "n8n",
+            "slug": "n8n",
+            "href": "https://n8n.io/",
+            "links": {
+                "docs": "https://docs.n8n.io/",
+                "gettingStarted": "https://docs.n8n.io/flows/first-workflow/",
+                "repo": "https://github.com/n8n-io/n8n",
+                "community": "https://community.n8n.io/"
+            },
+            "tags": [
+                "Open source",
+                "Workflows",
+                "Self-hosting"
+            ]
+        },
+        {
+            "name": "UiPath",
+            "slug": "uipath",
+            "href": "https://www.uipath.com/",
+            "links": {
+                "docs": "https://docs.uipath.com/",
+                "tutorials": "https://academy.uipath.com/",
+                "community": "https://forum.uipath.com/"
+            },
+            "tags": [
+                "Enterprise RPA",
+                "Automation",
+                "Robots"
+            ]
+        },
+        {
+            "name": "Power Automate",
+            "slug": "power-automate",
+            "href": "https://powerautomate.microsoft.com/",
+            "links": {
+                "docs": "https://learn.microsoft.com/power-automate/",
+                "gettingStarted": "https://learn.microsoft.com/power-automate/getting-started",
+                "templates": "https://make.powerautomate.com/en-US/templates"
+            },
+            "tags": [
+                "Automation",
+                "Microsoft 365",
+                "Low-code"
+            ]
+        },
+        {
+            "name": "Bardeen",
+            "slug": "bardeen",
+            "href": "https://www.bardeen.ai/",
+            "links": {
+                "docs": "https://docs.bardeen.ai/",
+                "gettingStarted": "https://docs.bardeen.ai/docs/getting-started",
+                "tutorials": "https://www.bardeen.ai/academy"
+            },
+            "tags": [
+                "Browser automation",
+                "Playbooks",
+                "Productivity"
+            ]
+        },
+        {
+            "name": "Levity",
+            "slug": "levity",
+            "href": "https://www.levity.ai/",
+            "links": {
+                "docs": "https://help.levity.ai/en/",
+                "gettingStarted": "https://help.levity.ai/en/collections/3600053-getting-started"
+            },
+            "tags": [
+                "AI classification",
+                "Automation",
+                "No-code"
+            ]
+        },
+        {
+            "name": "Axiom.ai",
+            "slug": "axiom-ai",
+            "href": "https://axiom.ai/",
+            "links": {
+                "docs": "https://axiom.ai/docs",
+                "tutorials": "https://axiom.ai/academy"
+            },
+            "tags": [
+                "Browser automation",
+                "No-code",
+                "Scraping"
+            ]
+        },
+        {
+            "name": "Workato",
+            "slug": "workato",
+            "href": "https://www.workato.com/",
+            "links": {
+                "docs": "https://docs.workato.com/",
+                "gettingStarted": "https://docs.workato.com/getting-started.html",
+                "community": "https://community.workato.com/"
+            },
+            "tags": [
+                "Enterprise automation",
+                "Integrations",
+                "Recipes"
+            ]
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 # AI Tools Mind‑map (Static)
 
-Interactive mind‑map of AI tools for SMBs. Single‑file static site (`index.html`) built with pure HTML/SVG/vanilla JS — no build step, works offline.
+Interactive mind‑map of AI tools for SMBs. Single‑file static site (`index.html`) built with pure HTML/SVG/vanilla JS — no build step, works offline. Click any service to open a richer detail card with its description, official site, documentation, and other helpful resources.
 
 ## Quick Start (Local)
 
@@ -41,6 +41,10 @@ python3 -m http.server 8000
 ```
 /
 ├─ index.html            # Production single-file app (vanilla, no deps)
+├─ data/                 # Localized datasets and resource metadata
+│  ├─ ua.json            # Ukrainian catalog
+│  ├─ en.json            # English catalog
+│  └─ resources.json     # Optional docs/repos/examples per service
 ├─ doc/                  # Documentation and ADRs
 │  ├─ index.md           # User and maintainer guide
 │  ├─ Requirements.md    # Consolidated requirements
@@ -49,8 +53,8 @@ python3 -m http.server 8000
 │     ├─ 0001-static-single-file-architecture.md
 │     ├─ 0002-adaptive-radial-layout.md
 │     ├─ 0003-curated-bilingual-catalog.md
-│     └─ 0004-collapsible-subcategories.md
-├─ assets/               # Place any static assets here (optional)
+│     ├─ 0004-collapsible-subcategories.md
+│     └─ 0005-service-detail-cards.md
 ├─ examples/
 │  └─ react-babel/       # Alternative React+Babel+CDN version (no build)
 ├─ .github/workflows/
@@ -63,9 +67,10 @@ python3 -m http.server 8000
 
 ## Editing Content
 
-- Categories and items are defined inside `index.html` in the `DATA` object (UA/EN).  
-- To add tools: update the `DATA` arrays (name, href, desc).  
-- The mind‑map layout is calculated radially; category click expands nodes; hover shows tooltip with link.
+- Categories and items are defined in `data/ua.json` and `data/en.json`. Keep translations aligned between the two files when you add or edit services.
+- Rich metadata such as documentation, getting-started guides, code samples, or community links lives in `data/resources.json`. Entries are matched by `href`/`slug` and appear in the service detail card when present.
+- To add a tool: update the localized JSON datasets (name, href, desc) and optionally add resource links/tags in `resources.json`.
+- The mind‑map layout is calculated radially; category click expands nodes; clicking a service opens the persistent detail card with links, and the official site opens from the card.
 
 ## License
 

@@ -10,27 +10,29 @@
 
 ## 2. Functional Requirements
 ### 2.1 Content Structure
-1. The system must store categories, subcategories (groups), and services in two language arrays, `ua` and `en`, to keep translations aligned.
+1. The system must store categories, subcategories (groups), and services in two localized JSON datasets (`data/ua.json` and `data/en.json`) to keep translations aligned.
 2. Every service entry must include a name, short description, and hyperlink to the official resource.
 3. Categories and groups must have unique colors/titles to stay visually distinct on the map.
+4. Optional metadata such as documentation, code samples, and community links may be stored in `data/resources.json` and merged with services by `href`/`slug`.
 
 ### 2.2 Map Interactivity
-4. After the page loads, the user must see a radial diagram with the “AI Compass” central node.
-5. Clicking a category must expand or collapse its related services; clicking again returns it to the default state.
-6. Groups inside categories must expand/collapse independently so long lists remain readable.
-7. Hovering over a service must show a tooltip with its description and link; clicking opens the official site in a new tab.
-8. Icons next to services must reflect the tool type and speed up scanning for the right solution.
+5. After the page loads, the user must see a radial diagram with the “AI Compass” central node.
+6. Clicking a category must expand or collapse its related services; clicking again returns it to the default state.
+7. Groups inside categories must expand/collapse independently so long lists remain readable.
+8. Hovering over a service must provide a visual focus cue (expanded node) without hiding existing cards; clicking must open a persistent detail card with the description and available resource links.
+9. The official site and supplemental resources must open from the detail card in new tabs to avoid losing the map context.
+10. Icons next to services must reflect the tool type and speed up scanning for the right solution.
 
 ### 2.3 Localization and Management
-9. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
-10. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
-11. Categories on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility.
-12. The catalog must document manual update instructions for future content editors.
+11. Users must be able to switch the interface language between Ukrainian and English; the choice is persisted between sessions via LocalStorage.
+12. Core text blocks (banner, hero, notes, footer) must update automatically according to the selected language.
+13. Categories and services on the map must respond to keyboard `Enter` and `Space` events to provide basic accessibility, and pressing `Esc` must dismiss an open detail card.
+14. The catalog must document manual update instructions for future content editors, including how to maintain the resource metadata file.
 
 ### 2.4 Deployment and Documentation
-13. The site must open directly from the file system or through any static hosting without a build step.
-14. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
-15. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
+15. The site must open directly from the file system or through any static hosting without a build step.
+16. Project documentation must live in the `/doc` folder and be ready for publication via GitHub Pages.
+17. Provide cross-links to related documents (ADR, backlog, requirements) to simplify navigation for the team.
 
 ## 3. Non-functional Requirements
 | ID | Requirement | Type |

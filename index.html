@@ -298,7 +298,19 @@
       transition: color 0.3s ease;
     }
     .tip {
-      pointer-events: none;
+      pointer-events: auto;
+    }
+    g.service-node {
+      transition: transform 0.18s ease;
+    }
+    g.service-node ellipse {
+      transition: rx 0.18s ease, ry 0.18s ease, stroke-width 0.18s ease, fill 0.18s ease;
+    }
+    g.service-node text {
+      transition: fill 0.18s ease;
+    }
+    g.service-node.is-active ellipse {
+      stroke-width: 2.4px;
     }
     .small {
       font-size: 11px;
@@ -460,6 +472,28 @@
       en: 'data/en.json',
     };
 
+    const RESOURCE_DATA_PATH = 'data/resources.json';
+    const RESOURCE_ORDER = [
+      'docs',
+      'gettingStarted',
+      'examples',
+      'repo',
+      'apiReference',
+      'tutorials',
+      'community',
+      'blog',
+      'changelog',
+      'playground',
+      'templates',
+      'support',
+    ];
+    let resourceMetadataLoaded = false;
+    let resourceMetadataPromise = null;
+    let resourceEntries = [];
+    let resourceLookupByHref = new Map();
+    let resourceLookupBySlug = new Map();
+    let resourceLookupByName = new Map();
+
     function getDatasetPath(language) {
       return DATA_PATHS[language] || DATA_PATHS.ua;
     }
@@ -490,6 +524,228 @@
         });
       datasetPromises.set(language, promise);
       return promise;
+    }
+
+    function toSlug(value) {
+      return String(value || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    function indexResourceEntries(entries) {
+      resourceEntries = entries;
+      resourceLookupByHref = new Map();
+      resourceLookupBySlug = new Map();
+      resourceLookupByName = new Map();
+      entries.forEach((entry) => {
+        if (!entry || typeof entry !== 'object') return;
+        const href = entry.href;
+        const name = entry.name;
+        const slug = entry.slug || (name ? toSlug(name) : null);
+        if (href) resourceLookupByHref.set(href, entry);
+        if (slug) resourceLookupBySlug.set(slug, entry);
+        if (name) resourceLookupByName.set(name, entry);
+      });
+      resourceMetadataLoaded = true;
+    }
+
+    async function ensureResourceMetadata() {
+      if (resourceMetadataLoaded) {
+        return;
+      }
+      if (resourceMetadataPromise) {
+        return resourceMetadataPromise;
+      }
+      resourceMetadataPromise = fetch(RESOURCE_DATA_PATH)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to load resource metadata: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((json) => {
+          const entries = Array.isArray(json)
+            ? json
+            : Array.isArray(json && json.services)
+            ? json.services
+            : [];
+          indexResourceEntries(entries);
+        })
+        .catch((error) => {
+          console.warn('Resource metadata unavailable', error);
+          indexResourceEntries([]);
+        })
+        .finally(() => {
+          resourceMetadataPromise = null;
+        });
+      return resourceMetadataPromise;
+    }
+
+    function getResourceEntry(service) {
+      if (!service) return null;
+      const inlineId = service.resourceId || service.slug;
+      if (inlineId) {
+        const slugId = toSlug(inlineId);
+        if (resourceLookupBySlug.has(slugId)) {
+          return resourceLookupBySlug.get(slugId);
+        }
+      }
+      if (service.href && resourceLookupByHref.has(service.href)) {
+        return resourceLookupByHref.get(service.href);
+      }
+      if (service.name && resourceLookupByName.has(service.name)) {
+        return resourceLookupByName.get(service.name);
+      }
+      const nameSlug = service.name ? toSlug(service.name) : null;
+      if (nameSlug && resourceLookupBySlug.has(nameSlug)) {
+        return resourceLookupBySlug.get(nameSlug);
+      }
+      return null;
+    }
+
+    function mergeResourceMaps(base, extra) {
+      const aggregated = {};
+      const pushValue = (key, value) => {
+        if (value == null) return;
+        if (!aggregated[key]) {
+          aggregated[key] = [];
+        }
+        if (Array.isArray(value)) {
+          value.forEach((entry) => pushValue(key, entry));
+          return;
+        }
+        aggregated[key].push(value);
+      };
+      const apply = (source) => {
+        if (!source || typeof source !== 'object') return;
+        Object.entries(source).forEach(([key, val]) => {
+          if (key === 'tags') return;
+          pushValue(key, val);
+        });
+      };
+      apply(base);
+      apply(extra);
+      return aggregated;
+    }
+
+    function mergeTags(base, extra) {
+      const result = [];
+      const seen = new Set();
+      const pickLabel = (value) => {
+        if (typeof value === 'string') return value;
+        if (value && typeof value === 'object') {
+          const preferred = value[lang] || value.en || value.ua;
+          if (typeof preferred === 'string') return preferred;
+        }
+        return null;
+      };
+      const append = (values) => {
+        if (!values) return;
+        const arr = Array.isArray(values) ? values : [values];
+        arr.forEach((value) => {
+          const label = pickLabel(value);
+          if (!label) return;
+          const normalized = label.trim();
+          if (!normalized) return;
+          const key = normalized.toLowerCase();
+          if (seen.has(key)) return;
+          seen.add(key);
+          result.push(normalized);
+        });
+      };
+      append(base);
+      append(extra);
+      return result;
+    }
+
+    function getServiceMetadata(service) {
+      const entry = getResourceEntry(service);
+      const entryLinks = entry && (entry.links || entry.resources || {});
+      const inlineResources = service && service.resources && (service.resources.links || service.resources);
+      return {
+        links: mergeResourceMaps(entryLinks, inlineResources),
+        tags: mergeTags(entry && entry.tags, service && service.tags),
+      };
+    }
+
+    function getResourceLabel(key, currentLang = lang) {
+      const labels = COPY.resourceLabels || {};
+      const entry = labels[key];
+      if (!entry) return null;
+      return entry[currentLang] || entry.en || entry.ua || null;
+    }
+
+    function normalizeResourceEntry(entry, key, currentLang = lang) {
+      if (!entry) return null;
+      if (typeof entry === 'string') {
+        return { label: getResourceLabel(key, currentLang) || entry, href: entry };
+      }
+      if (entry && typeof entry === 'object') {
+        const href = entry.href || entry.url;
+        if (!href) return null;
+        let label = null;
+        if (entry.label) {
+          if (typeof entry.label === 'object') {
+            label = entry.label[currentLang] || entry.label[lang] || entry.label.en || entry.label.ua || null;
+          } else {
+            label = entry.label;
+          }
+        }
+        if (!label && entry.type) {
+          label = getResourceLabel(entry.type, currentLang);
+        }
+        if (!label) {
+          label = getResourceLabel(key, currentLang);
+        }
+        if (!label) {
+          label = href.replace(/^https?:\/\//, '').replace(/\/?$/, '');
+        }
+        return { label, href };
+      }
+      return null;
+    }
+
+    function buildResourceLinks(service, linkMap, currentLang = lang) {
+      const links = [];
+      const seen = new Set();
+      if (service && service.href) {
+        const primary = {
+          label: getResourceLabel('officialSite', currentLang) || (currentLang === 'ua' ? 'Офіційний сайт' : 'Official site'),
+          href: service.href,
+        };
+        const key = `${primary.href}__${primary.label}`;
+        seen.add(key);
+        links.push(primary);
+      }
+      const append = (entry) => {
+        if (!entry || !entry.href) return;
+        const dedupeKey = `${entry.href}__${entry.label}`;
+        if (seen.has(dedupeKey)) return;
+        seen.add(dedupeKey);
+        links.push(entry);
+      };
+      const processEntries = (key, values) => {
+        if (!values) return;
+        const arr = Array.isArray(values) ? values : [values];
+        arr.forEach((value) => {
+          const normalized = normalizeResourceEntry(value, key, currentLang);
+          if (normalized) {
+            append(normalized);
+          }
+        });
+      };
+      RESOURCE_ORDER.forEach((key) => {
+        processEntries(key, linkMap && linkMap[key]);
+      });
+      if (linkMap) {
+        Object.entries(linkMap).forEach(([key, value]) => {
+          if (RESOURCE_ORDER.includes(key)) return;
+          processEntries(key, value);
+        });
+      }
+      return links;
     }
 
     const ICONS = {
@@ -659,6 +915,22 @@
     const footerTaglineEl = document.getElementById('footerTagline');
     const themeButtons = Array.from(document.querySelectorAll('[data-theme-option]'));
 
+    ensureResourceMetadata().catch((error) => {
+      console.warn('Unable to preload resource metadata', error);
+    });
+
+    if (stage) {
+      stage.addEventListener('click', () => {
+        hideTip();
+      });
+    }
+
+    window.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Escape') {
+        hideTip();
+      }
+    });
+
     const COPY = {
       heroTitle: {
         ua: 'Ваш компас у світі ШІ сервісів',
@@ -693,8 +965,70 @@
         en: 'No results for this query',
       },
       infoNote: {
-        ua: 'Іконки поруч із назвами допомагають швидко зорієнтуватися. Клікніть категорію, щоб побачити сервіси. Наведіть курсор — опис та посилання.',
-        en: 'Icons highlight each tool. Click a category to expand and hover any service to read the description and open the link.',
+        ua: 'Іконки поруч із назвами допомагають швидко зорієнтуватися. Клікніть категорію, щоб побачити сервіси. Натисніть на сервіс — відкриється карточка з описом і корисними посиланнями. Закрийте її натисканням на порожнє місце або клавішу Esc.',
+        en: 'Icons highlight each tool. Click a category to expand. Select a service to open a detail card with docs and helpful links. Close it by clicking empty space or pressing Esc.',
+      },
+      resourceSectionTitle: {
+        ua: 'Корисні посилання',
+        en: 'Helpful resources',
+      },
+      resourceLabels: {
+        officialSite: {
+          ua: 'Офіційний сайт',
+          en: 'Official site',
+        },
+        docs: {
+          ua: 'Документація',
+          en: 'Documentation',
+        },
+        gettingStarted: {
+          ua: 'Початок роботи',
+          en: 'Getting started',
+        },
+        examples: {
+          ua: 'Приклади',
+          en: 'Examples',
+        },
+        repo: {
+          ua: 'Репозиторій',
+          en: 'Repository',
+        },
+        apiReference: {
+          ua: 'API довідник',
+          en: 'API reference',
+        },
+        tutorials: {
+          ua: 'Посібники',
+          en: 'Tutorials',
+        },
+        community: {
+          ua: 'Спільнота',
+          en: 'Community',
+        },
+        blog: {
+          ua: 'Блог',
+          en: 'Blog',
+        },
+        changelog: {
+          ua: 'Зміни',
+          en: 'Changelog',
+        },
+        playground: {
+          ua: 'Playground',
+          en: 'Playground',
+        },
+        templates: {
+          ua: 'Шаблони',
+          en: 'Templates',
+        },
+        support: {
+          ua: 'Підтримка',
+          en: 'Support',
+        },
+      },
+      tagsLabel: {
+        ua: 'Фокус',
+        en: 'Focus',
       },
       footerRights: {
         ua: 'Усі права захищені · 2024',
@@ -920,6 +1254,8 @@
     // Tooltip management
     let tipGroup = null;
     let measureTextEl = null;
+    let activeTipKey = null;
+    let activeTipNode = null;
 
     function wrapText(text, maxWidth) {
       const lines = [];
@@ -957,21 +1293,45 @@
       return lines;
     }
 
-    function showTip(x, y, title, desc, href) {
+    function showTip(x, y, service, labelOverride) {
       hideTip();
       const palette = themeColors.surface ? themeColors : readThemeColors();
       tipGroup = group(stage);
       tipGroup.setAttribute('class','tip');
-      const w = 340;
-      const pad = 14;
+      tipGroup.addEventListener('click', (evt) => {
+        evt.stopPropagation();
+      });
+      const safeService = service || {};
+      const metadata = getServiceMetadata(safeService);
+      const resourceLinks = buildResourceLinks(safeService, metadata.links);
+      const tags = Array.isArray(metadata.tags) ? metadata.tags : [];
+      const title = labelOverride || safeService.name || '';
+      const desc = typeof safeService.desc === 'string' ? safeService.desc : '';
+      const w = 360;
+      const pad = 16;
       const maxWidth = w - pad * 2;
-      const lines = wrapText(desc, maxWidth);
+      const hasDescription = desc.trim().length > 0;
+      const lines = hasDescription ? wrapText(desc, maxWidth) : [];
       const lineHeight = 18;
-      const descHeight = Math.max(lineHeight, lines.length * lineHeight);
+      const descHeight = hasDescription ? Math.max(lineHeight, lines.length * lineHeight) : 0;
       const titleHeight = 18;
-      const linkHeight = 16;
-      const gap = 12;
-      const h = Math.max(170, pad + titleHeight + gap + descHeight + gap + linkHeight + pad);
+      const gap = 14;
+      const tagsGap = tags.length ? 8 : 0;
+      const tagsLineHeight = tags.length ? 16 : 0;
+      const resourceHeaderHeight = resourceLinks.length ? 16 : 0;
+      const resourceLinkSpacing = 18;
+      const resourcesHeight = resourceLinks.length ? resourceHeaderHeight + resourceLinks.length * resourceLinkSpacing : 0;
+      let contentHeight = titleHeight;
+      if (hasDescription) {
+        contentHeight += gap + descHeight;
+      }
+      if (tags.length) {
+        contentHeight += (hasDescription ? tagsGap : gap) + tagsLineHeight;
+      }
+      if (resourceLinks.length) {
+        contentHeight += gap + resourcesHeight;
+      }
+      const h = Math.max(200, pad + contentHeight + pad);
       const vb = (stage.getAttribute('viewBox') || '0 0 1100 760').split(' ').map(Number);
       const viewW = vb[2] || 1100;
       const viewH = vb[3] || 760;
@@ -991,34 +1351,159 @@
       t1.setAttribute('style','font-weight:700; font-size:13px;');
       t1.textContent = title;
       tipGroup.appendChild(t1);
-      const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t2.setAttribute('x', tx + pad);
-      t2.setAttribute('y', ty + pad + titleHeight + 4);
-      t2.setAttribute('class', 'muted');
-      t2.setAttribute('dominant-baseline', 'hanging');
-      lines.forEach((line, idx) => {
-        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-        tspan.setAttribute('x', tx + pad);
-        tspan.setAttribute('dy', idx === 0 ? 0 : lineHeight);
-        tspan.textContent = line;
-        t2.appendChild(tspan);
-      });
-      tipGroup.appendChild(t2);
-      const link = document.createElementNS('http://www.w3.org/2000/svg','a');
-      link.setAttribute('href', href); link.setAttribute('target','_blank'); link.setAttribute('rel','noreferrer');
-      const t3 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t3.setAttribute('x', tx + pad);
-      t3.setAttribute('y', ty + h - pad);
-      t3.setAttribute('class','link');
-      t3.textContent = (lang==='ua' ? 'Відкрити сайт →' : 'Visit site →');
-      link.appendChild(t3);
-      tipGroup.appendChild(link);
+      let cursorY = ty + pad + titleHeight;
+      if (hasDescription) {
+        const descTop = cursorY + 4;
+        const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+        t2.setAttribute('x', tx + pad);
+        t2.setAttribute('y', descTop);
+        t2.setAttribute('class', 'muted');
+        t2.setAttribute('dominant-baseline', 'hanging');
+        lines.forEach((line, idx) => {
+          const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+          tspan.setAttribute('x', tx + pad);
+          tspan.setAttribute('dy', idx === 0 ? 0 : lineHeight);
+          tspan.textContent = line;
+          t2.appendChild(tspan);
+        });
+        tipGroup.appendChild(t2);
+        cursorY = descTop + descHeight;
+      }
+      if (tags.length) {
+        const tagsTop = cursorY + (hasDescription ? tagsGap : gap);
+        const tagsText = document.createElementNS('http://www.w3.org/2000/svg','text');
+        tagsText.setAttribute('x', tx + pad);
+        tagsText.setAttribute('y', tagsTop);
+        tagsText.setAttribute('class', 'muted');
+        tagsText.setAttribute('dominant-baseline', 'hanging');
+        tagsText.setAttribute('style', 'font-size:12px; font-weight:600;');
+        const tagsLabel = (COPY.tagsLabel && (COPY.tagsLabel[lang] || COPY.tagsLabel.en)) || (lang === 'ua' ? 'Фокус' : 'Focus');
+        tagsText.textContent = `${tagsLabel}: ${tags.join(', ')}`;
+        tipGroup.appendChild(tagsText);
+        cursorY = tagsTop + tagsLineHeight;
+      }
+      if (resourceLinks.length) {
+        const resourcesTop = cursorY + gap;
+        const header = document.createElementNS('http://www.w3.org/2000/svg','text');
+        header.setAttribute('x', tx + pad);
+        header.setAttribute('y', resourcesTop);
+        header.setAttribute('class', 'muted');
+        header.setAttribute('dominant-baseline', 'hanging');
+        header.setAttribute('style', 'font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;');
+        const sectionLabel = (COPY.resourceSectionTitle && (COPY.resourceSectionTitle[lang] || COPY.resourceSectionTitle.en)) || 'Resources';
+        header.textContent = sectionLabel;
+        tipGroup.appendChild(header);
+        let linkY = resourcesTop + resourceHeaderHeight;
+        resourceLinks.forEach((entry, idx) => {
+          const link = document.createElementNS('http://www.w3.org/2000/svg','a');
+          link.setAttribute('href', entry.href);
+          link.setAttribute('target','_blank');
+          link.setAttribute('rel','noreferrer');
+          const linkText = document.createElementNS('http://www.w3.org/2000/svg','text');
+          linkText.setAttribute('x', tx + pad);
+          linkText.setAttribute('y', linkY + idx * resourceLinkSpacing);
+          linkText.setAttribute('class','link');
+          linkText.setAttribute('dominant-baseline', 'hanging');
+          linkText.textContent = entry.label;
+          link.appendChild(linkText);
+          tipGroup.appendChild(link);
+        });
+      }
     }
     function hideTip() {
       if (tipGroup) {
         if (tipGroup.parentNode) tipGroup.parentNode.removeChild(tipGroup);
         tipGroup = null;
       }
+      if (activeTipNode) {
+        activeTipNode.classList.remove('is-active');
+        activeTipNode.classList.remove('is-hovered');
+        activeTipNode.setAttribute('aria-pressed', 'false');
+        const ellipse = activeTipNode.querySelector('ellipse');
+        const baseRx = activeTipNode.dataset.baseRx;
+        const baseRy = activeTipNode.dataset.baseRy;
+        if (ellipse && baseRx && baseRy) {
+          ellipse.setAttribute('rx', baseRx);
+          ellipse.setAttribute('ry', baseRy);
+        }
+        activeTipNode = null;
+      }
+      activeTipKey = null;
+    }
+
+    const SERVICE_NODE_SCALE = 1.08;
+
+    function getServiceKey(service) {
+      if (!service) return '';
+      const name = service.name || '';
+      const href = service.href || '';
+      const resourceId = service.resourceId || service.slug || '';
+      return `${name}::${href}::${resourceId}`;
+    }
+
+    function setNodeScale(groupEl, ellipse, scale) {
+      if (!groupEl || !ellipse) return;
+      const baseRx = Number(groupEl.dataset.baseRx);
+      const baseRy = Number(groupEl.dataset.baseRy);
+      if (!Number.isFinite(baseRx) || !Number.isFinite(baseRy)) return;
+      const nextRx = Math.max(4, baseRx * scale);
+      const nextRy = Math.max(4, baseRy * scale);
+      ellipse.setAttribute('rx', nextRx.toFixed(2));
+      ellipse.setAttribute('ry', nextRy.toFixed(2));
+    }
+
+    function registerServiceNode(node, service, label) {
+      if (!node || !node.group) return;
+      const groupEl = node.group;
+      groupEl.classList.add('service-node');
+      groupEl.style.cursor = 'pointer';
+      groupEl.dataset.baseRx = String(node.rx);
+      groupEl.dataset.baseRy = String(node.ry);
+      if (!groupEl.hasAttribute('role')) {
+        groupEl.setAttribute('role', 'button');
+      }
+      groupEl.setAttribute('tabindex', '0');
+      groupEl.setAttribute('aria-label', service && service.name ? service.name : label || '');
+      groupEl.setAttribute('aria-pressed', 'false');
+      const hover = () => {
+        groupEl.classList.add('is-hovered');
+        setNodeScale(groupEl, node.ellipse, SERVICE_NODE_SCALE);
+      };
+      const reset = () => {
+        if (activeTipNode === groupEl) return;
+        groupEl.classList.remove('is-hovered');
+        setNodeScale(groupEl, node.ellipse, 1);
+      };
+      groupEl.addEventListener('mouseenter', hover);
+      groupEl.addEventListener('mouseleave', reset);
+      groupEl.addEventListener('focus', hover);
+      groupEl.addEventListener('blur', reset);
+      const activate = () => {
+        const key = getServiceKey(service);
+        if (activeTipKey === key) {
+          hideTip();
+          return;
+        }
+        hideTip();
+        activeTipKey = key;
+        activeTipNode = groupEl;
+        groupEl.classList.add('is-active');
+        groupEl.classList.add('is-hovered');
+        groupEl.setAttribute('aria-pressed', 'true');
+        setNodeScale(groupEl, node.ellipse, SERVICE_NODE_SCALE);
+        showTip(node.x, node.y, service, label);
+      };
+      groupEl.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        evt.stopPropagation();
+        activate();
+      });
+      groupEl.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Enter' || evt.key === ' ') {
+          evt.preventDefault();
+          activate();
+        }
+      });
     }
 
     async function render() {
@@ -1412,13 +1897,7 @@
               if (searchActive) {
                 itemNode.group.classList.add('search-hit');
               }
-              itemNode.group.style.cursor = 'pointer';
-              itemNode.group.setAttribute('aria-label', svc.name);
-              itemNode.group.addEventListener('mouseenter', () =>
-                showTip(itemX, itemY, label, svc.desc, svc.href)
-              );
-              itemNode.group.addEventListener('mouseleave', hideTip);
-              itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+              registerServiceNode(itemNode, svc, label);
               const startNestedX = pos.side === 'right' ? groupNode.x + groupNode.rx : groupNode.x - groupNode.rx;
               const endNestedX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
               const ctrlNestedX = startNestedX + (endNestedX - startNestedX) * 0.6;
@@ -1446,13 +1925,7 @@
             if (searchActive && branch.highlight) {
               itemNode.group.classList.add('search-hit');
             }
-            itemNode.group.style.cursor = 'pointer';
-            itemNode.group.setAttribute('aria-label', svc.name);
-            itemNode.group.addEventListener('mouseenter', () =>
-              showTip(itemX, itemY, label, svc.desc, svc.href)
-            );
-            itemNode.group.addEventListener('mouseleave', hideTip);
-            itemNode.group.addEventListener('click', () => window.open(svc.href, '_blank'));
+            registerServiceNode(itemNode, svc, label);
             const startBranchX = pos.side === 'right' ? node.x + node.rx : node.x - node.rx;
             const endBranchX = pos.side === 'right' ? itemX - itemNode.rx : itemX + itemNode.rx;
             const ctrlBranchX = startBranchX + (endBranchX - startBranchX) * 0.6;
