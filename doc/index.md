@@ -27,7 +27,9 @@ Open the Vite dev server URL (default `http://localhost:5173`). Hot module repla
 npm run build
 npm run preview # optional local preview of the production bundle
 ```
-The optimized assets are generated in `dist/` and can be hosted on any static platform.
+The optimized assets are generated in `dist/` and can be hosted on any static platform. The post-build hook also refreshes
+`public/assets/app.js` and `public/assets/app.css`; commit these files so that hosts which mirror the repository without
+executing `npm run build` still deliver the compiled SPA.
 
 ## Navigating the Map
 1. The “AI Compass” node sits at the center; categories radiate to the left and right. Each node includes a service logo for easier recognition.
@@ -48,7 +50,7 @@ The optimized assets are generated in `dist/` and can be hosted on any static pl
 - After data changes, run `npm run dev` to preview or `npm run build` to produce deployable assets. The SPA resolves JSON and asset URLs relative to `import.meta.env.BASE_URL`, so previews also work when served from a subdirectory.
 
 ## Deployment
-- **Cloudflare Pages:** configure the project with `npm run build` as the build command and `dist` as the output directory. A step-by-step walkthrough with troubleshooting tips lives in [doc/deployment/cloudflare-pages.md](./deployment/cloudflare-pages.md).
+- **Cloudflare Pages:** configure the project with `npm run build` as the build command and `dist` as the output directory. Hosts that skip the build step can still serve the committed `public/assets/app.{js,css}` bundle, but running the build in CI is preferred. A step-by-step walkthrough with troubleshooting tips lives in [doc/deployment/cloudflare-pages.md](./deployment/cloudflare-pages.md).
 - **GitHub Pages:** publish the `dist/` folder through GitHub Actions or manual deployment (e.g., `gh-pages` branch). The generated bundle already targets a relative base (`./`), so no extra rewrites are required for project subpaths.
 
 ## Accessibility & Mobile Tips

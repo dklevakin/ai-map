@@ -17,7 +17,9 @@ To create a production build:
 npm run build
 ```
 
-The optimized output is written to `dist/`.
+The optimized output is written to `dist/`. The post-build step mirrors the compiled `app.js` and `app.css` bundle into
+`public/assets/` so that static hosts (for example, Cloudflare Pages without a build step) can serve the ready-to-run SPA
+directly from the repository.
 
 ## Documentation
 
@@ -48,7 +50,7 @@ The optimized output is written to `dist/`.
 ├─ index.html                # Vite entry point
 ├─ package.json              # SPA scripts & dependencies
 ├─ public/
-│  ├─ assets/                # Brand logo, favicon, service placeholder
+│  ├─ assets/                # Brand logo, favicon, service placeholder, pre-built SPA bundle
 │  └─ data/                  # Localized datasets + resource metadata
 │     ├─ ua.json
 │     ├─ en.json

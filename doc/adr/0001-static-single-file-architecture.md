@@ -12,6 +12,7 @@ Adopt a React + Vite single-page application:
 - Split the UI into typed components (mind map canvas, accordion list, detail panel) stored in `src/`.
 - Load localized JSON datasets from `public/data` and cache them via `localStorage`.
 - Use Vite to bundle and optimize the SPA for static hosting; provide `npm run dev` / `npm run build` workflows.
+- Mirror the production bundle (`app.js`, `app.css`) into `public/assets/` after each build so hosts that only serve the source repository still load the SPA.
 - Normalize asset and dataset URLs with a helper that respects Vite's configurable `base`, so deployments under subpaths keep working.
 - Render service nodes with SVG + logos, apply accessibility best practices, and introduce a responsive list mode.
 
@@ -19,6 +20,7 @@ Adopt a React + Vite single-page application:
 - ✅ Modular codebase with clear separation of concerns, easier testing, and room for future features.
 - ✅ Modern tooling (TypeScript, React, Vite) improves developer experience and hot reloading.
 - ✅ Cloudflare Pages and GitHub Pages deployments still work after adding a lightweight build step, even when the site lives under a project subpath.
-- ⚠️ Editors must run the build or rely on CI; documentation now includes instructions for the new pipeline.
+- ⚠️ Editors must run the build or rely on CI; documentation now includes instructions for the new pipeline and the need to commit refreshed `public/assets/app.{js,css}` files.
+- ✅ Even without executing the build step, static mirrors now render the compiled SPA thanks to the committed bundle.
 - ⚠️ Logo fetching depends on external providers; fallbacks must be maintained for reliability.
 - ✅ Local preference storage is wrapped in guards so browsers that block `localStorage` still render the SPA instead of failing during boot.

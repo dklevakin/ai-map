@@ -29,6 +29,8 @@ On the “Set up builds and deployments” screen, adjust the defaults:
 
 > **Important:** The output directory must be `dist`. Publishing the repository root will serve the development `index.html`, which references `/src/main.tsx` and results in an empty white page.
 
+> **No-build fallback:** If corporate policy blocks outbound npm traffic, you can temporarily publish the repository root. The committed `public/assets/app.js` and `public/assets/app.css` bundles allow the SPA to run without executing `npm run build`, but you must refresh those files locally before pushing updates.
+
 Cloudflare installs dependencies with `npm install` before executing the build command. No additional environment variables are required for the default setup.
 
 ## 3. Trigger the first deploy
@@ -42,6 +44,7 @@ Cloudflare installs dependencies with `npm install` before executing the build c
 - ✅ The deployed site contains the hero banner, theme and language toggles, and service map/list.
 - ✅ Requests to `/data/ua.json`, `/data/en.json`, and `/data/resources.json` return HTTP 200.
 - ✅ The browser downloads `assets/index-*.js` and `assets/index-*.css` without errors (check the Network tab).
+- ✅ When using the committed fallback bundle, `/assets/app.js` and `/assets/app.css` load successfully.
 - ✅ Service nodes display recognizable logos; if a logo fails, the placeholder icon appears instead of an emoji.
 
 ## Troubleshooting blank pages

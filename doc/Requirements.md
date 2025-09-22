@@ -2,7 +2,7 @@
 
 ## 1. Context and Scope
 - **Product description:** a React-based single-page application that visualizes a curated catalog of AI services as an interactive mind map and accessible list.
-- **System boundaries:** the site remains client-side only; Vite builds a static bundle that can be deployed to any static host (Cloudflare Pages, GitHub Pages) without a backend.
+- **System boundaries:** the site remains client-side only; Vite builds a static bundle that can be deployed to any static host (Cloudflare Pages, GitHub Pages) without a backend. A pre-built copy of the bundle (`public/assets/app.{js,css}`) ships with the repository for environments that cannot execute the Node-based build step.
 - **Key stakeholders:**
   - Business owners, marketing teams, and product managers selecting AI tools.
   - Maintainers curating the catalog and localizations.
@@ -32,6 +32,7 @@
 14. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
 15. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
 16. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
+17. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
 
 ## 3. Non-functional Requirements
 | ID  | Requirement | Type |
@@ -43,7 +44,8 @@
 | NF-5 | Use TypeScript for component contracts and utilities to improve maintainability and onboarding. | Maintainability |
 | NF-6 | Document data-editing procedures so non-developers can update JSON files confidently. | Documentation |
 | NF-7 | Asset URLs must degrade gracefully when deployed behind a subpath or CDN prefix, avoiding blank screens due to broken absolute references. | Reliability |
-| NF-8 | Preference persistence must tolerate browsers that block `localStorage`, falling back to defaults without breaking the UI. | Reliability |
+| NF-8 | If a host serves the repository without running the build (e.g., static mirroring), the committed `public/assets/app.{js,css}` bundle must keep the SPA functional. | Reliability |
+| NF-9 | Preference persistence must tolerate browsers that block `localStorage`, falling back to defaults without breaking the UI. | Reliability |
 
 ## 4. Constraints and Assumptions
 - The catalog remains public and unauthenticated; no personal data is collected.

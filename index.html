@@ -8,6 +8,68 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+      const devFromMeta = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
+      const isLocalhost = typeof window !== 'undefined' && /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+      const isDev = Boolean(devFromMeta || isLocalhost);
+      const fallbackBundle = './assets/app.js';
+
+      function renderLoadError(error) {
+        console.error('Failed to bootstrap AI Compass', error);
+        const container = document.getElementById('root');
+        if (!container) return;
+        container.innerHTML = `
+          <section style="max-width: 560px; margin: 4rem auto; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center;">
+            <h1 style="font-size: 1.5rem; margin-bottom: 1rem;">Не вдалося завантажити застосунок</h1>
+            <p style="line-height: 1.6;">
+              Опублікована версія не містить зібраного JavaScript-файлу <code>assets/app.js</code>.
+              Запустіть <code>npm run build</code> перед деплоєм або налаштуйте середовище на виконання збірки SPA.
+            </p>
+          </section>
+        `;
+      }
+
+      async function bootstrap() {
+        if (!isDev) {
+          try {
+            await import('./src/main.tsx');
+            return;
+          } catch (error) {
+            console.warn('Direct SPA entry failed, loading pre-built bundle.', error);
+            try {
+              await import(/* @vite-ignore */ fallbackBundle);
+              return;
+            } catch (fallbackError) {
+              renderLoadError(fallbackError);
+              return;
+            }
+          }
+        }
+
+        try {
+          await import('./src/main.tsx');
+        } catch (error) {
+          renderLoadError(error);
+        }
+      }
+
+      if (isDev) {
+        bootstrap();
+      } else {
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = './assets/app.css';
+        stylesheet.addEventListener('load', bootstrap, { once: true });
+        stylesheet.addEventListener(
+          'error',
+          () => {
+            console.warn('Bundled stylesheet is missing, continuing without it.');
+            bootstrap();
+          },
+          { once: true },
+        );
+        document.head.appendChild(stylesheet);
+      }
+    </script>
   </body>
 </html>
