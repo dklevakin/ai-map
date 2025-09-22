@@ -40,11 +40,14 @@ AI Compass is a static website featuring an interactive map of artificial intell
 - To dismiss a tooltip, click anywhere on the canvas or hover over another element.
 
 ## Updating the Catalog
-- Catalog data lives in the `DATA` constant inside `index.html`. Each category contains a list of services with `name`, `href`, and `desc` fields, plus optional groups structured as `group` → `items`.
-- To add a service, insert an object into the relevant language array (`ua` and `en`) and keep the translations aligned.
-- Logos are resolved automatically from each service link (via [logo.clearbit.com](https://logo.clearbit.com/)).
-  Use the `LOGO_OVERRIDES` map in `index.html` to point a service to a different domain or local asset, or set the optional
-  `logo` field directly in the dataset. When a logo cannot be retrieved, the generic `assets/default-logo.svg` badge is used.
+- Catalog data is stored in language-specific JSON files: `data/ua.json` and `data/en.json`. Each category contains a `category`
+  label, a `color`, and a list of services with `name`, `href`, and `desc` fields. Categories may also include groups structured as
+  `group` → `items` for additional nesting.
+- To add or edit a service, update the matching entries in both language files and keep names, descriptions, and URLs aligned.
+- Logos are resolved automatically from each service link through [logo.clearbit.com](https://logo.clearbit.com/). When a
+  product requires a specific image or a local asset, set the optional `logo` field inside the dataset or add an entry in the
+  `LOGO_OVERRIDES` map within `index.html`. If a logo cannot be downloaded, the neutral `assets/default-logo.svg` badge is
+  displayed instead.
 
 ## Deployment
 - **Local:** open `index.html` directly or spin up any simple HTTP server.
