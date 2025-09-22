@@ -13,6 +13,60 @@ export const COPY = {
     ua: 'Перемикайте мову, обирайте категорію та відкривайте картки сервісів із описом, посиланнями й корисними матеріалами.',
     en: 'Switch languages, explore categories, and open service cards to review descriptions, links, and helpful resources.',
   },
+  heroHighlights: {
+    ua: [
+      {
+        id: 'map',
+        title: 'Інтерактивна мапа',
+        description: 'Навігуйте категоріями та одразу бачте зв’язки між сервісами й групами.',
+        icon: 'map',
+      },
+      {
+        id: 'resources',
+        title: 'Добірки ресурсів',
+        description: 'Кожна картка містить посилання на гайди, комʼюніті й репозиторії для швидкого старту.',
+        icon: 'layers',
+      },
+      {
+        id: 'bilingual',
+        title: 'Двомовний інтерфейс',
+        description: 'Перемикайте українську та англійську без перезавантаження й втрати контексту.',
+        icon: 'spark',
+      },
+    ],
+    en: [
+      {
+        id: 'map',
+        title: 'Interactive map',
+        description: 'Traverse categories and instantly see how services connect across groups.',
+        icon: 'map',
+      },
+      {
+        id: 'resources',
+        title: 'Curated resources',
+        description: 'Each card links to guides, communities, and repositories so teams can ramp up fast.',
+        icon: 'layers',
+      },
+      {
+        id: 'bilingual',
+        title: 'Bilingual experience',
+        description: 'Switch between Ukrainian and English without reloads or losing your place.',
+        icon: 'spark',
+      },
+    ],
+  },
+  heroPreviewBadge: {
+    ua: 'Живе превʼю',
+    en: 'Live preview',
+  },
+  heroPreviewTitle: {
+    ua: 'Вузли та категорії в одному полі зору',
+    en: 'Nodes and categories at a glance',
+  },
+  heroPreviewCaption: {
+    ua: 'Підсвітка показує, які сервіси збігаються з тегами, а легенда допомагає порівнювати.',
+    en: 'Highlights reveal tag matches while the legend keeps comparisons easy to scan.',
+  },
   languageToggleLabel: {
     ua: 'Перемикач мови',
     en: 'Language switcher',
