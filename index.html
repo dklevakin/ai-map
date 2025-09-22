@@ -521,6 +521,7 @@
     };
 
     const SUBDOMAIN_STRIP_PREFIXES = new Set(['app', 'apps', 'beta', 'chat', 'studio']);
+    const logoCache = new Map();
 
     function normalizeLogoHost(rawHost) {
       if (!rawHost) return '';
@@ -539,36 +540,63 @@
       return host;
     }
 
-    function resolveLogoSource(service) {
+    function getLogoCacheKey(service) {
       if (!service) return null;
+      if (service.logo && typeof service.logo === 'string') {
+        return `logo:${service.logo}`;
+      }
+      if (service.href && typeof service.href === 'string') {
+        return `href:${service.href.toLowerCase()}`;
+      }
+      if (service.name && typeof service.name === 'string') {
+        return `name:${service.name}`;
+      }
+      return null;
+    }
+
+    function resolveLogoSource(service) {
+      if (!service) return { src: null, cacheKey: null };
+      const cacheKey = getLogoCacheKey(service);
+      if (cacheKey && logoCache.has(cacheKey)) {
+        return { src: logoCache.get(cacheKey) || null, cacheKey };
+      }
+      let src = null;
       if (service.logo) {
-        return service.logo;
-      }
-      const override = LOGO_OVERRIDES[service.name];
-      if (override) {
-        if (typeof override === 'string') {
-          if (/^(?:https?:|data:|assets\//)/.test(override)) {
-            return override;
+        src = service.logo;
+      } else {
+        const override = LOGO_OVERRIDES[service.name];
+        if (override) {
+          if (typeof override === 'string') {
+            if (/^(?:https?:|data:|assets\//)/.test(override)) {
+              src = override;
+            } else {
+              src = `https://logo.clearbit.com/${override}`;
+            }
+          } else if (override.src) {
+            src = override.src;
+          } else if (override.domain) {
+            src = `https://logo.clearbit.com/${override.domain}`;
           }
-          return `https://logo.clearbit.com/${override}`;
         }
-        if (override.src) {
-          return override.src;
-        }
-        if (override.domain) {
-          return `https://logo.clearbit.com/${override.domain}`;
+        if (!src) {
+          const href = service.href;
+          if (href) {
+            try {
+              const url = new URL(href);
+              const normalized = normalizeLogoHost(url.hostname || '');
+              if (normalized) {
+                src = `https://logo.clearbit.com/${normalized}`;
+              }
+            } catch (error) {
+              src = null;
+            }
+          }
         }
       }
-      const href = service.href;
-      if (!href) return null;
-      try {
-        const url = new URL(href);
-        const normalized = normalizeLogoHost(url.hostname || '');
-        if (!normalized) return null;
-        return `https://logo.clearbit.com/${normalized}`;
-      } catch (error) {
-        return null;
+      if (cacheKey) {
+        logoCache.set(cacheKey, src || null);
       }
+      return { src, cacheKey };
     }
 
     function formatLabel(service) {
@@ -579,12 +607,13 @@
         return { text: service, iconHref: FALLBACK_LOGO_SRC, fallbackHref: FALLBACK_LOGO_SRC };
       }
       const text = service.name || '';
-      const iconHref = resolveLogoSource(service) || FALLBACK_LOGO_SRC;
+      const { src, cacheKey } = resolveLogoSource(service);
+      const iconHref = src || FALLBACK_LOGO_SRC;
       return {
         text,
         iconHref,
         fallbackHref: FALLBACK_LOGO_SRC,
-        cacheKey: text,
+        cacheKey,
       };
     }
 
@@ -937,6 +966,7 @@
         const clipUrl = ensureLogoClipPath();
         const fallbackSrc = label.fallbackHref || FALLBACK_LOGO_SRC;
         const iconHref = label.iconHref || fallbackSrc;
+        const cacheKey = label.cacheKey;
         if (iconHref) {
           const iconEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
           iconEl.setAttribute('width', iconSize);
@@ -959,10 +989,15 @@
           if (fallbackSrc && iconHref !== fallbackSrc) {
             const handleError = () => {
               iconEl.removeEventListener('error', handleError);
+              if (cacheKey) {
+                logoCache.set(cacheKey, null);
+              }
               applyHref(fallbackSrc);
               iconEl.classList.add('node-logo-fallback');
             };
             iconEl.addEventListener('error', handleError);
+          } else if (iconHref === fallbackSrc) {
+            iconEl.classList.add('node-logo-fallback');
           }
           labelGroup.appendChild(iconEl);
           cursorX += iconSize + iconGap;
