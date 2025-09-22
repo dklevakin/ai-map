@@ -248,6 +248,8 @@ export default function App() {
   }, []);
 
   const heroBadgeLabel = COPY.heroBadge[language];
+  const heroCtaLabel = COPY.heroCtaLabel[language];
+  const heroCtaTitle = COPY.heroCtaTitle[language];
 
   return (
     <div className="app">
@@ -326,10 +328,18 @@ export default function App() {
                 </button>
               </div>
             </div>
+            <a
+              className="hero__cta"
+              href="#catalog"
+              title={heroCtaTitle}
+              aria-label={heroCtaTitle}
+            >
+              {heroCtaLabel}
+            </a>
           </div>
         </div>
       </header>
-      <main className="wrap main-layout">
+      <main className="wrap main-layout" id="catalog">
         <section className="panel" aria-live="polite">
           <h2>{viewMode === 'map' ? COPY.mapHeading[language] : COPY.listHeading[language]}</h2>
           <div className="search">

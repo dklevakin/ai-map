@@ -22,17 +22,18 @@
 8. Implement language (UA/EN) and theme (dark/light) toggles; remember user preferences across sessions.
 9. Surface a persistent detail panel with description, category/group context, tags, and actionable resource links opening in new tabs.
 10. Support keyboard navigation: categories, groups, and services must be focusable, respond to `Enter`/`Space`, and the detail panel must expose a close control.
+11. Highlight a prominent hero CTA that links directly to the catalog section, keeps a high-contrast treatment, and scales to full width on small screens.
 
 ### 2.3 Search & Filtering
-11. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
-12. When a search is active, auto-expand matching branches in the map and list to reveal results.
+12. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
+13. When a search is active, auto-expand matching branches in the map and list to reveal results.
 
 ### 2.4 Deployment & Tooling
-13. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
-14. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
-15. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
-16. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
-17. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
+14. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
+15. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
+16. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
+17. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
+18. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
 
 ## 3. Non-functional Requirements
 | ID  | Requirement | Type |
