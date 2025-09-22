@@ -28,17 +28,19 @@
     and the detail panel must expose a close control.
 12. Highlight a prominent hero CTA that links directly to the catalog section, keeps a high-contrast treatment, and scales to
     full width on small screens.
+13. Surface a hero quick-navigation bar with keyboard-focusable links and anchored IDs so visitors can jump to the catalog,
+    resource panel, and footer without scrolling.
 
 ### 2.3 Search & Filtering
-13. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
-14. When a search is active, auto-expand matching branches in the map and list to reveal results.
+14. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
+15. When a search is active, auto-expand matching branches in the map and list to reveal results.
 
 ### 2.4 Deployment & Tooling
-15. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
-16. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
-17. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
-18. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
-19. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
+16. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
+17. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
+18. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
+19. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
+20. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
 
 ## 3. Non-functional Requirements
 | ID  | Requirement | Type |

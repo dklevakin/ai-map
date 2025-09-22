@@ -251,6 +251,23 @@ export default function App() {
   const heroBadgeLabel = COPY.heroBadge[language];
   const heroCtaLabel = COPY.heroCtaLabel[language];
   const heroCtaTitle = COPY.heroCtaTitle[language];
+  const quickLinks = [
+    {
+      href: '#catalog',
+      label: COPY.quickNavCatalog[language],
+      icon: '🗺️',
+    },
+    {
+      href: '#resources',
+      label: COPY.quickNavResources[language],
+      icon: '📚',
+    },
+    {
+      href: '#site-footer',
+      label: COPY.quickNavFooter[language],
+      icon: 'ℹ️',
+    },
+  ];
 
   return (
     <div className="app">
@@ -291,9 +308,23 @@ export default function App() {
               {heroCtaLabel}
             </a>
           </div>
+          <nav className="hero__quick-links" aria-label={COPY.quickNavLabel[language]}>
+            <ul className="hero__quick-links-list">
+              {quickLinks.map(({ href, label, icon }) => (
+                <li key={href} className="hero__quick-links-item">
+                  <a className="hero__quick-link" href={href}>
+                    <span aria-hidden="true" className="hero__quick-link-icon">
+                      {icon}
+                    </span>
+                    <span className="hero__quick-link-text">{label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </header>
-      <main className="wrap main-layout" id="catalog">
+      <main className="wrap main-layout" id="catalog" tabIndex={-1}>
         <section className="panel" aria-live="polite">
           <h2>{viewMode === 'map' ? COPY.mapHeading[language] : COPY.listHeading[language]}</h2>
           <div className="search">
@@ -344,11 +375,11 @@ export default function App() {
             </p>
           )}
         </section>
-        <aside className="panel" role="complementary">
+        <aside className="panel" role="complementary" id="resources" tabIndex={-1}>
           <DetailsPanel service={selectedService} language={language} onClose={handleClearSelection} />
         </aside>
       </main>
-      <footer className="footer">
+      <footer className="footer" id="site-footer" tabIndex={-1}>
         <div className="wrap footer__inner">
           <strong>{COPY.footerRights[language]}</strong>
           <span>{COPY.footerTagline[language]}</span>

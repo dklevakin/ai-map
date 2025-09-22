@@ -57,6 +57,8 @@ executing `npm run build` still deliver the compiled SPA.
 ## Accessibility & Mobile Tips
 - Keyboard users can tab through categories, groups, services, and hero toggles; focus states are visible and `aria-pressed`
   states announce active selections.
+- A hero quick-links strip provides icon-accented skip links to the catalog, resource panel, and footer; it becomes a
+  swipeable carousel on small screens for thumb-friendly navigation.
 - The list/accordion view automatically activates under 900px width and can be toggled manually with the view switcher.
 - High-contrast themes (dark/light) ensure readability across environments, and the segmented controls reveal active modes for
   assistive tech and sighted users alike.

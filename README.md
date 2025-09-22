@@ -80,6 +80,7 @@ directly from the repository.
 - Search filtering across categories, groups, and services.
 - Accessible list/accordion mode for mobile and assistive technologies.
 - Detail panel with localized copy, tags, and actionable resource links.
+- Hero quick navigation with icon-accented skip links to the catalog, resource panel, and footer.
 
 ## License
 

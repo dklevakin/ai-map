@@ -229,6 +229,71 @@ input:focus-visible {
   gap: 20px;
 }
 
+.hero__quick-links {
+  grid-column: 2;
+  align-self: flex-start;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.hero__quick-links-list {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.hero__quick-links-item {
+  display: flex;
+}
+
+.hero__quick-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  color: var(--color-hero-title);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.hero__quick-link:hover,
+.hero__quick-link:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(148, 163, 184, 0.28);
+  border-color: rgba(148, 163, 184, 0.48);
+}
+
+.hero__quick-link-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.hero__quick-link-text {
+  white-space: nowrap;
+}
+
+body[data-theme='light'] .hero__quick-link {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.16);
+  color: var(--color-hero-subtitle);
+}
+
+body[data-theme='light'] .hero__quick-link:hover,
+body[data-theme='light'] .hero__quick-link:focus-visible {
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.28);
+}
+
 .hero__toggles {
   display: flex;
   flex-wrap: wrap;
@@ -713,6 +778,10 @@ svg text.link {
     flex: 1;
   }
 
+  .hero__quick-links {
+    grid-column: 1;
+  }
+
   .main-layout {
     grid-template-columns: 1fr;
   }
@@ -736,6 +805,27 @@ svg text.link {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .hero__quick-links {
+    margin-top: 24px;
+  }
+
+  .hero__quick-links-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hero__quick-links-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hero__quick-link {
+    min-width: max-content;
+    scroll-snap-align: start;
   }
 
   .hero__toggles {

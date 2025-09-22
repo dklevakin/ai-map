@@ -33,6 +33,22 @@ export const COPY = {
     ua: 'Перейти до розділу з мапою та списком сервісів',
     en: 'Jump to the map and list of services',
   },
+  quickNavLabel: {
+    ua: 'Швидка навігація',
+    en: 'Quick navigation',
+  },
+  quickNavCatalog: {
+    ua: 'До каталогу сервісів',
+    en: 'To the service catalog',
+  },
+  quickNavResources: {
+    ua: 'До блоку ресурсів',
+    en: 'To the resource panel',
+  },
+  quickNavFooter: {
+    ua: 'До підвалу сайту',
+    en: 'To the site footer',
+  },
   banner: {
     ua: 'Бібліотека перевірених AI сервісів для маркетингу, автоматизації та аналітики.',
     en: 'Curated AI tools for marketing, automation, and analytics teams.',
