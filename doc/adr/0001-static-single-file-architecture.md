@@ -21,3 +21,4 @@ Adopt a React + Vite single-page application:
 - ✅ Cloudflare Pages and GitHub Pages deployments still work after adding a lightweight build step, even when the site lives under a project subpath.
 - ⚠️ Editors must run the build or rely on CI; documentation now includes instructions for the new pipeline.
 - ⚠️ Logo fetching depends on external providers; fallbacks must be maintained for reliability.
+- ✅ Local preference storage is wrapped in guards so browsers that block `localStorage` still render the SPA instead of failing during boot.

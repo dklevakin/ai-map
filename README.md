@@ -34,6 +34,7 @@ The optimized output is written to `dist/`.
 2. **Build command:** `npm run build`
 3. **Output directory:** `dist`
 4. Cloudflare installs dependencies, runs the build, and serves the generated SPA. Asset and data paths resolve via the Vite `base` option (`./` by default), so no extra rewrites are required.
+5. Need more detail? Follow the [Cloudflare Pages deployment guide](doc/deployment/cloudflare-pages.md) for screenshots, post-deploy checks, and blank-page troubleshooting tips.
 
 ### GitHub Pages
 

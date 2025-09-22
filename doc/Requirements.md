@@ -43,6 +43,7 @@
 | NF-5 | Use TypeScript for component contracts and utilities to improve maintainability and onboarding. | Maintainability |
 | NF-6 | Document data-editing procedures so non-developers can update JSON files confidently. | Documentation |
 | NF-7 | Asset URLs must degrade gracefully when deployed behind a subpath or CDN prefix, avoiding blank screens due to broken absolute references. | Reliability |
+| NF-8 | Preference persistence must tolerate browsers that block `localStorage`, falling back to defaults without breaking the UI. | Reliability |
 
 ## 4. Constraints and Assumptions
 - The catalog remains public and unauthenticated; no personal data is collected.

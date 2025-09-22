@@ -48,7 +48,7 @@ The optimized assets are generated in `dist/` and can be hosted on any static pl
 - After data changes, run `npm run dev` to preview or `npm run build` to produce deployable assets. The SPA resolves JSON and asset URLs relative to `import.meta.env.BASE_URL`, so previews also work when served from a subdirectory.
 
 ## Deployment
-- **Cloudflare Pages:** configure the project with `npm run build` as the build command and `dist` as the output directory.
+- **Cloudflare Pages:** configure the project with `npm run build` as the build command and `dist` as the output directory. A step-by-step walkthrough with troubleshooting tips lives in [doc/deployment/cloudflare-pages.md](./deployment/cloudflare-pages.md).
 - **GitHub Pages:** publish the `dist/` folder through GitHub Actions or manual deployment (e.g., `gh-pages` branch). The generated bundle already targets a relative base (`./`), so no extra rewrites are required for project subpaths.
 
 ## Accessibility & Mobile Tips

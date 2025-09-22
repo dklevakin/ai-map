@@ -23,6 +23,29 @@ const VIEW_STORAGE_KEY = 'ai-compass:view-mode';
 const HERO_LOGO = withBase('assets/brand-logo.svg');
 const HERO_BADGE_LOGO = withBase('assets/favicon.svg');
 
+function safeGetItem(key: string): string | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  try {
+    return window.localStorage.getItem(key);
+  } catch (error) {
+    console.warn(`Unable to read "${key}" from localStorage`, error);
+    return null;
+  }
+}
+
+function safeSetItem(key: string, value: string): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (error) {
+    console.warn(`Unable to persist "${key}" in localStorage`, error);
+  }
+}
+
 type ThemeMode = 'light' | 'dark';
 type ViewMode = 'map' | 'list';
 
@@ -30,11 +53,12 @@ function readStoredLanguage(): LanguageCode {
   if (typeof window === 'undefined') {
     return 'ua';
   }
-  const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
+  const stored = safeGetItem(LANG_STORAGE_KEY);
   if (stored === 'en' || stored === 'ua') {
     return stored;
   }
-  const prefersUa = window.navigator.language.toLowerCase().startsWith('uk');
+  const navigatorLanguage = window.navigator?.language;
+  const prefersUa = navigatorLanguage ? navigatorLanguage.toLowerCase().startsWith('uk') : false;
   return prefersUa ? 'ua' : 'en';
 }
 
@@ -42,11 +66,11 @@ function readStoredTheme(): ThemeMode {
   if (typeof window === 'undefined') {
     return 'dark';
   }
-  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  const stored = safeGetItem(THEME_STORAGE_KEY);
   if (stored === 'light' || stored === 'dark') {
     return stored;
   }
-  const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  const prefersLight = !!window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
   return prefersLight ? 'light' : 'dark';
 }
 
@@ -54,11 +78,11 @@ function readStoredView(): ViewMode {
   if (typeof window === 'undefined') {
     return 'map';
   }
-  const stored = window.localStorage.getItem(VIEW_STORAGE_KEY);
+  const stored = safeGetItem(VIEW_STORAGE_KEY);
   if (stored === 'map' || stored === 'list') {
     return stored;
   }
-  const prefersList = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+  const prefersList = !!window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
   return prefersList ? 'list' : 'map';
 }
 
@@ -109,16 +133,16 @@ export default function App() {
 
   useEffect(() => {
     document.body.dataset.theme = theme;
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    safeSetItem(THEME_STORAGE_KEY, theme);
     setPalette(readPalette());
   }, [theme]);
 
   useEffect(() => {
-    window.localStorage.setItem(LANG_STORAGE_KEY, language);
+    safeSetItem(LANG_STORAGE_KEY, language);
   }, [language]);
 
   useEffect(() => {
-    window.localStorage.setItem(VIEW_STORAGE_KEY, viewMode);
+    safeSetItem(VIEW_STORAGE_KEY, viewMode);
   }, [viewMode]);
 
   useEffect(() => {
@@ -145,7 +169,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!window.localStorage.getItem(VIEW_STORAGE_KEY)) {
+    if (!safeGetItem(VIEW_STORAGE_KEY)) {
       setViewMode(isNarrow ? 'list' : 'map');
     }
   }, [isNarrow]);
