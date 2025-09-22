@@ -10,7 +10,8 @@ AI Compass is a React/Vite single-page application that visualizes a bilingual c
 ## Key Features
 - Mind map canvas with expandable categories, groups, and logo-enhanced service nodes.
 - Accessible accordion/list mode for mobile (<900px) and low-vision users (toggle available on desktop).
-- UA/EN language switcher, dark/light theme toggle, and persistent preferences via `localStorage`.
+- Segmented UA/EN language and dark/light theme toggles with persistent preferences via `localStorage`.
+- Icon-enhanced map/list view switcher that communicates layout changes at a glance.
 - Search with instant highlighting across categories, groups, and service descriptions.
 - Detail panel containing localized copy, tags, and curated resource links that open in new tabs.
 
@@ -54,9 +55,11 @@ executing `npm run build` still deliver the compiled SPA.
 - **GitHub Pages:** publish the `dist/` folder through GitHub Actions or manual deployment (e.g., `gh-pages` branch). The generated bundle already targets a relative base (`./`), so no extra rewrites are required for project subpaths.
 
 ## Accessibility & Mobile Tips
-- Keyboard users can tab through categories, groups, and services; focus states are visible.
+- Keyboard users can tab through categories, groups, services, and hero toggles; focus states are visible and `aria-pressed`
+  states announce active selections.
 - The list/accordion view automatically activates under 900px width and can be toggled manually with the view switcher.
-- High-contrast themes (dark/light) ensure readability across environments.
+- High-contrast themes (dark/light) ensure readability across environments, and the segmented controls reveal active modes for
+  assistive tech and sighted users alike.
 
 ## Documentation Map
 - [Requirements](./Requirements.md) — updated functional & non-functional scope.

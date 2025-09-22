@@ -19,21 +19,26 @@
 5. Render the AI Compass mind map in SVG with expandable categories, groups, and service nodes.
 6. Display the service logo inside each node and prevent overlaps between nodes and connector paths.
 7. Provide an alternate accordion/list view optimized for mobile widths (<900px) and low-vision navigation.
-8. Implement language (UA/EN) and theme (dark/light) toggles; remember user preferences across sessions.
-9. Surface a persistent detail panel with description, category/group context, tags, and actionable resource links opening in new tabs.
-10. Support keyboard navigation: categories, groups, and services must be focusable, respond to `Enter`/`Space`, and the detail panel must expose a close control.
-11. Highlight a prominent hero CTA that links directly to the catalog section, keeps a high-contrast treatment, and scales to full width on small screens.
+8. Implement language (UA/EN) and theme (dark/light) toggles as segmented controls with visible `aria-pressed` states, and
+   remember user preferences across sessions.
+9. Provide a dedicated map/list view switch with icon affordances so users understand the layout change at a glance.
+10. Surface a persistent detail panel with description, category/group context, tags, and actionable resource links opening in
+    new tabs.
+11. Support keyboard navigation: categories, groups, services, and hero controls must be focusable, respond to `Enter`/`Space`,
+    and the detail panel must expose a close control.
+12. Highlight a prominent hero CTA that links directly to the catalog section, keeps a high-contrast treatment, and scales to
+    full width on small screens.
 
 ### 2.3 Search & Filtering
-12. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
-13. When a search is active, auto-expand matching branches in the map and list to reveal results.
+13. Offer instant search across categories, groups, and service descriptions; highlight matching nodes in both map and list modes.
+14. When a search is active, auto-expand matching branches in the map and list to reveal results.
 
 ### 2.4 Deployment & Tooling
-14. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
-15. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
-16. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
-17. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
-18. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
+15. Provide npm scripts for development (`npm run dev`), production build (`npm run build`), and preview (`npm run preview`).
+16. Ensure Cloudflare Pages and GitHub Pages deployment documentation reflects the build pipeline.
+17. Resolve JSON datasets, assets, and icons relative to the configured Vite `base` so the SPA works when hosted from a subdirectory (e.g., GitHub Pages project sites).
+18. Keep project documentation in `/doc`, updating requirements, ADRs, and guides whenever the architecture evolves.
+19. Refresh and commit the pre-built bundle in `public/assets/app.{js,css}` whenever the SPA changes so zero-build deployments render correctly.
 
 ## 3. Non-functional Requirements
 | ID  | Requirement | Type |
